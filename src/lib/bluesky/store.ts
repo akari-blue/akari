@@ -1,9 +1,23 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { BskyAgent } from "@atproto/api";
-import { BlueskyCredentials, BlueskyState } from "./types_old";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { BskyAgent } from '@atproto/api';
 
-const BLUESKY_SERVICE = "https://bsky.social";
+export type BlueskyCredentials = {
+  handle: string;
+  password: string;
+};
+
+type BlueskyState = {
+  agent: BskyAgent | null;
+  isAuthenticated: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  session: any;
+  login: (credentials: BlueskyCredentials) => Promise<void>;
+  logout: () => void;
+  restoreSession: () => Promise<void>;
+};
+
+const BLUESKY_SERVICE = 'https://bsky.social';
 
 export const useBlueskyStore = create<BlueskyState>()(
   persist(
@@ -25,6 +39,8 @@ export const useBlueskyStore = create<BlueskyState>()(
 
       logout: () => {
         set({ agent: null, isAuthenticated: false, session: null });
+        // reload the page after logout
+        window.location.reload();
       },
 
       restoreSession: async () => {
@@ -35,7 +51,7 @@ export const useBlueskyStore = create<BlueskyState>()(
             await agent.resumeSession(session);
             set({ agent, isAuthenticated: true });
           } catch (error) {
-            console.error("Failed to restore session:", error);
+            console.error('Failed to restore session:', error);
             set({ agent: null, isAuthenticated: false, session: null });
           }
         }
@@ -44,8 +60,8 @@ export const useBlueskyStore = create<BlueskyState>()(
       session: null,
     }),
     {
-      name: "bluesky-store",
+      name: 'bluesky-store',
       partialize: (state) => ({ session: state.session }),
-    }
-  )
+    },
+  ),
 );
