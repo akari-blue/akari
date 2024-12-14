@@ -6,7 +6,7 @@ type BskyPostLabel = {
   cts: string;
 };
 
-type BSkyPostAuthor = {
+type Author = {
   did: `did:${string}`;
   handle: string;
   displayName: string;
@@ -18,12 +18,31 @@ type BSkyPostAuthor = {
   };
   viewer: {
     muted: boolean;
-    blockedBy: boolean;
+    blockedBy: false;
     following?: `at://did:${string}`;
     followedBy?: `at://did:${string}`;
   };
   labels?: BskyPostLabel[];
   createdAt: string;
+};
+
+type BlockedAuthor = {
+  did: `did:${string}`;
+  handle: never;
+  displayName: never;
+  avatar: never;
+  associated: never;
+  viewer: {
+    blockedBy: true;
+  };
+  labels: never;
+  createdAt: never;
+};
+
+type BSkyAuthor = Author | BlockedAuthor;
+
+export const isAuthorBlocked = (author?: BSkyAuthor): author is BlockedAuthor => {
+  return (author as BlockedAuthor).viewer.blockedBy === true;
 };
 
 type BskyFacet =
@@ -91,46 +110,97 @@ export type BskyPostEmbed =
     }
   | {
       $type: 'app.bsky.embed.record#view';
-      record: {
-        $type: 'app.bsky.embed.record#viewRecord';
-        uri: `at://did:${string}`;
-        cid: string;
-        author: BSkyPostAuthor;
-        value: BSkyFeedPostRecord;
-        labels: BskyPostLabel[];
-        likeCount: number;
-        replyCount: number;
-        repostCount: number;
-        quoteCount: number;
-        indexedAt: string;
-        text?: string;
-        facets?: BskyFacet[];
-        embeds: (
-          | {
-              $type: 'app.bsky.embed.external#view';
-              external: {
-                uri: string;
-                title: string;
-                description: string;
-                thumb: string;
-              };
-            }
-          | {
-              $type: 'app.bsky.embed.images#view';
-              images: [
-                {
-                  thumb: string;
-                  fullsize: string;
-                  alt: string;
-                  aspectRatio: {
-                    height: number;
-                    width: number;
+      record:
+        | {
+            $type: 'app.bsky.embed.record#viewRecord';
+            uri: `at://did:${string}`;
+            cid: string;
+            author?: BSkyAuthor;
+            value: BSkyFeedPostRecord;
+            labels: BskyPostLabel[];
+            likeCount: number;
+            replyCount: number;
+            repostCount: number;
+            quoteCount: number;
+            indexedAt: string;
+            text?: string;
+            facets?: BskyFacet[];
+            embeds: (
+              | {
+                  $type: 'app.bsky.embed.external#view';
+                  external: {
+                    uri: string;
+                    title: string;
+                    description: string;
+                    thumb: string;
                   };
+                }
+              | {
+                  $type: 'app.bsky.embed.images#view';
+                  images: [
+                    {
+                      thumb: string;
+                      fullsize: string;
+                      alt: string;
+                      aspectRatio: {
+                        height: number;
+                        width: number;
+                      };
+                    },
+                  ];
+                }
+            )[];
+          }
+        | {
+            uri: string;
+            cid: string;
+            record: {
+              $type: 'app.bsky.graph.starterpack';
+              createdAt: string;
+              description: string;
+              feeds: [
+                {
+                  avatar: string;
+                  cid: string;
+                  creator: {
+                    associated: {
+                      chat: {
+                        allowIncoming: string;
+                      };
+                    };
+                    avatar: string;
+                    createdAt: string;
+                    description: string;
+                    did: string;
+                    displayName: string;
+                    handle: string;
+                    indexedAt: string;
+                    labels: [];
+                    viewer: {
+                      blockedBy: false;
+                      muted: false;
+                    };
+                  };
+                  description: string;
+                  did: string;
+                  displayName: string;
+                  indexedAt: string;
+                  labels: [];
+                  likeCount: number;
+                  uri: string;
                 },
               ];
-            }
-        )[];
-      };
+              list: string;
+              name: string;
+              updatedAt: string;
+            };
+            creator: BSkyAuthor;
+            joinedAllTimeCount: number;
+            joinedWeekCount: number;
+            labels: [];
+            indexedAt: string;
+            $type: 'app.bsky.graph.defs#starterPackViewBasic';
+          };
     }
   | {
       $type: 'app.bsky.embed.video#view';
@@ -159,7 +229,7 @@ export type BskyPostEmbed =
           $type: 'app.bsky.embed.record#viewRecord';
           uri: string;
           cid: string;
-          author: BSkyPostAuthor;
+          author: BSkyAuthor;
           value: {
             $type: 'app.bsky.feed.post';
             createdAt: string;
@@ -190,7 +260,7 @@ export type BskyPostEmbed =
                   $type: 'app.bsky.embed.record#viewRecord';
                   uri: string;
                   cid: string;
-                  author: BSkyPostAuthor;
+                  author: BSkyAuthor;
                   value: {
                     $type: 'app.bsky.feed.post';
                     createdAt: string;
@@ -346,7 +416,7 @@ type BSkyFeedPostRecord = {
 export type BskyPost = {
   uri: string;
   cid: string;
-  author: BSkyPostAuthor;
+  author: BSkyAuthor;
   record: BSkyFeedPostRecord;
   embed?: BskyPostEmbed;
   replyCount: number;

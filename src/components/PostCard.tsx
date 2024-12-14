@@ -10,6 +10,7 @@ import { FacetedText } from './FacetedText';
 import { PostEmbed } from './PostEmbed';
 import { Link } from './ui/Link';
 import { NotImplementedBox } from './ui/NotImplementedBox';
+import { ErrorBoundary } from './ErrorBoundary';
 
 type PostCardProps = {
   post: BskyPost | undefined | null;
@@ -64,7 +65,9 @@ export function PostCard({ post, className, onClick }: PostCardProps) {
       <p className="text-gray-800 dark:text-gray-200 mb-3">
         {<FacetedText text={post.record.text} facets={post.record.facets} />}
       </p>
-      <PostEmbed embed={post.embed} />
+      <ErrorBoundary>
+        <PostEmbed embed={post.embed} />
+      </ErrorBoundary>
       <div className="flex items-center space-x-6 text-gray-500 dark:text-gray-400">
         <button className="flex items-center space-x-2 hover:text-red-500 transition-colors">
           <MessageCircle size={20} />
