@@ -1,4 +1,4 @@
-import { MessageCircle, Repeat2, Heart, Repeat } from 'lucide-react';
+import { MessageCircle, Heart, Repeat } from 'lucide-react';
 import { useLike } from '../lib/bluesky/hooks/useLike';
 import { formatDate } from '../lib/utils';
 import { Debug } from './ui/Debug';
@@ -7,6 +7,7 @@ import { cn } from '../lib/utils';
 import { Image } from './ui/Image';
 import { useRepost } from '../lib/bluesky/hooks/useRepost';
 import { toast } from 'sonner';
+import { FacetedText } from './FacetedText';
 
 const postUriToLink = (uri: string) => {
   const [did, , rKey] = uri.split('//')[1].split('/');
@@ -56,7 +57,9 @@ export function PostCard({ post, className, onClick }: PostCardProps) {
           </div>
         </div>
       </div>
-      <p className="text-gray-800 dark:text-gray-200 mb-3">{post.record.text}</p>
+      <p className="text-gray-800 dark:text-gray-200 mb-3">
+        {<FacetedText text={post.record.text} facets={post.record.facets} />}
+      </p>
       {post.embed?.$type === 'app.bsky.embed.images#view' && (
         <div className="grid grid-cols-2 gap-2 mb-3">
           {post.embed.images.map((image) => (

@@ -215,6 +215,8 @@ export type BskyPost = {
               mimeType: string;
               size: number;
             };
+            title?: string;
+            uri?: string;
           };
         }
       | {
@@ -259,18 +261,45 @@ export type BskyPost = {
             size: number;
           };
         };
-    facets?: {
-      features: [
-        {
-          $type: 'app.bsky.richtext.facet#link';
-          uri: string;
-        },
-      ];
-      index: {
-        byteEnd: number;
-        byteStart: number;
-      };
-    }[];
+    facets?: (
+      | {
+          features: [
+            {
+              $type: 'app.bsky.richtext.facet#link';
+              uri: string;
+            },
+          ];
+          index: {
+            byteEnd: number;
+            byteStart: number;
+          };
+        }
+      | {
+          $type: 'app.bsky.richtext.facet';
+          features: [
+            {
+              $type: 'app.bsky.richtext.facet#mention';
+              did: `did:plc:${string}`;
+            },
+          ];
+          index: {
+            byteEnd: number;
+            byteStart: number;
+          };
+        }
+      | {
+          features: [
+            {
+              $type: 'app.bsky.richtext.facet#tag';
+              tag: string;
+            },
+          ];
+          index: {
+            byteEnd: number;
+            byteStart: number;
+          };
+        }
+    )[];
     langs?: ('en' | 'de')[];
     reply?: unknown;
     text: string;
@@ -820,6 +849,184 @@ const testPost = [
     viewer: {
       repost: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.feed.repost/3ldaahny32d2x',
       like: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.feed.like/3ldaahk3ait2a',
+      threadMuted: false,
+      embeddingDisabled: false,
+    },
+    labels: [],
+  },
+  {
+    uri: 'at://did:plc:wjatbj4hiinxfqaeixaw2bcp/app.bsky.feed.post/3ldadsarvwo24',
+    cid: 'bafyreia36q2y3sbognfjqjnioupnf7qzezjkpl4j7kxt43l6g7fuekz6he',
+    author: {
+      did: 'did:plc:wjatbj4hiinxfqaeixaw2bcp',
+      handle: 'realtuckfrumper.bsky.social',
+      displayName: '#TuckFrump',
+      avatar:
+        'https://cdn.bsky.app/img/avatar/plain/did:plc:wjatbj4hiinxfqaeixaw2bcp/bafkreideluihiwuwssieujhm7vkgpi3fjmkt7c2uvoyt3o5bhgwbwjwzpy@jpeg',
+      associated: {
+        chat: {
+          allowIncoming: 'following',
+        },
+      },
+      viewer: {
+        muted: false,
+        blockedBy: false,
+        following: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.graph.follow/3lb2c5fiboz25',
+      },
+      labels: [],
+      createdAt: '2024-03-03T18:13:03.807Z',
+    },
+    record: {
+      $type: 'app.bsky.feed.post',
+      createdAt: '2024-12-14T03:21:11Z',
+      embed: {
+        $type: 'app.bsky.embed.external',
+        external: {
+          description:
+            "Sen. Mitch McConnell (R-KY) just fired a warning shot at President-elect Donald Trump's nominees, a Republican strategist opined on CNN late Friday.\n\nMcConnell has taken swipes at President-elect Donald Trump in recent days, and Friday, blasted an aide to…",
+          thumb: {
+            $type: 'blob',
+            ref: {
+              $link: 'bafkreiessscyjahjp4dtctvorlj6geslfopjhusahe3xexbqpyyosspddi',
+            },
+            mimeType: 'image/jpeg',
+            size: 44869,
+          },
+          title: "Republican says McConnell fired a warning shot to Trump nominees — you're not 'automatic'",
+          uri: 'https://www.rawstory.com/mitch-mcconnell-2670451965/?utm_source=dlvr.it&utm_medium=bluesky',
+        },
+      },
+      text: '',
+    },
+    embed: {
+      $type: 'app.bsky.embed.external#view',
+      external: {
+        uri: 'https://www.rawstory.com/mitch-mcconnell-2670451965/?utm_source=dlvr.it&utm_medium=bluesky',
+        title: "Republican says McConnell fired a warning shot to Trump nominees — you're not 'automatic'",
+        description:
+          "Sen. Mitch McConnell (R-KY) just fired a warning shot at President-elect Donald Trump's nominees, a Republican strategist opined on CNN late Friday.\n\nMcConnell has taken swipes at President-elect Donald Trump in recent days, and Friday, blasted an aide to…",
+        thumb:
+          'https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:wjatbj4hiinxfqaeixaw2bcp/bafkreiessscyjahjp4dtctvorlj6geslfopjhusahe3xexbqpyyosspddi@jpeg',
+      },
+    },
+    replyCount: 20,
+    repostCount: 14,
+    likeCount: 86,
+    quoteCount: 1,
+    indexedAt: '2024-12-14T03:21:12.355Z',
+    viewer: {
+      threadMuted: false,
+      embeddingDisabled: false,
+    },
+    labels: [],
+  },
+  {
+    uri: 'at://did:plc:womhb5cxq2knwpevrf45nyec/app.bsky.feed.post/3ld73m4xurs2n',
+    cid: 'bafyreihiwtmnyhakpteo2z2mytmpmjlyj2becu5ojiflb3telg3utdtc6a',
+    author: {
+      did: 'did:plc:womhb5cxq2knwpevrf45nyec',
+      handle: 'bonesyblue.bsky.social',
+      displayName: 'Jonathan Bones',
+      avatar:
+        'https://cdn.bsky.app/img/avatar/plain/did:plc:womhb5cxq2knwpevrf45nyec/bafkreihoqf7d6f7tto4ocr7aiald3qregnqmaqc46luve4elq7xmgar4rm@jpeg',
+      associated: {
+        chat: {
+          allowIncoming: 'following',
+        },
+      },
+      viewer: {
+        muted: false,
+        blockedBy: false,
+        following: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.graph.follow/3l7vzazpagn2v',
+      },
+      labels: [
+        {
+          src: 'did:plc:womhb5cxq2knwpevrf45nyec',
+          uri: 'at://did:plc:womhb5cxq2knwpevrf45nyec/app.bsky.actor.profile/self',
+          cid: 'bafyreiadusufs5scly55dx6aewqjs4ta6szfrws3e6q7ajv6bwxbn5whs4',
+          val: '!no-unauthenticated',
+          cts: '1970-01-01T00:00:00.000Z',
+        },
+      ],
+      createdAt: '2023-05-12T15:01:22.335Z',
+    },
+    record: {
+      $type: 'app.bsky.feed.post',
+      createdAt: '2024-12-13T15:21:56.489Z',
+      embed: {
+        $type: 'app.bsky.embed.external',
+        external: {
+          description: 'YouTube video by tldraw',
+          thumb: {
+            $type: 'blob',
+            ref: {
+              $link: 'bafkreiga6uybapxde2lhri73po7mrcp2tfqqiod4udmovzcsczwhnrawmi',
+            },
+            mimeType: 'image/jpeg',
+            size: 70293,
+          },
+          title: 'tldraw computer - Teaser',
+          uri: 'https://youtu.be/u1016UnJIgA?si=7YJLFzpAWTJXGD61',
+        },
+      },
+      facets: [
+        {
+          $type: 'app.bsky.richtext.facet',
+          features: [
+            {
+              $type: 'app.bsky.richtext.facet#mention',
+              did: 'did:plc:omsowhiqyifcyhcu4dd3zytj',
+            },
+          ],
+          index: {
+            byteEnd: 45,
+            byteStart: 21,
+          },
+        },
+        {
+          features: [
+            {
+              $type: 'app.bsky.richtext.facet#tag',
+              tag: 'ReactDayBerlin',
+            },
+          ],
+          index: {
+            byteEnd: 64,
+            byteStart: 49,
+          },
+        },
+        {
+          features: [
+            {
+              $type: 'app.bsky.richtext.facet#link',
+              uri: 'https://youtu.be/u1016UnJIgA?si=7YJLFzpAWTJXGD61',
+            },
+          ],
+          index: {
+            byteEnd: 155,
+            byteStart: 131,
+          },
+        },
+      ],
+      langs: ['en'],
+      text: 'Very cool demos from @steveruizok.bsky.social at #ReactDayBerlin! If you haven’t already, make sure to check out tldraw Computer youtu.be/u1016UnJIgA?...',
+    },
+    embed: {
+      $type: 'app.bsky.embed.external#view',
+      external: {
+        uri: 'https://youtu.be/u1016UnJIgA?si=7YJLFzpAWTJXGD61',
+        title: 'tldraw computer - Teaser',
+        description: 'YouTube video by tldraw',
+        thumb:
+          'https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:womhb5cxq2knwpevrf45nyec/bafkreiga6uybapxde2lhri73po7mrcp2tfqqiod4udmovzcsczwhnrawmi@jpeg',
+      },
+    },
+    replyCount: 0,
+    repostCount: 1,
+    likeCount: 5,
+    quoteCount: 0,
+    indexedAt: '2024-12-13T15:21:58.856Z',
+    viewer: {
       threadMuted: false,
       embeddingDisabled: false,
     },
