@@ -1,9 +1,9 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { BskyAgent } from '@atproto/api';
-import { BlueskyCredentials, BlueskyState } from './types';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { BskyAgent } from "@atproto/api";
+import { BlueskyCredentials, BlueskyState } from "./types_old";
 
-const BLUESKY_SERVICE = 'https://bsky.social';
+const BLUESKY_SERVICE = "https://bsky.social";
 
 export const useBlueskyStore = create<BlueskyState>()(
   persist(
@@ -17,7 +17,7 @@ export const useBlueskyStore = create<BlueskyState>()(
           identifier: credentials.handle,
           password: credentials.password,
         });
-        
+
         // Store session data
         const session = response.data;
         set({ agent, isAuthenticated: true, session });
@@ -35,7 +35,7 @@ export const useBlueskyStore = create<BlueskyState>()(
             await agent.resumeSession(session);
             set({ agent, isAuthenticated: true });
           } catch (error) {
-            console.error('Failed to restore session:', error);
+            console.error("Failed to restore session:", error);
             set({ agent: null, isAuthenticated: false, session: null });
           }
         }
@@ -44,7 +44,7 @@ export const useBlueskyStore = create<BlueskyState>()(
       session: null,
     }),
     {
-      name: 'bluesky-store',
+      name: "bluesky-store",
       partialize: (state) => ({ session: state.session }),
     }
   )

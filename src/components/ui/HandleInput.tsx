@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { searchProfiles } from '../../lib/bluesky/api';
-import { BlueskyProfile } from '../../lib/bluesky/types';
-import { Input } from './Input';
+import React, { useState, useEffect, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { searchProfiles } from "../../lib/bluesky/api";
+import { BlueskyProfile } from "../../lib/bluesky/types_old";
+import { Input } from "./Input";
 
 interface HandleInputProps {
   value: string;
@@ -16,14 +16,14 @@ export function HandleInput({
   value,
   onChange,
   onSelect,
-  placeholder = 'Enter handle...',
-  className = '',
+  placeholder = "Enter handle...",
+  className = "",
 }: HandleInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const { data: profiles, isLoading } = useQuery({
-    queryKey: ['profile-search', value],
+    queryKey: ["profile-search", value],
     queryFn: () => searchProfiles(value),
     enabled: value.length > 0 && isOpen,
     staleTime: 1000 * 60 * 5, // Cache for 5 minutes
@@ -31,13 +31,16 @@ export function HandleInput({
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (

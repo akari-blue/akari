@@ -5,24 +5,20 @@ import { BskyPost } from '../types';
 
 const timelineQueryKey = ['timeline', { isAuthenticated: true }];
 
-export function useLike() {
+export function useRepost() {
   const { agent } = useBlueskyStore();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['like'],
-    mutationFn: async ({ uri, cid, like }: { uri: string; cid: string; like: boolean }) => {
+    mutationKey: ['repost'],
+    mutationFn: async ({ uri, cid }: { uri: string; cid: string }) => {
       if (!agent) throw new Error('Not authenticated');
 
-      toast.info('Updating like status for ' + uri + ' to ' + like);
+      toast.info('Reposting ' + uri);
 
-      if (like) {
-        await agent.like(uri, cid);
-      } else {
-        await agent.deleteLike(uri);
-      }
+      await agent.repost(uri, cid);
     },
-    onMutate: async ({ uri, like }) => {
+    onMutate: async ({ uri }) => {
       await queryClient.cancelQueries({ queryKey: timelineQueryKey });
 
       const previousData = queryClient.getQueryData(timelineQueryKey);
@@ -52,10 +48,10 @@ export function useLike() {
                 feedContext,
                 post: {
                   ...post,
-                  likeCount: post.likeCount + (like ? 1 : -1),
+                  repostCount: post.repostCount + 1,
                   viewer: {
                     ...post.viewer,
-                    like,
+                    repost: true,
                   },
                 },
               };
@@ -68,10 +64,10 @@ export function useLike() {
     },
     onError: (error, __, context) => {
       queryClient.setQueryData(timelineQueryKey, context?.previousData);
-      toast.error('Failed to update like status ' + (error as Error).message);
+      toast.error('Failed to repost ' + (error as Error).message);
     },
-    onSuccess: (_, { like }) => {
-      toast.success('Like status updated to ' + like);
+    onSuccess: () => {
+      toast.success('Reposted successfully');
     },
   });
 }
