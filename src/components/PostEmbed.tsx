@@ -6,8 +6,10 @@ import { cn, formatDate } from '../lib/utils';
 import { FacetedText } from './FacetedText';
 import { Link } from './ui/Link';
 import { Debug } from './ui/Debug';
+import { useSettings } from '../hooks/useSetting';
 
 export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
+  const { experiments } = useSettings();
   if (!embed) return null;
 
   switch (embed.$type) {
@@ -16,6 +18,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
         <div className={cn(embed.images.length >= 2 && 'grid grid-cols-2', 'gap-2 mb-3')}>
           {embed.images.map((image) => (
             <Image
+              type="post"
               key={image.thumb}
               src={image.thumb}
               alt={image.alt}
@@ -26,8 +29,8 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
       );
     case 'app.bsky.embed.video#view':
       return (
-        <div className="mb-3">
-          <ReactPlayer url={embed.playlist} controls={true} width="100%" height="100%" />
+        <div className={cn('mb-3', experiments.streamerMode && 'filter blur-md')}>
+          <ReactPlayer url={embed.playlist} controls={true} width="100%" height="100%" muted={true} />
         </div>
       );
     case 'app.bsky.embed.external#view':
@@ -37,6 +40,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
             {embed.external.title}
           </a>
           <Image
+            type="post"
             src={embed.external.thumb}
             alt={embed.external.title}
             className="rounded-lg w-full aspect-square object-cover"
@@ -62,7 +66,9 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
         <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow')}>
           {embed.record.$type === 'app.bsky.embed.record#viewRecord' && (
             <div className="flex items-center space-x-3 mb-2">
-              {author.avatar && <img src={author.avatar} alt={author.handle} className="w-10 h-10 rounded-full" />}
+              {author.avatar && (
+                <Image type="avatar" src={author.avatar} alt={author.handle} className="w-10 h-10 rounded-full" />
+              )}
               <div>
                 <div className="font-medium text-gray-900 dark:text-gray-100">
                   <Link to="/profile/$handle" params={{ handle: author.handle }}>

@@ -1,10 +1,15 @@
 import { useState } from 'react';
+import { useSettings } from '../../hooks/useSetting';
 
 export const Debug = ({ value }: { value: unknown }) => {
+  const { experiments } = useSettings();
   const [open, setOpen] = useState(false);
   const onClick = () => {
     setOpen((prev) => !prev);
   };
+
+  if (!experiments.devMode) return null;
+
   return (
     <div className="flex flex-col gap-2">
       <div className="w-full flex flex-row justify-end">

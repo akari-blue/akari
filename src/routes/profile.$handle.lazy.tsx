@@ -31,9 +31,9 @@ function Profile() {
           </div>
         </div>
         <ErrorBoundary>
-          <Image src={profile?.banner} alt="Banner" className="w-full h-32 object-cover" />
+          <Image type="banner" src={profile?.banner} alt="Banner" className="w-full h-32 object-cover" />
           <div>
-            <Image src={profile?.avatar} alt="Avatar" className="w-24 h-24 rounded-full" />
+            <Image type="avatar" src={profile?.avatar} alt="Avatar" className="w-24 h-24 rounded-full" />
             <div>
               <h2 className="text-xl font-bold">{profile?.displayName}</h2>
               <p>{profile?.description}</p>

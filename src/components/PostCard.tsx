@@ -11,6 +11,7 @@ import { PostEmbed } from './PostEmbed';
 import { Link } from './ui/Link';
 import { NotImplementedBox } from './ui/NotImplementedBox';
 import { ErrorBoundary } from './ErrorBoundary';
+import { Image } from './ui/Image';
 
 type PostCardProps = {
   post: BskyPost | undefined | null;
@@ -38,7 +39,9 @@ export function PostCard({ post, className, onClick }: PostCardProps) {
     <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow', className)} onClick={onClick} id={post.uri}>
       {!!post.record.reply && <NotImplementedBox type="reply" data={post.record.reply} />}
       <div className="flex items-center space-x-3 mb-2">
-        {post.author.avatar && <img src={post.author.avatar} alt={post.author.handle} className="w-10 h-10 rounded-full" />}
+        {post.author.avatar && (
+          <Image type="avatar" src={post.author.avatar} alt={post.author.handle} className="w-10 h-10 rounded-full" />
+        )}
         <div>
           <div className="font-medium text-gray-900 dark:text-gray-100">
             <Link to="/profile/$handle" params={{ handle: post.author.handle }}>

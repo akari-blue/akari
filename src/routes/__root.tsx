@@ -5,6 +5,8 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useBlueskyStore } from '../lib/bluesky/store';
 import { Toaster } from 'sonner';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useSettings } from '../hooks/useSetting';
 
 // Create a new query client instance
 const queryClient = new QueryClient({
@@ -46,13 +48,15 @@ export const Route = createRootRoute({
 });
 
 function Root() {
+  const { experiments } = useSettings();
   return (
     <main className="text-black dark:text-white">
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
           <Outlet />
+          {experiments.devMode && <ReactQueryDevtools />}
         </QueryClientProvider>
-        <TanStackRouterDevtools />
+        {experiments.devMode && <TanStackRouterDevtools />}
         <Toaster position="bottom-right" closeButton richColors />
       </ErrorBoundary>
     </main>

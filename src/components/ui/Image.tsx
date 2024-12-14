@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
+import { useSettings } from '../../hooks/useSetting';
 
-export const Image = ({ src, alt, ...props }: { src?: string; alt: string } & React.ImgHTMLAttributes<HTMLImageElement>) => {
+type ImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+  type: 'avatar' | 'post' | 'banner';
+};
+
+export const Image = ({ src, alt, type, ...props }: ImageProps) => {
+  const { experiments } = useSettings();
   const [showAltText, setShowAltText] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const altButtonOnClick = () => {
@@ -31,6 +37,7 @@ export const Image = ({ src, alt, ...props }: { src?: string; alt: string } & Re
     <>
       <div className="relative">
         {alt &&
+          type === 'post' &&
           (showAltText ? (
             <div
               className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 text-white"
@@ -43,7 +50,13 @@ export const Image = ({ src, alt, ...props }: { src?: string; alt: string } & Re
               ALT
             </button>
           ))}
-        <img src={src} alt={alt} {...props} onClick={imageOnClick} />
+        <img
+          src={src}
+          alt={alt}
+          {...props}
+          onClick={imageOnClick}
+          className={cn(props.className, experiments.streamerMode && 'filter blur-md')}
+        />
       </div>
       {isFullscreen && (
         <div className="z-50" onClick={imageOnClick}>
@@ -51,7 +64,12 @@ export const Image = ({ src, alt, ...props }: { src?: string; alt: string } & Re
             <div className="fixed top-0 bottom-0 left-0 right-0">
               <div className="fixed top-0 bottom-0 left-0 right-0 bg-black bg-opacity-90" />
               <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4">
-                <img src={src} alt={alt} {...props} className={cn(props.className, 'h-full w-full')} />
+                <img
+                  src={src}
+                  alt={alt}
+                  {...props}
+                  className={cn(props.className, 'h-full w-full', experiments.streamerMode && 'filter blur-md')}
+                />
               </div>
             </div>
           </div>
