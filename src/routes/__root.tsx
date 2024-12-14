@@ -5,7 +5,7 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useBlueskyStore } from '../lib/bluesky/store';
 import { Toaster } from 'sonner';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
 import { useSettings } from '../hooks/useSetting';
 
 // Create a new query client instance
