@@ -28,6 +28,14 @@ export const Route = createRootRoute({
   beforeLoad: async ({ location }) => {
     if (location.pathname === '/login') return;
 
+    // redirect to profile
+    if (location.pathname.startsWith('/@')) {
+      throw redirect({
+        to: '/profile/$handle',
+        params: { handle: location.pathname.slice(2) },
+      });
+    }
+
     // Attempt to restore the session
     await useBlueskyStore.getState().restoreSession();
 
