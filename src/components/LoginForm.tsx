@@ -1,4 +1,3 @@
-import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { HandleInput } from './ui/HandleInput';
@@ -32,17 +31,9 @@ export function LoginForm() {
           name="handle"
           control={control}
           rules={{ required: 'Handle is required' }}
-          render={({ field }) => (
-            <HandleInput
-              value={field.value || ''}
-              onChange={field.onChange}
-              className="mt-1"
-            />
-          )}
+          render={({ field }) => <HandleInput value={field.value || ''} onChange={field.onChange} className="mt-1" />}
         />
-        {errors.handle && (
-          <p className="mt-1 text-sm text-red-500">{errors.handle.message}</p>
-        )}
+        {errors.handle && <p className="mt-1 text-sm text-red-500">{errors.handle.message}</p>}
       </div>
 
       <div>
@@ -53,20 +44,12 @@ export function LoginForm() {
           {...register('password', { required: 'Password is required' })}
           error={!!errors.password}
         />
-        {errors.password && (
-          <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
-        )}
+        {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
       </div>
 
-      {error && (
-        <p className="text-red-500 text-sm">{error.message}</p>
-      )}
+      {error && <p className="text-red-500 text-sm">{error.message}</p>}
 
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full"
-      >
+      <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? 'Logging in...' : 'Login'}
       </Button>
     </form>

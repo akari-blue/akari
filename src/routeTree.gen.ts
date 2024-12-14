@@ -18,6 +18,11 @@ import { Route as rootRoute } from './routes/__root'
 
 const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
+const TagTagLazyImport = createFileRoute('/tag/$tag')()
+const ProfileHandleLazyImport = createFileRoute('/profile/$handle')()
+const ProfileHandlePostPostIdLazyImport = createFileRoute(
+  '/profile_/$handle/post/$postId',
+)()
 
 // Create/Update Routes
 
@@ -32,6 +37,29 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const TagTagLazyRoute = TagTagLazyImport.update({
+  id: '/tag/$tag',
+  path: '/tag/$tag',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/tag.$tag.lazy').then((d) => d.Route))
+
+const ProfileHandleLazyRoute = ProfileHandleLazyImport.update({
+  id: '/profile/$handle',
+  path: '/profile/$handle',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/profile.$handle.lazy').then((d) => d.Route),
+)
+
+const ProfileHandlePostPostIdLazyRoute =
+  ProfileHandlePostPostIdLazyImport.update({
+    id: '/profile_/$handle/post/$postId',
+    path: '/profile/$handle/post/$postId',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/profile_.$handle.post.$postId.lazy').then((d) => d.Route),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -51,6 +79,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginLazyImport
       parentRoute: typeof rootRoute
     }
+    '/profile/$handle': {
+      id: '/profile/$handle'
+      path: '/profile/$handle'
+      fullPath: '/profile/$handle'
+      preLoaderRoute: typeof ProfileHandleLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/tag/$tag': {
+      id: '/tag/$tag'
+      path: '/tag/$tag'
+      fullPath: '/tag/$tag'
+      preLoaderRoute: typeof TagTagLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile_/$handle/post/$postId': {
+      id: '/profile_/$handle/post/$postId'
+      path: '/profile/$handle/post/$postId'
+      fullPath: '/profile/$handle/post/$postId'
+      preLoaderRoute: typeof ProfileHandlePostPostIdLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -59,36 +108,67 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
+  '/profile/$handle': typeof ProfileHandleLazyRoute
+  '/tag/$tag': typeof TagTagLazyRoute
+  '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
+  '/profile/$handle': typeof ProfileHandleLazyRoute
+  '/tag/$tag': typeof TagTagLazyRoute
+  '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
+  '/profile/$handle': typeof ProfileHandleLazyRoute
+  '/tag/$tag': typeof TagTagLazyRoute
+  '/profile_/$handle/post/$postId': typeof ProfileHandlePostPostIdLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/profile/$handle'
+    | '/tag/$tag'
+    | '/profile/$handle/post/$postId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login'
-  id: '__root__' | '/' | '/login'
+  to:
+    | '/'
+    | '/login'
+    | '/profile/$handle'
+    | '/tag/$tag'
+    | '/profile/$handle/post/$postId'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/profile/$handle'
+    | '/tag/$tag'
+    | '/profile_/$handle/post/$postId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
+  ProfileHandleLazyRoute: typeof ProfileHandleLazyRoute
+  TagTagLazyRoute: typeof TagTagLazyRoute
+  ProfileHandlePostPostIdLazyRoute: typeof ProfileHandlePostPostIdLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
+  ProfileHandleLazyRoute: ProfileHandleLazyRoute,
+  TagTagLazyRoute: TagTagLazyRoute,
+  ProfileHandlePostPostIdLazyRoute: ProfileHandlePostPostIdLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -102,7 +182,10 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/login"
+        "/login",
+        "/profile/$handle",
+        "/tag/$tag",
+        "/profile_/$handle/post/$postId"
       ]
     },
     "/": {
@@ -110,6 +193,15 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.lazy.tsx"
+    },
+    "/profile/$handle": {
+      "filePath": "profile.$handle.lazy.tsx"
+    },
+    "/tag/$tag": {
+      "filePath": "tag.$tag.lazy.tsx"
+    },
+    "/profile_/$handle/post/$postId": {
+      "filePath": "profile_.$handle.post.$postId.lazy.tsx"
     }
   }
 }

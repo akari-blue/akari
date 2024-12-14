@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useTimeline } from '../lib/bluesky/hooks/useTimeline';
 import { PostCard } from './PostCard';
@@ -13,7 +13,7 @@ export function Timeline() {
   const like = useLike();
   const repost = useRepost();
   const posts = data?.pages.map((page) => page.feed.map(({ post }) => post)).flat() ?? [];
-  const [selectedPost, setSelectedPost] = useState<`at://did:${string}` | null>(posts[0]?.uri ?? null);
+  const [selectedPost, setSelectedPost] = useState<string | null>(posts[0]?.uri ?? null);
   const getPost = (uri: string | null) => (uri ? posts.find((post) => post.uri === uri) : null);
   const getNextPost = (uri: string | null) => {
     const index = posts.findIndex((post) => post.uri === uri);
@@ -107,9 +107,8 @@ export function Timeline() {
 
   return (
     <div className="space-y-4">
-      {posts.map((post, index) => (
+      {posts.map((post) => (
         <div>
-          <div>#{index}</div>
           <PostCard
             key={post.uri}
             post={post}

@@ -1,36 +1,32 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-
-import { useBlueskyStore } from '../lib/bluesky/store';
-import { Timeline } from '../components/Timeline';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { Button } from '../components/ui/Button';
-import { FeedSelector } from '../components/FeedSelector';
+import { useAuth } from '../lib/bluesky/hooks/useAuth';
+import { PostCard } from '../components/PostCard';
+import { useTag } from '../lib/bluesky/hooks/useTag';
 
-function Index() {
-  const { logout } = useBlueskyStore();
+export const Route = createLazyFileRoute('/tag/$tag')({
+  component: Tag,
+});
+
+function Tag() {
+  const { logout } = useAuth();
+  const { tag } = Route.useParams();
+  const { data: posts } = useTag({ tag: tag });
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 max-w-2xl mx-auto py-8 px-4">
       <div className="flex flex-col gap-2">
         <div className="flex flex-col justify-between items-center">
           <div className="flex justify-between items-center w-full">
-            <h1 className="text-2xl font-bold">Feeds</h1>
+            <h1 className="text-2xl font-bold">#{tag}</h1>
             <Button variant="ghost" onClick={logout}>
               Logout
             </Button>
           </div>
-          <ErrorBoundary>
-            <FeedSelector />
-          </ErrorBoundary>
         </div>
-        <ErrorBoundary>
-          <Timeline />
-        </ErrorBoundary>
+        <ErrorBoundary>{posts?.map((post) => <PostCard key={post.uri} post={post} />)}</ErrorBoundary>
       </div>
     </div>
   );
 }
-
-export const Route = createLazyFileRoute('/')({
-  component: Index,
-});

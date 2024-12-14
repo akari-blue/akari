@@ -6,7 +6,27 @@ type BskyPostLabel = {
   cts: string;
 };
 
-type BskyPostEmbed =
+type BSkyPostAuthor = {
+  did: `did:${string}`;
+  handle: string;
+  displayName: string;
+  avatar: string;
+  associated?: {
+    chat: {
+      allowIncoming: 'all' | 'following';
+    };
+  };
+  viewer: {
+    muted: boolean;
+    blockedBy: boolean;
+    following?: `at://did:${string}`;
+    followedBy?: `at://did:${string}`;
+  };
+  labels?: BskyPostLabel[];
+  createdAt: string;
+};
+
+export type BskyPostEmbed =
   | {
       $type: 'app.bsky.embed.external#view';
       external: {
@@ -36,104 +56,8 @@ type BskyPostEmbed =
         $type: 'app.bsky.embed.record#viewRecord';
         uri: `at://did:${string}`;
         cid: string;
-        author: {
-          did: `did:plc:${string}`;
-          handle: string;
-          displayName: string;
-          avatar: string;
-          associated: {
-            chat: {
-              allowIncoming: 'all' | 'following';
-            };
-          };
-          viewer: {
-            muted: boolean;
-            blockedBy: boolean;
-            following: `at://did:${string}`;
-            followedBy?: `at://did:${string}`;
-          };
-          labels: BskyPostLabel[];
-          createdAt: string;
-        };
-        value: {
-          $type: 'app.bsky.feed.post';
-          createdAt: string;
-          embed?:
-            | {
-                $type: 'app.bsky.embed.external';
-                external: {
-                  description: string;
-                  thumb: {
-                    $type: 'blob';
-                    ref: {
-                      $link: string;
-                    };
-                    mimeType: string;
-                    size: number;
-                  };
-                  title: string;
-                  uri: string;
-                };
-              }
-            | {
-                $type: 'app.bsky.embed.images';
-                images: [
-                  {
-                    alt: string;
-                    aspectRatio: {
-                      height: number;
-                      width: number;
-                    };
-                    image: {
-                      $type: 'blob';
-                      ref: {
-                        $link: string;
-                      };
-                      mimeType: string;
-                      size: number;
-                    };
-                  },
-                ];
-              };
-          facets?: [
-            {
-              features: [
-                {
-                  $type: 'app.bsky.richtext.facet#tag';
-                  tag: string;
-                },
-              ];
-              index: {
-                byteEnd: number;
-                byteStart: number;
-              };
-            },
-            {
-              features: [
-                {
-                  $type: 'app.bsky.richtext.facet#link';
-                  uri: string;
-                },
-              ];
-              index: {
-                byteEnd: number;
-                byteStart: number;
-              };
-            },
-          ];
-          langs: ['en'];
-          text: string;
-          reply?: {
-            parent: {
-              cid: string;
-              uri: `at://did:${string}`;
-            };
-            root: {
-              cid: string;
-              uri: `at://did:${string}`;
-            };
-          };
-        };
+        author: BSkyPostAuthor;
+        value: BSkyFeedPostRecord;
         labels: BskyPostLabel[];
         likeCount: number;
         replyCount: number;
@@ -175,84 +99,138 @@ type BskyPostEmbed =
         height: number;
         width: number;
       };
-    };
-
-export type BskyPost = {
-  uri: `at://did:${string}`;
-  cid: string;
-  author: {
-    did: `did:${string}`;
-    handle: string;
-    displayName: string;
-    avatar: string;
-    associated?: {
-      chat: {
-        allowIncoming: 'all' | 'following';
+      alt?: string;
+    }
+  | {
+      $type: 'app.bsky.embed.recordWithMedia#view';
+      media: {
+        $type: 'app.bsky.embed.external#view';
+        external: {
+          uri: string;
+          title: string;
+          description: string;
+          thumb: string;
+        };
       };
-    };
-    viewer: {
-      muted: boolean;
-      blockedBy: boolean;
-      following: `at://did:${string}`;
-      followedBy?: `at://did:${string}`;
-    };
-    labels?: BskyPostLabel[];
-    createdAt: string;
-  };
-  record: {
-    $type: 'app.bsky.feed.post';
-    createdAt: string;
-    embed?:
-      | {
-          $type: 'app.bsky.embed.external';
-          external: {
-            description: string;
-            thumb: {
-              $type: 'blob';
-              ref: {
-                $link: string;
-              };
-              mimeType: string;
-              size: number;
-            };
-            title?: string;
-            uri?: string;
+      record: {
+        record: {
+          $type: 'app.bsky.embed.record#viewRecord';
+          uri: string;
+          cid: string;
+          author: BSkyPostAuthor;
+          value: {
+            $type: 'app.bsky.feed.post';
+            createdAt: string;
+            embed: BskyEmebdRecordWithMedia;
+            langs: string[];
+            text: string;
           };
-        }
-      | {
-          $type: 'app.bsky.embed.images';
-          images: [
+          labels: [];
+          likeCount: number;
+          replyCount: number;
+          repostCount: number;
+          quoteCount: number;
+          indexedAt: string;
+          embeds: [
             {
-              alt: string;
-              aspectRatio: {
-                height: number;
-                width: number;
-              };
-              image: {
-                $type: 'blob';
-                ref: {
-                  $link: string;
+              $type: 'app.bsky.embed.recordWithMedia#view';
+              media: {
+                $type: 'app.bsky.embed.external#view';
+                external: {
+                  uri: string;
+                  title: string;
+                  description: string;
+                  thumb: string;
                 };
-                mimeType: string;
-                size: number;
+              };
+              record: {
+                record: {
+                  $type: 'app.bsky.embed.record#viewRecord';
+                  uri: string;
+                  cid: string;
+                  author: BSkyPostAuthor;
+                  value: {
+                    $type: 'app.bsky.feed.post';
+                    createdAt: string;
+                    embed: {
+                      $type: 'app.bsky.embed.recordWithMedia';
+                      media: {
+                        $type: 'app.bsky.embed.external';
+                        external: {
+                          description: string;
+                          thumb: {
+                            $type: 'blob';
+                            ref: {
+                              $link: string;
+                            };
+                            mimeType: string;
+                            size: number;
+                          };
+                          title: string;
+                          uri: string;
+                        };
+                      };
+                      record: {
+                        $type: 'app.bsky.embed.record';
+                        record: {
+                          cid: string;
+                          uri: string;
+                        };
+                      };
+                    };
+                    langs: string[];
+                    text: string;
+                  };
+                  labels: [];
+                  likeCount: number;
+                  replyCount: number;
+                  repostCount: number;
+                  quoteCount: number;
+                  indexedAt: string;
+                };
               };
             },
           ];
-        }
-      | {
-          $type: 'app.bsky.embed.record';
-          record: {
-            cid: string;
-            uri: `at://did:${string}`;
-          };
-        }
-      | {
-          $type: 'app.bsky.embed.video';
-          aspectRatio: {
-            height: number;
-            width: number;
-          };
-          video: {
+        };
+      };
+    };
+
+type BskyEmebdRecordWithMedia = {
+  $type: 'app.bsky.embed.recordWithMedia';
+  media: {
+    $type: 'app.bsky.embed.external';
+    external: {
+      description: string;
+      thumb: {
+        $type: 'blob';
+        ref: {
+          $link: string;
+        };
+        mimeType: string;
+        size: number;
+      };
+      title: string;
+      uri: string;
+    };
+  };
+  record: {
+    $type: 'app.bsky.embed.record';
+    record: {
+      cid: string;
+      uri: string;
+    };
+  };
+};
+
+type BSkyFeedPostRecord = {
+  $type: 'app.bsky.feed.post';
+  createdAt: string;
+  embed?:
+    | {
+        $type: 'app.bsky.embed.external';
+        external: {
+          description: string;
+          thumb: {
             $type: 'blob';
             ref: {
               $link: string;
@@ -260,55 +238,117 @@ export type BskyPost = {
             mimeType: string;
             size: number;
           };
+          title?: string;
+          uri?: string;
         };
-    facets?: (
-      | {
-          features: [
-            {
-              $type: 'app.bsky.richtext.facet#link';
-              uri: string;
-            },
-          ];
-          index: {
-            byteEnd: number;
-            byteStart: number;
+      }
+    | {
+        $type: 'app.bsky.embed.images';
+        images: [
+          {
+            alt: string;
+            aspectRatio: {
+              height: number;
+              width: number;
+            };
+            image: {
+              $type: 'blob';
+              ref: {
+                $link: string;
+              };
+              mimeType: string;
+              size: number;
+            };
+          },
+        ];
+      }
+    | {
+        $type: 'app.bsky.embed.record';
+        record: {
+          cid: string;
+          uri: `at://did:${string}`;
+        };
+      }
+    | {
+        $type: 'app.bsky.embed.video';
+        aspectRatio: {
+          height: number;
+          width: number;
+        };
+        video: {
+          $type: 'blob';
+          ref: {
+            $link: string;
           };
-        }
-      | {
-          $type: 'app.bsky.richtext.facet';
-          features: [
-            {
-              $type: 'app.bsky.richtext.facet#mention';
-              did: `did:plc:${string}`;
-            },
-          ];
-          index: {
-            byteEnd: number;
-            byteStart: number;
-          };
-        }
-      | {
-          features: [
-            {
-              $type: 'app.bsky.richtext.facet#tag';
-              tag: string;
-            },
-          ];
-          index: {
-            byteEnd: number;
-            byteStart: number;
-          };
-        }
-    )[];
-    langs?: ('en' | 'de')[];
-    reply?: unknown;
-    text: string;
+          mimeType: string;
+          size: number;
+        };
+        alt?: string;
+      }
+    | BskyEmebdRecordWithMedia;
+  facets?: (
+    | {
+        features: [
+          {
+            $type: 'app.bsky.richtext.facet#link';
+            uri: string;
+          },
+        ];
+        index: {
+          byteEnd: number;
+          byteStart: number;
+        };
+      }
+    | {
+        $type: 'app.bsky.richtext.facet';
+        features: [
+          {
+            $type: 'app.bsky.richtext.facet#mention';
+            did: `did:plc:${string}`;
+          },
+        ];
+        index: {
+          byteEnd: number;
+          byteStart: number;
+        };
+      }
+    | {
+        features: [
+          {
+            $type: 'app.bsky.richtext.facet#tag';
+            tag: string;
+          },
+        ];
+        index: {
+          byteEnd: number;
+          byteStart: number;
+        };
+      }
+  )[];
+  langs?: ('en' | 'de')[];
+  reply?: {
+    parent: {
+      cid: string;
+      uri: string;
+    };
+    root: {
+      cid: string;
+      uri: string;
+    };
   };
+  text: string;
+};
+
+export type BskyPost = {
+  uri: string;
+  cid: string;
+  author: BSkyPostAuthor;
+  record: BSkyFeedPostRecord;
   embed?: BskyPostEmbed;
   replyCount: number;
   repostCount: number;
   likeCount: number;
-  quoteCount: number;
+  quoteCount?: number;
   indexedAt: string;
   viewer: {
     threadMuted: boolean;
@@ -1026,6 +1066,470 @@ const testPost = [
     likeCount: 5,
     quoteCount: 0,
     indexedAt: '2024-12-13T15:21:58.856Z',
+    viewer: {
+      threadMuted: false,
+      embeddingDisabled: false,
+    },
+    labels: [],
+  },
+  {
+    uri: 'at://did:plc:5zf23j4w6npbiw3axiy5pzhq/app.bsky.feed.post/3ldae4sni7s2h',
+    cid: 'bafyreicpv6uc3h6xgmla4br3dotkzavh3fgwloot3cvl7prox5dcs3q5o4',
+    author: {
+      did: 'did:plc:5zf23j4w6npbiw3axiy5pzhq',
+      handle: 'neurodamuzz.bsky.social',
+      displayName: 'NEURO da Muzz',
+      avatar:
+        'https://cdn.bsky.app/img/avatar/plain/did:plc:5zf23j4w6npbiw3axiy5pzhq/bafkreica3qltuiddq4eviiibyjl4mrg57jas2ubd4apojdnswehn3yaaoq@jpeg',
+      viewer: {
+        muted: false,
+        blockedBy: false,
+        following: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.graph.follow/3lbdmhklxvy2x',
+        followedBy: 'at://did:plc:5zf23j4w6npbiw3axiy5pzhq/app.bsky.graph.follow/3lb32fp5z6c23',
+      },
+      labels: [],
+      createdAt: '2024-11-07T01:59:56.188Z',
+    },
+    record: {
+      $type: 'app.bsky.feed.post',
+      createdAt: '2024-12-14T03:27:05.763Z',
+      embed: {
+        $type: 'app.bsky.embed.recordWithMedia',
+        media: {
+          $type: 'app.bsky.embed.external',
+          external: {
+            description: 'ALT: a woman in a black dress and necklace is pointing at something .',
+            thumb: {
+              $type: 'blob',
+              ref: {
+                $link: 'bafkreicg7zc6f4rthdbzre7et27gyryqvgzoeecgifi4nr4y5kn343sckq',
+              },
+              mimeType: 'image/jpeg',
+              size: 144438,
+            },
+            title: 'a woman in a black dress and necklace is pointing at something .',
+            uri: 'https://media.tenor.com/EuElMELV9aIAAAAC/the-withes-the-grand-high-witch.gif?hh=373&ww=498',
+          },
+        },
+        record: {
+          $type: 'app.bsky.embed.record',
+          record: {
+            cid: 'bafyreifyid63exka7fu25g6qhanj5sv65fwzttqvhemeoiswzb7c2vxfci',
+            uri: 'at://did:plc:jxh3k4xiloncl2gef7vvb3h4/app.bsky.feed.post/3lda5ougmdk2l',
+          },
+        },
+      },
+      langs: ['en'],
+      text: 'Age yourself with a movie you saw in the theatre as a kid.\n\nWitches the Original movie based off Roald Dahl book went with my auntie n it freaked her out more than me',
+    },
+    embed: {
+      $type: 'app.bsky.embed.recordWithMedia#view',
+      media: {
+        $type: 'app.bsky.embed.external#view',
+        external: {
+          uri: 'https://media.tenor.com/EuElMELV9aIAAAAC/the-withes-the-grand-high-witch.gif?hh=373&ww=498',
+          title: 'a woman in a black dress and necklace is pointing at something .',
+          description: 'ALT: a woman in a black dress and necklace is pointing at something .',
+          thumb:
+            'https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:5zf23j4w6npbiw3axiy5pzhq/bafkreicg7zc6f4rthdbzre7et27gyryqvgzoeecgifi4nr4y5kn343sckq@jpeg',
+        },
+      },
+      record: {
+        record: {
+          $type: 'app.bsky.embed.record#viewRecord',
+          uri: 'at://did:plc:jxh3k4xiloncl2gef7vvb3h4/app.bsky.feed.post/3lda5ougmdk2l',
+          cid: 'bafyreifyid63exka7fu25g6qhanj5sv65fwzttqvhemeoiswzb7c2vxfci',
+          author: {
+            did: 'did:plc:jxh3k4xiloncl2gef7vvb3h4',
+            handle: 'darthcanucks.bsky.social',
+            displayName: 'Jordan',
+            avatar:
+              'https://cdn.bsky.app/img/avatar/plain/did:plc:jxh3k4xiloncl2gef7vvb3h4/bafkreigy6co2co4uoo27gyakxzdcbeowleqjxlu25ddpafm2hfl5vzjy2e@jpeg',
+            viewer: {
+              muted: false,
+              blockedBy: false,
+            },
+            labels: [],
+            createdAt: '2024-11-08T00:47:55.581Z',
+          },
+          value: {
+            $type: 'app.bsky.feed.post',
+            createdAt: '2024-12-14T01:31:55.423Z',
+            embed: {
+              $type: 'app.bsky.embed.recordWithMedia',
+              media: {
+                $type: 'app.bsky.embed.external',
+                external: {
+                  description: 'ALT: a cartoon character is standing in front of a fire',
+                  thumb: {
+                    $type: 'blob',
+                    ref: {
+                      $link: 'bafkreifrcgikz3blwstdr432cnu6iixqh5wnls3k2sfnm3ti5lk2awcs5a',
+                    },
+                    mimeType: 'image/jpeg',
+                    size: 361886,
+                  },
+                  title: 'a cartoon character is standing in front of a fire',
+                  uri: 'https://media.tenor.com/-4tVtkvpvn4AAAAC/pokemon-pokemon-first-movie.gif?hh=445&ww=498',
+                },
+              },
+              record: {
+                $type: 'app.bsky.embed.record',
+                record: {
+                  cid: 'bafyreidnmcg7c74mhwamk3s2zj2tckqnnnnapleunxvure4elfabhh7rmi',
+                  uri: 'at://did:plc:3v4apvaros2mllnlmvoflhak/app.bsky.feed.post/3lda4pf3tnc22',
+                },
+              },
+            },
+            langs: ['en'],
+            text: 'Age yourself with a movie you saw in the theatre as a kid.\n\nI remember getting the Ancient Mew card and seeing Pokemon on the big screen it was the best thing ever',
+          },
+          labels: [],
+          likeCount: 1,
+          replyCount: 0,
+          repostCount: 0,
+          quoteCount: 1,
+          indexedAt: '2024-12-14T01:31:57.658Z',
+          embeds: [
+            {
+              $type: 'app.bsky.embed.recordWithMedia#view',
+              media: {
+                $type: 'app.bsky.embed.external#view',
+                external: {
+                  uri: 'https://media.tenor.com/-4tVtkvpvn4AAAAC/pokemon-pokemon-first-movie.gif?hh=445&ww=498',
+                  title: 'a cartoon character is standing in front of a fire',
+                  description: 'ALT: a cartoon character is standing in front of a fire',
+                  thumb:
+                    'https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:jxh3k4xiloncl2gef7vvb3h4/bafkreifrcgikz3blwstdr432cnu6iixqh5wnls3k2sfnm3ti5lk2awcs5a@jpeg',
+                },
+              },
+              record: {
+                record: {
+                  $type: 'app.bsky.embed.record#viewRecord',
+                  uri: 'at://did:plc:3v4apvaros2mllnlmvoflhak/app.bsky.feed.post/3lda4pf3tnc22',
+                  cid: 'bafyreidnmcg7c74mhwamk3s2zj2tckqnnnnapleunxvure4elfabhh7rmi',
+                  author: {
+                    did: 'did:plc:3v4apvaros2mllnlmvoflhak',
+                    handle: 'mikekobela.bsky.social',
+                    displayName: 'Mike Kobela',
+                    avatar:
+                      'https://cdn.bsky.app/img/avatar/plain/did:plc:3v4apvaros2mllnlmvoflhak/bafkreihgudcphdgohchg3ivhfnrz5x4xxt4wkntqokmqvejsvnx2vqmiwe@jpeg',
+                    viewer: {
+                      muted: false,
+                      blockedBy: false,
+                    },
+                    labels: [],
+                    createdAt: '2023-09-21T05:45:16.950Z',
+                  },
+                  value: {
+                    $type: 'app.bsky.feed.post',
+                    createdAt: '2024-12-14T01:14:19.152Z',
+                    embed: {
+                      $type: 'app.bsky.embed.recordWithMedia',
+                      media: {
+                        $type: 'app.bsky.embed.external',
+                        external: {
+                          description: "ALT: a group of chickens with the words we must n't panic above them",
+                          thumb: {
+                            $type: 'blob',
+                            ref: {
+                              $link: 'bafkreih4nn4ts3ghxmyzwcj74l7ltbsexsv7fcywgjnp7u5meg55lgtdve',
+                            },
+                            mimeType: 'image/jpeg',
+                            size: 109228,
+                          },
+                          title: "a group of chickens with the words we must n't panic above them",
+                          uri: 'https://media.tenor.com/uh0Lsu5yZVQAAAAC/chicken-run.gif?hh=280&ww=498',
+                        },
+                      },
+                      record: {
+                        $type: 'app.bsky.embed.record',
+                        record: {
+                          cid: 'bafyreic2l2b6o7mzrimxu4dddsjq4ykib7troiyl5azy67jnq6nbmbm4ki',
+                          uri: 'at://did:plc:36u66axh7ebjzxhtmqo6gel5/app.bsky.feed.post/3lda423qepc2m',
+                        },
+                      },
+                    },
+                    langs: ['en'],
+                    text: 'Age yourself with a movie you saw in the theatre as a kid.\n\nThis was my first experience with the theatre. Couldn’t even grasp the idea of it till the film started rolling, I was like “what is this big wall, where’s the stage?”',
+                  },
+                  labels: [],
+                  likeCount: 2,
+                  replyCount: 0,
+                  repostCount: 0,
+                  quoteCount: 1,
+                  indexedAt: '2024-12-14T01:14:29.755Z',
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+    replyCount: 0,
+    repostCount: 0,
+    likeCount: 1,
+    quoteCount: 0,
+    indexedAt: '2024-12-14T03:27:07.853Z',
+    viewer: {
+      threadMuted: false,
+      embeddingDisabled: false,
+    },
+    labels: [],
+  },
+  {
+    uri: 'at://did:plc:amysrxhsrdtchmujzw7hhhp4/app.bsky.feed.post/3ldads56y2d2o',
+    cid: 'bafyreico3pf5foagnwffmzi5scanfmsan5ulnqfd4arasif2h4cbn55hky',
+    author: {
+      did: 'did:plc:amysrxhsrdtchmujzw7hhhp4',
+      handle: 'noisypixel.net',
+      displayName: 'Noisy Pixel',
+      avatar:
+        'https://cdn.bsky.app/img/avatar/plain/did:plc:amysrxhsrdtchmujzw7hhhp4/bafkreiaa76tpcwdld6nv5p76yrklaficyfighgaqbrqlpiesktn7euqzc4@jpeg',
+      associated: {
+        chat: {
+          allowIncoming: 'following',
+        },
+      },
+      viewer: {
+        muted: false,
+        blockedBy: false,
+        following: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.graph.follow/3lafgtri3uh2v',
+      },
+      labels: [],
+      createdAt: '2024-02-07T17:47:01.698Z',
+    },
+    record: {
+      $type: 'app.bsky.feed.post',
+      createdAt: '2024-12-13T19:21:04-08:00',
+      embed: {
+        $type: 'app.bsky.embed.external',
+        external: {
+          description:
+            'Crunchyroll reveals its Winter 2025 anime lineup, including new series like Fate/strange Fake and Re:ZERO Season 3, plus fan-favorites like Solo Leveling. See what’s premiering soon!',
+          thumb: {
+            $type: 'blob',
+            ref: {
+              $link: 'bafkreiekpe4r2xo7h4zekcw44vdxt44wn327rbkqncrrjlly55ozc22cni',
+            },
+            mimeType: 'image/webp',
+            size: 76872,
+          },
+          title: 'Crunchyroll Winter 2025 Anime Lineup: New Premieres And Returning Favorites',
+          uri: 'https://noisypixel.net/crunchyroll-winter-2025-anime-lineup/',
+        },
+      },
+      text: '',
+    },
+    embed: {
+      $type: 'app.bsky.embed.external#view',
+      external: {
+        uri: 'https://noisypixel.net/crunchyroll-winter-2025-anime-lineup/',
+        title: 'Crunchyroll Winter 2025 Anime Lineup: New Premieres And Returning Favorites',
+        description:
+          'Crunchyroll reveals its Winter 2025 anime lineup, including new series like Fate/strange Fake and Re:ZERO Season 3, plus fan-favorites like Solo Leveling. See what’s premiering soon!',
+        thumb:
+          'https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:amysrxhsrdtchmujzw7hhhp4/bafkreiekpe4r2xo7h4zekcw44vdxt44wn327rbkqncrrjlly55ozc22cni@jpeg',
+      },
+    },
+    replyCount: 0,
+    repostCount: 0,
+    likeCount: 0,
+    quoteCount: 0,
+    indexedAt: '2024-12-14T03:21:08.749Z',
+    viewer: {
+      threadMuted: false,
+      embeddingDisabled: false,
+    },
+    labels: [],
+  },
+  {
+    uri: 'at://did:plc:fusfnqwap635b7b56renc2co/app.bsky.feed.post/3ldal6hgefc2y',
+    cid: 'bafyreifjgztw7tefj4bfcb3x4sla5r4f6xyt7rvc4povni3juc7dxnzccy',
+    author: {
+      did: 'did:plc:fusfnqwap635b7b56renc2co',
+      handle: 'squidpunk.bsky.social',
+      displayName: '[squidpunk]',
+      avatar:
+        'https://cdn.bsky.app/img/avatar/plain/did:plc:fusfnqwap635b7b56renc2co/bafkreifsi334rpgiboikvyhcv72vdf2hfgr7br2xzstfas2irgvxx3n4gq@jpeg',
+      associated: {
+        chat: {
+          allowIncoming: 'all',
+        },
+      },
+      viewer: {
+        muted: false,
+        blockedBy: false,
+        following: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.graph.follow/3laldwa3vz42e',
+      },
+      labels: [],
+      createdAt: '2023-07-12T04:33:35.769Z',
+    },
+    record: {
+      $type: 'app.bsky.feed.post',
+      createdAt: '2024-12-14T05:33:17.298Z',
+      embed: {
+        $type: 'app.bsky.embed.video',
+        aspectRatio: {
+          height: 1024,
+          width: 576,
+        },
+        video: {
+          $type: 'blob',
+          ref: {
+            $link: 'bafkreigzt2z755ikfjka5mywvjh42wpmfo2kikgk3q74d4yh4z2iie6o54',
+          },
+          mimeType: 'video/mp4',
+          size: 1657954,
+        },
+      },
+      langs: ['en'],
+      text: 'If you look like this DM me immediately',
+    },
+    embed: {
+      $type: 'app.bsky.embed.video#view',
+      cid: 'bafkreigzt2z755ikfjka5mywvjh42wpmfo2kikgk3q74d4yh4z2iie6o54',
+      playlist:
+        'https://video.bsky.app/watch/did%3Aplc%3Afusfnqwap635b7b56renc2co/bafkreigzt2z755ikfjka5mywvjh42wpmfo2kikgk3q74d4yh4z2iie6o54/playlist.m3u8',
+      thumbnail:
+        'https://video.bsky.app/watch/did%3Aplc%3Afusfnqwap635b7b56renc2co/bafkreigzt2z755ikfjka5mywvjh42wpmfo2kikgk3q74d4yh4z2iie6o54/thumbnail.jpg',
+      aspectRatio: {
+        height: 1024,
+        width: 576,
+      },
+    },
+    replyCount: 0,
+    repostCount: 0,
+    likeCount: 1,
+    quoteCount: 0,
+    indexedAt: '2024-12-14T05:33:19.858Z',
+    viewer: {
+      threadMuted: false,
+      embeddingDisabled: false,
+    },
+    labels: [],
+  },
+  {
+    uri: 'at://did:plc:w4xbfzo7kqfes5zb7r6qv3rw/app.bsky.feed.post/3ld6tjkcg3k26',
+    cid: 'bafyreihczsim4sq4leis5pujjfxe5qdq24eheu3oa7la2skopwnjxxrepy',
+    author: {
+      did: 'did:plc:w4xbfzo7kqfes5zb7r6qv3rw',
+      handle: 'rudyfraser.com',
+      displayName: 'Rudy wants revolution.',
+      avatar:
+        'https://cdn.bsky.app/img/avatar/plain/did:plc:w4xbfzo7kqfes5zb7r6qv3rw/bafkreih6z7pjeuq4bgjechhjpo7zmekkm4cmckgv5whuyg6mdt2gwug55y@jpeg',
+      associated: {
+        chat: {
+          allowIncoming: 'all',
+        },
+      },
+      viewer: {
+        muted: false,
+        blockedBy: false,
+        following: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.graph.follow/3l7vbr5ppek2c',
+      },
+      labels: [],
+      createdAt: '2023-05-01T03:43:42.434Z',
+    },
+    record: {
+      $type: 'app.bsky.feed.post',
+      createdAt: '2024-12-13T12:57:19.870Z',
+      embed: {
+        $type: 'app.bsky.embed.video',
+        alt: '50 cent saying I’m from 134th street and I ain’t got no mf boss. Rudy is also from 134th st and ain’t got no mf boss',
+        aspectRatio: {
+          height: 1080,
+          width: 1440,
+        },
+        video: {
+          $type: 'blob',
+          ref: {
+            $link: 'bafkreigsmqcg3c6xkgxrkvaw27coy5upyvldh7pe3r64nepb3dsm5dkq5u',
+          },
+          mimeType: 'video/mp4',
+          size: 2100758,
+        },
+      },
+      facets: [
+        {
+          features: [
+            {
+              $type: 'app.bsky.richtext.facet#tag',
+              tag: 'QGTM',
+            },
+          ],
+          index: {
+            byteEnd: 91,
+            byteStart: 86,
+          },
+        },
+      ],
+      langs: ['en'],
+      text: '(I live in Bed Stuy but I’m from Southside Jamaica Queens, off Guy Brewer Blvd, btw #QGTM heavy on it)',
+    },
+    embed: {
+      $type: 'app.bsky.embed.video#view',
+      cid: 'bafkreigsmqcg3c6xkgxrkvaw27coy5upyvldh7pe3r64nepb3dsm5dkq5u',
+      playlist:
+        'https://video.bsky.app/watch/did%3Aplc%3Aw4xbfzo7kqfes5zb7r6qv3rw/bafkreigsmqcg3c6xkgxrkvaw27coy5upyvldh7pe3r64nepb3dsm5dkq5u/playlist.m3u8',
+      thumbnail:
+        'https://video.bsky.app/watch/did%3Aplc%3Aw4xbfzo7kqfes5zb7r6qv3rw/bafkreigsmqcg3c6xkgxrkvaw27coy5upyvldh7pe3r64nepb3dsm5dkq5u/thumbnail.jpg',
+      alt: '50 cent saying I’m from 134th street and I ain’t got no mf boss. Rudy is also from 134th st and ain’t got no mf boss',
+      aspectRatio: {
+        height: 1080,
+        width: 1440,
+      },
+    },
+    replyCount: 9,
+    repostCount: 1,
+    likeCount: 36,
+    quoteCount: 1,
+    indexedAt: '2024-12-13T12:57:20.651Z',
+    viewer: {
+      threadMuted: false,
+      embeddingDisabled: false,
+    },
+    labels: [],
+  },
+  {
+    uri: 'at://did:plc:bktqwjpjnqpoyt6xoxjrcpkm/app.bsky.feed.post/3ldaneslxjc2n',
+    cid: 'bafyreibjob2oqkagzytlsii4wpisjj6pwtj3ytkviuv6edh34tqcvwvdjq',
+    author: {
+      did: 'did:plc:bktqwjpjnqpoyt6xoxjrcpkm',
+      handle: 'rabichakra.bsky.social',
+      displayName: 'Robi',
+      avatar:
+        'https://cdn.bsky.app/img/avatar/plain/did:plc:bktqwjpjnqpoyt6xoxjrcpkm/bafkreicu6igc7x66wave5mbesdsglkatgfjqjb77nzfn3svrsvl3coysry@jpeg',
+      viewer: {
+        muted: false,
+        blockedBy: false,
+        following: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.graph.follow/3lay7pvztvx26',
+        followedBy: 'at://did:plc:bktqwjpjnqpoyt6xoxjrcpkm/app.bsky.graph.follow/3layomhjgvm27',
+      },
+      labels: [],
+      createdAt: '2023-08-24T23:49:25.385Z',
+    },
+    record: {
+      $type: 'app.bsky.feed.post',
+      createdAt: '2024-12-14T06:12:37.826Z',
+      langs: ['en'],
+      reply: {
+        parent: {
+          cid: 'bafyreiflnw3qzqagiyzbxdqvdh4e6vvgm5l6j34fqtqfghckyzxji4zs5m',
+          uri: 'at://did:plc:4llrhdclvdlmmynkwsmg5tdc/app.bsky.feed.post/3ld7t3qb3dk2r',
+        },
+        root: {
+          cid: 'bafyreiflnw3qzqagiyzbxdqvdh4e6vvgm5l6j34fqtqfghckyzxji4zs5m',
+          uri: 'at://did:plc:4llrhdclvdlmmynkwsmg5tdc/app.bsky.feed.post/3ld7t3qb3dk2r',
+        },
+      },
+      text: 'Drone syndrome vaccine is the need of the hour,\nMass vaccination required.',
+    },
+    replyCount: 0,
+    repostCount: 0,
+    likeCount: 0,
+    quoteCount: 0,
+    indexedAt: '2024-12-14T06:12:38.252Z',
     viewer: {
       threadMuted: false,
       embeddingDisabled: false,

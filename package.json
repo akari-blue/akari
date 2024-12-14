@@ -20,7 +20,9 @@
     "react-hook-form": "^7.51.0",
     "react-hotkeys-hook": "^4.6.1",
     "react-intersection-observer": "^9.8.1",
+    "react-player": "^2.16.0",
     "sonner": "^1.4.3",
+    "string-byte-slice": "^3.0.0",
     "tailwind-merge": "^2.5.5",
     "zustand": "^4.5.1"
   },

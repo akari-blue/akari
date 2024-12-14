@@ -4,6 +4,7 @@ import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useBlueskyStore } from '../lib/bluesky/store';
+import { Toaster } from 'sonner';
 
 // Create a new query client instance
 const queryClient = new QueryClient({
@@ -52,6 +53,7 @@ function Root() {
           <Outlet />
         </QueryClientProvider>
         <TanStackRouterDevtools />
+        <Toaster position="bottom-right" closeButton richColors />
       </ErrorBoundary>
     </main>
   );

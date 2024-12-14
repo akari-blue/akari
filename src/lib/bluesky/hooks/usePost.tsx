@@ -1,17 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
+import { BskyPost } from '../types';
 
-export function usePreferences() {
+export function usePost({ uri }: { uri: string }) {
   const { agent } = useBlueskyStore();
 
   return useQuery({
-    queryKey: ['preferences'],
+    queryKey: ['post', { uri }],
     queryFn: async () => {
       if (!agent) {
         throw new Error('Not authenticated');
       }
-      const response = await agent.app.bsky.actor.getPreferences();
-      return response.data.preferences;
+      const response = await agent.getPostThread({ uri });
+      return response.data.thread.post as BskyPost;
     },
     enabled: !!agent,
   });
