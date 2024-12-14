@@ -35,7 +35,7 @@ export function PostCard({ post, className, onClick }: PostCardProps) {
 
   return (
     <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow', className)} onClick={onClick} id={post.uri}>
-      {!!post.record.reply && <NotImplementedBox type="quote" data={post.record.reply} />}
+      {!!post.record.reply && <NotImplementedBox type="reply" data={post.record.reply} />}
       <div className="flex items-center space-x-3 mb-2">
         {post.author.avatar && <img src={post.author.avatar} alt={post.author.handle} className="w-10 h-10 rounded-full" />}
         <div>

@@ -26,6 +26,45 @@ type BSkyPostAuthor = {
   createdAt: string;
 };
 
+type BskyFacet =
+  | {
+      features: [
+        {
+          $type: 'app.bsky.richtext.facet#link';
+          uri: string;
+        },
+      ];
+      index: {
+        byteEnd: number;
+        byteStart: number;
+      };
+    }
+  | {
+      $type: 'app.bsky.richtext.facet';
+      features: [
+        {
+          $type: 'app.bsky.richtext.facet#mention';
+          did: `did:plc:${string}`;
+        },
+      ];
+      index: {
+        byteEnd: number;
+        byteStart: number;
+      };
+    }
+  | {
+      features: [
+        {
+          $type: 'app.bsky.richtext.facet#tag';
+          tag: string;
+        },
+      ];
+      index: {
+        byteEnd: number;
+        byteStart: number;
+      };
+    };
+
 export type BskyPostEmbed =
   | {
       $type: 'app.bsky.embed.external#view';
@@ -64,7 +103,9 @@ export type BskyPostEmbed =
         repostCount: number;
         quoteCount: number;
         indexedAt: string;
-        embeds:
+        text?: string;
+        facets?: BskyFacet[];
+        embeds: (
           | {
               $type: 'app.bsky.embed.external#view';
               external: {
@@ -87,7 +128,8 @@ export type BskyPostEmbed =
                   };
                 },
               ];
-            }[];
+            }
+        )[];
       };
     }
   | {
@@ -286,45 +328,7 @@ type BSkyFeedPostRecord = {
         alt?: string;
       }
     | BskyEmebdRecordWithMedia;
-  facets?: (
-    | {
-        features: [
-          {
-            $type: 'app.bsky.richtext.facet#link';
-            uri: string;
-          },
-        ];
-        index: {
-          byteEnd: number;
-          byteStart: number;
-        };
-      }
-    | {
-        $type: 'app.bsky.richtext.facet';
-        features: [
-          {
-            $type: 'app.bsky.richtext.facet#mention';
-            did: `did:plc:${string}`;
-          },
-        ];
-        index: {
-          byteEnd: number;
-          byteStart: number;
-        };
-      }
-    | {
-        features: [
-          {
-            $type: 'app.bsky.richtext.facet#tag';
-            tag: string;
-          },
-        ];
-        index: {
-          byteEnd: number;
-          byteStart: number;
-        };
-      }
-  )[];
+  facets?: BskyFacet[];
   langs?: ('en' | 'de')[];
   reply?: {
     parent: {
