@@ -7,6 +7,8 @@ import { useBlueskyStore } from '../lib/bluesky/store';
 import { Toaster } from 'sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
 import { useSettings } from '../hooks/useSetting';
+import { Button } from '../components/ui/Button';
+import { useAuth } from '../lib/bluesky/hooks/useAuth';
 
 // Create a new query client instance
 const queryClient = new QueryClient({
@@ -55,13 +57,34 @@ export const Route = createRootRoute({
   },
 });
 
+const LogoutButton = () => {
+  const { logout } = useAuth();
+  return (
+    <Button variant="ghost" onClick={logout}>
+      Logout
+    </Button>
+  );
+};
+
 function Root() {
   const { experiments } = useSettings();
   return (
     <main className="text-black dark:text-white">
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-          <Outlet />
+          <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 max-w-2xl mx-auto py-8 px-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-col justify-between items-center">
+                <div className="flex justify-between items-center w-full">
+                  <h1 className="text-2xl font-bold">[placeholder name]</h1>
+                  <LogoutButton />
+                </div>
+              </div>
+              <ErrorBoundary>
+                <Outlet />
+              </ErrorBoundary>
+            </div>
+          </div>
           {experiments.devMode && <ReactQueryDevtools />}
         </QueryClientProvider>
         {experiments.devMode && <TanStackRouterDevtools />}
