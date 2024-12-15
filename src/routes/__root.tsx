@@ -87,7 +87,9 @@ function Root() {
             <div className="flex flex-col gap-2">
               <div className="flex flex-col justify-between items-center">
                 <div className="flex justify-between items-center w-full">
-                  <h1 className="text-2xl font-bold">[placeholder name]</h1>
+                  <Link to="/">
+                    <h1 className="text-2xl font-bold">[placeholder name]</h1>
+                  </Link>
                   <div className="flex flex-row gap-2">
                     <SettingsLink />
                     <LogoutButton />
