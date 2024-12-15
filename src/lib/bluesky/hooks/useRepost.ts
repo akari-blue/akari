@@ -51,7 +51,8 @@ export function useRepost() {
                   repostCount: post.repostCount + 1,
                   viewer: {
                     ...post.viewer,
-                    repost: true,
+                    // TODO: confirm the format of repost string
+                    repost: `at://did:${agent?.session?.did}`,
                   },
                 },
               };

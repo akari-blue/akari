@@ -10,7 +10,7 @@ export function usePreferences() {
       if (!agent) {
         throw new Error('Not authenticated');
       }
-      const response = await agent.app.bsky.actor.getPreferences();
+      const response = await agent.api.app.bsky.actor.getPreferences();
       return response.data.preferences;
     },
     enabled: !!agent,

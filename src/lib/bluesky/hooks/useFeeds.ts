@@ -10,7 +10,7 @@ export function useFeeds({ feeds }: { feeds: string[] }) {
       if (!agent) throw new Error('Not authenticated');
       if (feeds.length === 0) throw new Error('No feeds provided');
 
-      const response = await agent.app.bsky.feed.getFeedGenerators({
+      const response = await agent.api.app.bsky.feed.getFeedGenerators({
         feeds,
       });
       return response.data.feeds;

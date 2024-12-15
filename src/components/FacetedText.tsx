@@ -18,7 +18,7 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
   const parts: React.ReactNode[] = [];
 
   // Add text before first facet
-  parts.push(<Text text={stringByteSlice(text, 0, sortedFacets[0]?.index.byteStart)} />);
+  parts.push(<Text text={stringByteSlice(text, 0, sortedFacets[0]?.index.byteStart)} key="text-start" />);
 
   for (let i = 0; i < sortedFacets.length; i++) {
     const facet = sortedFacets[i];
@@ -32,7 +32,7 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
       case 'app.bsky.richtext.facet#link':
         parts.push(
           <>
-            <Text text={' '} />
+            <Text text={' '} key={`text-${i}`} />
             <ExternalLink key={`facet-${i}`} href={firstFeature.uri}>
               {facetText}
             </ExternalLink>
@@ -42,7 +42,7 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
       case 'app.bsky.richtext.facet#mention':
         parts.push(
           <>
-            <Text text={' '} />
+            <Text text={' '} key={`text-${i}`} />
             <Mention key={`facet-${i}`} handle={facetText.slice(1)} />
           </>,
         );
@@ -50,8 +50,8 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
       case 'app.bsky.richtext.facet#tag':
         parts.push(
           <>
-            <Text text={' '} />
-            <HashTag key={facetText} tag={facetText.slice(1)} />
+            <Text text={' '} key={`text-${i}`} />
+            <HashTag key={`facet-${i}`} tag={facetText.slice(1)} />
           </>,
         );
         break;
@@ -59,31 +59,27 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
   }
 
   // Add remaining text after the last facet
-  parts.push(<Text text={stringByteSlice(text, sortedFacets[sortedFacets.length - 1]?.index.byteEnd)} />);
+  parts.push(<Text key="text-ending" text={stringByteSlice(text, sortedFacets[sortedFacets.length - 1]?.index.byteEnd)} />);
 
   return parts;
 };
 
-function ExternalLink({ href, children }: { key: string; href: string; children: React.ReactNode }) {
+function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
   return <Link href={href}>{children}</Link>;
 }
 
-function Mention({ key, handle }: { key: string; handle: string }) {
+function Mention({ handle }: { handle: string }) {
   return (
     <Link to="/profile/$handle" params={{ handle }}>
-      <span key={key} className="text-purple-500 font-semibold">
-        @{handle.replace('.bksy.social', '')}
-      </span>
+      <span className="text-purple-500 font-semibold">@{handle.replace('.bksy.social', '')}</span>
     </Link>
   );
 }
 
-function HashTag({ key, tag }: { key: string; tag: string }) {
+function HashTag({ tag }: { tag: string }) {
   return (
     <Link to="/tag/$tag" params={{ tag }}>
-      <span key={key} className="text-green-500">
-        #{tag}
-      </span>
+      <span className="text-green-500">#{tag}</span>
     </Link>
   );
 }

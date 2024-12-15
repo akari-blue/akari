@@ -11,7 +11,7 @@ export function usePost({ uri }: { uri: string }) {
       if (!agent) {
         throw new Error('Not authenticated');
       }
-      const response = await agent.getPostThread({ uri });
+      const response = await agent.api.app.bsky.feed.getPostThread({ uri });
       return response.data.thread.post as BskyPost;
     },
     enabled: !!agent,

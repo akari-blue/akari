@@ -55,7 +55,8 @@ export function useLike() {
                   likeCount: post.likeCount + (like ? 1 : -1),
                   viewer: {
                     ...post.viewer,
-                    like,
+                    // @TODO: confirm the format of like string
+                    like: `at://did:${agent?.session?.did}`,
                   },
                 },
               };

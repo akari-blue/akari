@@ -49,14 +49,14 @@ export function useTimeline() {
 
       // // guest
       // if (!isAuthenticated) {
-      //   return agent.app.bsky.feed.getFeed({
+      //   return agent.api.app.bsky.feed.getFeed({
       //     feed: "discover",
       //   });
       // }
 
       // authenticated
       const cursor = pageParam as string | undefined;
-      const response = await agent.app.bsky.feed.getFeed({
+      const response = await agent.api.app.bsky.feed.getFeed({
         feed,
         cursor,
       });

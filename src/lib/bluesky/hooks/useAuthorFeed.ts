@@ -10,7 +10,7 @@ export function useAuthorFeed({ handle }: { handle: string }) {
       if (!agent) {
         throw new Error('Not authenticated');
       }
-      const response = await agent.getAuthorFeed({ actor: handle });
+      const response = await agent.api.app.bsky.feed.getAuthorFeed({ actor: handle });
       return response.data.feed;
     },
     enabled: !!agent,

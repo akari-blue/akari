@@ -1,29 +1,46 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { searchProfiles } from "../../lib/bluesky/api";
-import { BlueskyProfile } from "../../lib/bluesky/types_old";
-import { Input } from "./Input";
+import { useState, useEffect, useRef } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Input } from './Input';
+import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs';
 
 interface HandleInputProps {
   value: string;
   onChange: (value: string) => void;
-  onSelect?: (profile: BlueskyProfile) => void;
+  onSelect?: (profile: ProfileViewBasic) => void;
   placeholder?: string;
   className?: string;
 }
 
+const PUBLIC_API = 'https://public.api.bsky.app';
+
+const searchProfiles = async (query: string) => {
+  if (query.length < 1) return [];
+
+  try {
+    const response = await fetch(
+      `${PUBLIC_API}/xrpc/app.bsky.actor.searchActorsTypeahead?term=${encodeURIComponent(query)}&limit=5`,
+    );
+    if (!response.ok) throw new Error('Failed to search profiles');
+
+    const data = (await response.json()) as { actors: ProfileViewBasic[] };
+    return data.actors;
+  } catch (error) {
+    console.error('Failed to search profiles:', error);
+    return [];
+  }
+};
 export function HandleInput({
   value,
   onChange,
   onSelect,
-  placeholder = "Enter handle...",
-  className = "",
+  placeholder = 'Enter handle...',
+  className = '',
 }: HandleInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const { data: profiles, isLoading } = useQuery({
-    queryKey: ["profile-search", value],
+    queryKey: ['profile-search', value],
     queryFn: () => searchProfiles(value),
     enabled: value.length > 0 && isOpen,
     staleTime: 1000 * 60 * 5, // Cache for 5 minutes
@@ -31,16 +48,13 @@ export function HandleInput({
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -59,9 +73,7 @@ export function HandleInput({
       {isOpen && value && (
         <div className="absolute z-10 w-full mt-1 rounded-md shadow-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
           {isLoading ? (
-            <div className="p-4 text-sm text-gray-500 dark:text-gray-400">
-              Loading...
-            </div>
+            <div className="p-4 text-sm text-gray-500 dark:text-gray-400">Loading...</div>
           ) : profiles?.length ? (
             <ul className="max-h-60 overflow-auto">
               {profiles.map((profile) => (
@@ -74,26 +86,16 @@ export function HandleInput({
                     setIsOpen(false);
                   }}
                 >
-                  {profile.avatar && (
-                    <img
-                      src={profile.avatar}
-                      alt={profile.handle}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  )}
+                  {profile.avatar && <img src={profile.avatar} alt={profile.handle} className="w-8 h-8 rounded-full" />}
                   <div>
                     <div className="font-medium">{profile.displayName}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      @{profile.handle}
-                    </div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">@{profile.handle}</div>
                   </div>
                 </li>
               ))}
             </ul>
           ) : (
-            <div className="p-4 text-sm text-gray-500 dark:text-gray-400">
-              No results found
-            </div>
+            <div className="p-4 text-sm text-gray-500 dark:text-gray-400">No results found</div>
           )}
         </div>
       )}

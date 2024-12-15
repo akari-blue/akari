@@ -10,7 +10,7 @@ export function useProfile({ handle }: { handle: string }) {
       if (!agent) {
         throw new Error('Not authenticated');
       }
-      const response = await agent.app.bsky.actor.getProfile({ actor: handle });
+      const response = await agent.api.app.bsky.actor.getProfile({ actor: handle });
       return response.data;
     },
     enabled: !!agent,

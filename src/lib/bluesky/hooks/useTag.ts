@@ -11,7 +11,7 @@ export function useTag({ tag }: { tag: string }) {
       if (!agent) {
         throw new Error('Not authenticated');
       }
-      const response = await agent.app.bsky.feed.searchPosts({ q: `#${tag}` });
+      const response = await agent.api.app.bsky.feed.searchPosts({ q: `#${tag}` });
       return response.data.posts as BskyPost[];
     },
     enabled: !!agent,

@@ -108,14 +108,12 @@ export function Timeline() {
   return (
     <div className="space-y-4">
       {posts.map((post) => (
-        <div>
-          <PostCard
-            key={post.uri}
-            post={post}
-            className={cn(selectedPost === post.uri && 'outline outline-red-500')}
-            onClick={() => setSelectedPost(post.uri)}
-          />
-        </div>
+        <PostCard
+          key={post.uri}
+          post={post}
+          className={cn(selectedPost === post.uri && 'outline outline-red-500')}
+          onClick={() => setSelectedPost(post.uri)}
+        />
       ))}
 
       <div ref={ref} className="h-10">
