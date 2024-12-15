@@ -28,7 +28,21 @@ const queryClient = new QueryClient({
 export const Route = createRootRoute({
   component: Root,
   beforeLoad: async ({ location }) => {
-    if (location.pathname === '/login') return;
+    // Attempt to restore the session
+    await useBlueskyStore.getState().restoreSession();
+
+    console.info('beforeLoad', location.pathname);
+    if (location.pathname.startsWith('/login')) {
+      // if already authenticated, redirect to root
+      const { isAuthenticated } = useBlueskyStore.getState();
+      console.info('isAuthenticated', isAuthenticated);
+      if (isAuthenticated) {
+        throw redirect({ to: '/' });
+      }
+
+      // if not authenticated, proceed to login
+      return;
+    }
 
     // redirect to profile
     if (location.pathname.startsWith('/@')) {
@@ -37,9 +51,6 @@ export const Route = createRootRoute({
         params: { handle: location.pathname.slice(2) },
       });
     }
-
-    // Attempt to restore the session
-    await useBlueskyStore.getState().restoreSession();
 
     // Redirect to login if not authenticated
     const { isAuthenticated } = useBlueskyStore.getState();
