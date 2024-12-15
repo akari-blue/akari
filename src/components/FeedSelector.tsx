@@ -2,8 +2,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { useFeeds } from '../lib/bluesky/hooks/useFeeds';
 import { usePreferences } from '../lib/bluesky/hooks/usePreferences';
+import { useSettings } from '../hooks/useSetting';
 
 export const FeedSelector = () => {
+  const { setSettings } = useSettings();
   const { isAuthenticated } = useAuth();
   const preferences = usePreferences();
   const queryClient = useQueryClient();
@@ -41,10 +43,12 @@ export const FeedSelector = () => {
     return <div className="text-red-500">{error.message}</div>;
   }
 
-  const onClick = () => {
+  const onClick = (feedUri: string) => {
+    setSettings({ lastSelectedHomeFeed: feedUri });
+
     // make the feed mark as stale
     queryClient.invalidateQueries({
-      queryKey: ['timeline', { isAuthenticated: true }],
+      queryKey: ['timeline', { feed: feedUri, isAuthenticated: true }],
     });
   };
 
@@ -52,7 +56,7 @@ export const FeedSelector = () => {
     <ul className="flex flex-row gap-2 max-w-full overflow-x-scroll">
       {data?.map((feed) => (
         <li key={feed.uri} className="p-2 bg-blue-500 w-auto">
-          <button className="text-white whitespace-nowrap" onClick={onClick}>
+          <button className="text-white whitespace-nowrap" onClick={() => onClick(feed.uri)}>
             {feed.displayName}
           </button>
         </li>

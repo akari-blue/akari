@@ -2,6 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
 import { usePreferences } from './usePreferences';
 import { BskyPost } from '../types';
+import { useSettings } from '../../../hooks/useSetting';
 
 type Timeline = {
   feed: {
@@ -38,10 +39,11 @@ export function useTimeline() {
     )
       ?.filter((item) => item.type === 'feed')
       ?.map((item) => item.value) ?? [];
-  const feed = feeds[0];
+  const lastSelectedHomeFeed = useSettings((state) => state.lastSelectedHomeFeed);
+  const feed = feeds.find((feed) => feed === lastSelectedHomeFeed) ?? feeds[0];
 
   return useInfiniteQuery<Timeline>({
-    queryKey: ['timeline', { isAuthenticated }],
+    queryKey: ['timeline', { feed, isAuthenticated }],
     queryFn: async ({ pageParam }) => {
       if (!agent) {
         throw new Error('Not authenticated');

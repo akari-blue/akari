@@ -6,6 +6,7 @@ type Settings = {
     streamerMode: boolean;
     devMode: boolean;
   };
+  lastSelectedHomeFeed: string | null;
   setSettings: (
     partial: Settings | Partial<Settings> | ((state: Settings) => Settings | Partial<Settings>),
     replace?: boolean | undefined,
@@ -20,6 +21,7 @@ export const useSettings = create<Settings>()(
         streamerMode: true,
         devMode: false,
       },
+      lastSelectedHomeFeed: null,
       setSettings: set,
     }),
     {

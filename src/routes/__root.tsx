@@ -7,8 +7,8 @@ import { useBlueskyStore } from '../lib/bluesky/store';
 import { Toaster } from 'sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
 import { useSettings } from '../hooks/useSetting';
-import { Button } from '../components/ui/Button';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
+import { Link } from '../components/ui/Link';
 
 // Create a new query client instance
 const queryClient = new QueryClient({
@@ -68,13 +68,13 @@ export const Route = createRootRoute({
   },
 });
 
+const SettingsLink = () => {
+  return <Link to="/settings">Settings</Link>;
+};
+
 const LogoutButton = () => {
   const { logout } = useAuth();
-  return (
-    <Button variant="ghost" onClick={logout}>
-      Logout
-    </Button>
-  );
+  return <button onClick={logout}>Logout</button>;
 };
 
 function Root() {
@@ -88,7 +88,10 @@ function Root() {
               <div className="flex flex-col justify-between items-center">
                 <div className="flex justify-between items-center w-full">
                   <h1 className="text-2xl font-bold">[placeholder name]</h1>
-                  <LogoutButton />
+                  <div className="flex flex-row gap-2">
+                    <SettingsLink />
+                    <LogoutButton />
+                  </div>
                 </div>
               </div>
               <ErrorBoundary>
