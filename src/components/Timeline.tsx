@@ -12,15 +12,15 @@ export function Timeline() {
   const { ref, inView } = useInView();
   const like = useLike();
   const repost = useRepost();
-  const posts = data?.pages.map((page) => page.feed.map(({ post }) => post)).flat() ?? [];
-  const [selectedPost, setSelectedPost] = useState<string | null>(posts[0]?.uri ?? null);
-  const getPost = (uri: string | null) => (uri ? posts.find((post) => post.uri === uri) : null);
+  const posts = data?.pages.map((page) => page.feed).flat() ?? [];
+  const [selectedPost, setSelectedPost] = useState<string | null>(posts[0].post.uri ?? null);
+  const getPost = (uri: string | null) => (uri ? posts.find(({ post }) => post.uri === uri)?.post : null);
   const getNextPost = (uri: string | null) => {
-    const index = posts.findIndex((post) => post.uri === uri);
+    const index = posts.findIndex(({ post }) => post.uri === uri);
     return posts[index + 1];
   };
   const getPrevPost = (uri: string | null) => {
-    const index = posts.findIndex((post) => post.uri === uri);
+    const index = posts.findIndex(({ post }) => post.uri === uri);
     return posts[index - 1];
   };
 
@@ -52,7 +52,7 @@ export function Timeline() {
   useHotkeys(
     'j',
     () => {
-      const postUri = getNextPost(selectedPost).uri;
+      const postUri = getNextPost(selectedPost).post.uri;
       if (!postUri) return;
       setSelectedPost(postUri);
 
@@ -69,7 +69,7 @@ export function Timeline() {
   useHotkeys(
     'k',
     () => {
-      const postUri = getPrevPost(selectedPost).uri;
+      const postUri = getPrevPost(selectedPost).post.uri;
       if (!postUri) return;
       setSelectedPost(postUri);
 
@@ -107,10 +107,11 @@ export function Timeline() {
 
   return (
     <div className="space-y-4">
-      {posts.map((post) => (
+      {posts.map(({ post, feedContext }) => (
         <PostCard
           key={post.uri}
           post={post}
+          context={feedContext}
           className={cn(selectedPost === post.uri && 'outline outline-red-500')}
           onClick={() => setSelectedPost(post.uri)}
         />

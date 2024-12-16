@@ -15,11 +15,32 @@ import { Image } from './ui/Image';
 
 type PostCardProps = {
   post: BskyPost | undefined | null;
+  context?: string;
   className?: string;
   onClick?: () => void;
 };
 
-export function PostCard({ post, className, onClick }: PostCardProps) {
+const contextToText = (context: string) => {
+  if (context === 'following') return 'following';
+  if (context === 'friends') return 'friends';
+  if (context === 'popfriends') return 'popular friends';
+  if (context.startsWith('t-')) return `trending in ${context.slice(2)}`;
+
+  return context;
+};
+
+const BetterContext = ({ context }: { context?: string }) => {
+  if (!context) return null;
+
+  return (
+    <span title="Reason the post was included in the feed" className="text-gray-500 dark:text-gray-400">
+      {` · `}
+      {contextToText(context)}
+    </span>
+  );
+};
+
+export function PostCard({ post, context, className, onClick }: PostCardProps) {
   const like = useLike();
   const repost = useRepost();
 
@@ -62,6 +83,7 @@ export function PostCard({ post, className, onClick }: PostCardProps) {
             >
               {formatDate(post.record.createdAt)}
             </Link>
+            <BetterContext context={context} />
           </div>
         </div>
       </div>
@@ -103,7 +125,7 @@ export function PostCard({ post, className, onClick }: PostCardProps) {
           <span>{post.likeCount}</span>
         </button>
       </div>
-      <Debug value={post} />
+      <Debug value={{ post, context }} />
     </div>
   );
 }
