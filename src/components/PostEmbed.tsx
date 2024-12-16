@@ -2,11 +2,12 @@ import ReactPlayer from 'react-player';
 import { BskyPostEmbed, isAuthorBlocked } from '../lib/bluesky/types';
 import { Image } from './ui/Image';
 import { NotImplementedBox } from './ui/NotImplementedBox';
-import { cn, formatDate } from '../lib/utils';
+import { cn } from '../lib/utils';
 import { FacetedText } from './FacetedText';
 import { Link } from './ui/Link';
 import { Debug } from './ui/Debug';
 import { useSettings } from '../hooks/useSetting';
+import TimeAgo from 'react-timeago-i18n';
 
 export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
   const { experiments } = useSettings();
@@ -72,7 +73,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
               <div>
                 <div className="font-medium text-gray-900 dark:text-gray-100">
                   <Link to="/profile/$handle" params={{ handle: author.handle }}>
-                    {author.displayName}
+                    {author.displayName || author.handle}
                   </Link>
                 </div>
                 <div className="text-gray-500 dark:text-gray-400 text-sm">
@@ -87,7 +88,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
                       postId: embed.record.uri.split('/').pop()!,
                     }}
                   >
-                    {formatDate(embed.record.indexedAt)}
+                    <TimeAgo date={embed.record.indexedAt} />
                   </Link>
                 </div>
               </div>

@@ -27,6 +27,14 @@ function RouteComponent() {
         />
         <p>Hide sensitive information and blur all media content.</p>
       </div>
+      <div className="border p-2">
+        <ToggleSwitch
+          on={experiments.zenMode}
+          setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, zenMode: on } }))}
+          label="Zen Mode"
+        />
+        <p>Hide all numbers.</p>
+      </div>
     </div>
   );
 }

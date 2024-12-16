@@ -428,8 +428,8 @@ export type BskyPost = {
     threadMuted: boolean;
     embeddingDisabled: boolean;
     replyDisabled?: boolean;
-    like?: `at://did:${string}`;
-    repost?: `at://did:${string}`;
+    like?: string;
+    repost?: string;
   };
   labels: [];
   threadgate?: {

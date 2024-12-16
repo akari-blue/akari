@@ -6,14 +6,16 @@ import { cn } from '../lib/utils';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useLike } from '../lib/bluesky/hooks/useLike';
 import { useRepost } from '../lib/bluesky/hooks/useRepost';
+import { useSettings } from '../hooks/useSetting';
 
 export function Timeline() {
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useTimeline();
   const { ref, inView } = useInView();
+  const { experiments } = useSettings();
   const like = useLike();
   const repost = useRepost();
   const posts = data?.pages.map((page) => page.feed).flat() ?? [];
-  const [selectedPost, setSelectedPost] = useState<string | null>(posts[0].post.uri ?? null);
+  const [selectedPost, setSelectedPost] = useState<string | null>(posts?.[0]?.post.uri ?? null);
   const getPost = (uri: string | null) => (uri ? posts.find(({ post }) => post.uri === uri)?.post : null);
   const getNextPost = (uri: string | null) => {
     const index = posts.findIndex(({ post }) => post.uri === uri);
@@ -112,7 +114,7 @@ export function Timeline() {
           key={post.uri}
           post={post}
           context={feedContext}
-          className={cn(selectedPost === post.uri && 'outline outline-red-500')}
+          className={cn(experiments.devMode && selectedPost === post.uri && 'outline outline-red-500')}
           onClick={() => setSelectedPost(post.uri)}
         />
       ))}

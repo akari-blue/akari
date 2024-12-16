@@ -5,6 +5,7 @@ type Settings = {
   experiments: {
     streamerMode: boolean;
     devMode: boolean;
+    zenMode: boolean;
   };
   lastSelectedHomeFeed: string | null;
   setSettings: (
@@ -20,6 +21,7 @@ export const useSettings = create<Settings>()(
       experiments: {
         streamerMode: true,
         devMode: false,
+        zenMode: false,
       },
       lastSelectedHomeFeed: null,
       setSettings: set,

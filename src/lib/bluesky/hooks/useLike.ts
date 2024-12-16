@@ -3,8 +3,6 @@ import { useBlueskyStore } from '../store';
 import { toast } from 'sonner';
 import { BskyPost } from '../types';
 
-const timelineQueryKey = ['timeline', { isAuthenticated: true }];
-
 export function useLike() {
   const { agent } = useBlueskyStore();
   const queryClient = useQueryClient();
@@ -17,62 +15,179 @@ export function useLike() {
       toast.info('Updating like status for ' + uri + ' to ' + like);
 
       if (like) {
-        await agent.like(uri, cid);
-      } else {
-        await agent.deleteLike(uri);
+        return await agent.like(uri, cid);
       }
+
+      await agent.deleteLike(uri);
     },
     onMutate: async ({ uri, like }) => {
-      await queryClient.cancelQueries({ queryKey: timelineQueryKey });
+      const cache = queryClient.getQueryCache();
+      const timelineQueries = cache.findAll({
+        queryKey: ['timeline'],
+      });
+      const authorFeedQueries = cache.findAll({
+        queryKey: ['author-feed'],
+      });
+      const previousData = [...timelineQueries, ...authorFeedQueries];
 
-      const previousData = queryClient.getQueryData(timelineQueryKey);
+      for (const query of timelineQueries) {
+        await queryClient.cancelQueries({ queryKey: query.queryKey });
 
-      queryClient.setQueryData<{
-        pages: {
-          feed: {
-            post: BskyPost;
-            feedContext: string;
+        queryClient.setQueryData<{
+          pages: {
+            feed: {
+              post: BskyPost;
+              feedContext: string;
+            }[];
+            cursor: string;
           }[];
-          cursor: string;
-        }[];
-        pageParams: unknown;
-      }>(timelineQueryKey, (old) => ({
-        pages:
-          old?.pages.map((page) => ({
-            ...page,
-            feed: page.feed.map(({ post, feedContext }) => {
-              if (post.uri !== uri) {
+          pageParams: unknown;
+        }>(query.queryKey, (old) => ({
+          pages:
+            old?.pages.map((page) => ({
+              ...page,
+              feed: page.feed.map(({ post, feedContext }) => {
+                if (post.uri !== uri) {
+                  return {
+                    feedContext,
+                    post,
+                  };
+                }
+
                 return {
                   feedContext,
-                  post,
-                };
-              }
-
-              return {
-                feedContext,
-                post: {
-                  ...post,
-                  likeCount: post.likeCount + (like ? 1 : -1),
-                  viewer: {
-                    ...post.viewer,
-                    // @TODO: confirm the format of like string
-                    like: `at://did:${agent?.session?.did}`,
+                  post: {
+                    ...post,
+                    likeCount: post.likeCount + (like ? 1 : -1),
+                    viewer: {
+                      ...post.viewer,
+                      like: `at://imlunahey.com/app.bsky.feed.like/pending`,
+                    },
                   },
-                },
-              };
-            }),
-          })) ?? [],
-        pageParams: old?.pageParams,
-      }));
+                };
+              }),
+            })) ?? [],
+          pageParams: old?.pageParams,
+        }));
+      }
 
-      return { previousData };
+      for (const query of authorFeedQueries) {
+        await queryClient.cancelQueries({ queryKey: query.queryKey });
+
+        queryClient.setQueryData<
+          {
+            post: BskyPost;
+          }[]
+        >(query.queryKey, (old) =>
+          old?.map(({ post }) => {
+            if (post.uri !== uri) {
+              return { post };
+            }
+
+            return {
+              post: {
+                ...post,
+                likeCount: post.likeCount + (like ? 1 : -1),
+                viewer: {
+                  ...post.viewer,
+                  like: `at://imlunahey.com/app.bsky.feed.like/pending`,
+                },
+              },
+            };
+          }),
+        );
+      }
+
+      return {
+        previousData: previousData.map((query) => ({
+          queryKey: query.queryKey,
+          state: query.state,
+        })),
+      };
     },
-    onError: (error, __, context) => {
-      queryClient.setQueryData(timelineQueryKey, context?.previousData);
+    onError: (error, _, context) => {
+      // set the previous data back
+      for (const query of context?.previousData ?? []) {
+        queryClient.setQueryData(query.queryKey, query.state.data);
+      }
       toast.error('Failed to update like status ' + (error as Error).message);
     },
-    onSuccess: (_, { like }) => {
+    onSuccess: async (data, { like, uri }) => {
       toast.success('Like status updated to ' + like);
+
+      const cache = queryClient.getQueryCache();
+      const timelineQueries = cache.findAll({
+        queryKey: ['timeline'],
+      });
+      const authorFeedQueries = cache.findAll({
+        queryKey: ['author-feed'],
+      });
+
+      for (const query of timelineQueries) {
+        await queryClient.cancelQueries({ queryKey: query.queryKey });
+
+        queryClient.setQueryData<{
+          pages: {
+            feed: {
+              post: BskyPost;
+              feedContext: string;
+            }[];
+            cursor: string;
+          }[];
+          pageParams: unknown;
+        }>(query.queryKey, (old) => ({
+          pages:
+            old?.pages.map((page) => ({
+              ...page,
+              feed: page.feed.map(({ post, feedContext }) => {
+                if (post.uri !== uri) {
+                  return {
+                    feedContext,
+                    post,
+                  };
+                }
+
+                return {
+                  feedContext,
+                  post: {
+                    ...post,
+                    viewer: {
+                      ...post.viewer,
+                      like: data?.uri,
+                    },
+                  },
+                };
+              }),
+            })) ?? [],
+          pageParams: old?.pageParams,
+        }));
+      }
+
+      for (const query of authorFeedQueries) {
+        await queryClient.cancelQueries({ queryKey: query.queryKey });
+
+        queryClient.setQueryData<
+          {
+            post: BskyPost;
+          }[]
+        >(query.queryKey, (old) =>
+          old?.map(({ post }) => {
+            if (post.uri !== uri) {
+              return { post };
+            }
+
+            return {
+              post: {
+                ...post,
+                viewer: {
+                  ...post.viewer,
+                  like: data?.uri,
+                },
+              },
+            };
+          }),
+        );
+      }
     },
   });
 }
