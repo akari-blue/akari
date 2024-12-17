@@ -1,4 +1,5 @@
 import { useForm, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { HandleInput } from './ui/HandleInput';
 import { Input } from './ui/Input';
@@ -11,6 +12,7 @@ interface LoginFormData {
 }
 
 export function LoginForm() {
+  const { t } = useTranslation(['auth', 'app']);
   const { login, isLoading, error } = useAuth();
   const {
     control,
@@ -26,7 +28,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full max-w-md">
       <div>
-        <Label htmlFor="handle">Bluesky Handle</Label>
+        <Label htmlFor="handle">{t('app:blueskyHandle')}</Label>
         <Controller
           name="handle"
           control={control}
@@ -37,7 +39,7 @@ export function LoginForm() {
       </div>
 
       <div>
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t('password')}</Label>
         <Input
           id="password"
           type="password"
@@ -50,7 +52,7 @@ export function LoginForm() {
       {error && <p className="text-red-500 text-sm">{error.message}</p>}
 
       <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? 'Logging in...' : 'Login'}
+        {isLoading ? t('login.pending') : t('login.default')}
       </Button>
     </form>
   );

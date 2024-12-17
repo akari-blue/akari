@@ -12,6 +12,7 @@ import { FormattedNumber } from '../components/ui/FormattedNumber';
 import { FormattedText } from '../components/ui/FormattedText';
 import { BskyPost } from '../lib/bluesky/types';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { useTranslation } from 'react-i18next';
 
 export const Route = createLazyFileRoute('/profile_/$handle/post/$postId')({
   component: Profile,
@@ -25,6 +26,7 @@ function Profile() {
     uri: `at://${params.handle}/app.bsky.feed.post/${params.postId}`,
   });
   const { experiments } = useSettings();
+  const { t } = useTranslation('app');
   const isLoading = isLoadingProfile || isLoadingPost;
 
   if (isLoading) return <div>Loading...</div>;
@@ -51,9 +53,9 @@ function Profile() {
           </div>
           {!experiments.zenMode && (
             <div className="flex gap-2">
-              <FormattedNumber value={profile?.followersCount} unit="followers" />
-              <FormattedNumber value={profile?.followsCount} unit="following" />
-              <FormattedNumber value={profile?.postsCount} unit="posts" />
+              <FormattedNumber value={profile?.followersCount} unit={t('followers')} />
+              <FormattedNumber value={profile?.followsCount} unit={t('following')} />
+              <FormattedNumber value={profile?.postsCount} unit={t('posts')} />
             </div>
           )}
           <p>

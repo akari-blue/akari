@@ -14,6 +14,7 @@ import { Image } from './ui/Image';
 import { useSettings } from '../hooks/useSetting';
 import { FormattedNumber } from './ui/FormattedNumber';
 import TimeAgo from 'react-timeago-i18n';
+import { useTranslation } from 'react-i18next';
 
 type PostCardProps = {
   post: BskyPost | undefined | null;
@@ -43,6 +44,7 @@ const BetterContext = ({ context }: { context?: string }) => {
 };
 
 export function PostCard({ post, context, className, onClick }: PostCardProps) {
+  const { t } = useTranslation('app');
   const like = useLike();
   const repost = useRepost();
   // const { data: reply } = usePostThread({ uri: post?.record.reply?.parent.uri });
@@ -109,7 +111,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
               to="/profile/$handle/post/$postId"
               params={{ handle: post.author.handle, postId: post.uri.split('/').pop()! }}
             >
-              <FormattedNumber value={post.replyCount} unit="replies" />
+              <FormattedNumber value={post.replyCount} unit={t('replies')} />
             </Link>
           )}
         </button>
@@ -126,7 +128,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
           )}
         >
           <Repeat size={20} className={cn(post.viewer.repost ? 'stroke-current' : '')} />
-          {!experiments.zenMode && <FormattedNumber value={post.repostCount} unit="reposts" />}
+          {!experiments.zenMode && <FormattedNumber value={post.repostCount} unit={t('reposts')} />}
         </button>
         <button
           onClick={() => handleLike(post.uri, post.cid, post.viewer?.like)}
@@ -137,7 +139,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
           )}
         >
           <Heart size={20} className={cn(post.viewer?.like ? 'fill-current' : '')} />
-          {!experiments.zenMode && <FormattedNumber value={post.likeCount} unit="likes" />}
+          {!experiments.zenMode && <FormattedNumber value={post.likeCount} unit={t('likes')} />}
         </button>
       </div>
       <Debug value={{ post, context }} />

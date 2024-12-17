@@ -9,6 +9,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
 import { useSettings } from '../hooks/useSetting';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Link } from '../components/ui/Link';
+import { useTranslation } from 'react-i18next';
 
 // Create a new query client instance
 const queryClient = new QueryClient({
@@ -69,33 +70,38 @@ export const Route = createRootRoute({
 });
 
 const SettingsLink = () => {
-  return <Link to="/settings">Settings</Link>;
+  const { t } = useTranslation('app');
+  return <Link to="/settings">{t('settings')}</Link>;
 };
 
 const LogoutButton = () => {
   const { logout } = useAuth();
-  return <button onClick={logout}>Logout</button>;
+  const { t } = useTranslation('auth');
+  return <button onClick={logout}>{t('logout')}</button>;
 };
 
 function Root() {
   const { experiments } = useSettings();
+  const { isAuthenticated } = useBlueskyStore.getState();
   return (
     <main className="text-black dark:text-white">
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
           <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 max-w-2xl mx-auto py-8 px-4">
             <div className="flex flex-col gap-2">
-              <div className="flex flex-col justify-between items-center">
-                <div className="flex justify-between items-center w-full">
-                  <Link to="/">
-                    <h1 className="text-2xl font-bold">[placeholder name]</h1>
-                  </Link>
-                  <div className="flex flex-row gap-2">
-                    <SettingsLink />
-                    <LogoutButton />
+              {isAuthenticated && (
+                <div className="flex flex-col justify-between items-center">
+                  <div className="flex justify-between items-center w-full">
+                    <Link to="/">
+                      <h1 className="text-2xl font-bold">[placeholder name]</h1>
+                    </Link>
+                    <div className="flex flex-row gap-2">
+                      <SettingsLink />
+                      <LogoutButton />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
               <ErrorBoundary>
                 <Outlet />
               </ErrorBoundary>

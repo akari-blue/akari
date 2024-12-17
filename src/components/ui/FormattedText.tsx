@@ -4,18 +4,27 @@ import { Link } from './Link';
  * Converts URLs in a string to links
  */
 const linkifyText = (line: string) => {
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
-  return line.split(urlRegex).map((part, index) => {
-    const match = urlRegex.test(part);
-    if (!match) return part;
+  const regex = /(https?:\/\/[^\s]+)|(@[\w.-]+)/g;
 
-    const url = new URL(part);
-    return (
-      <Link key={index} to={part} className="text-blue-400">
-        {url.hostname}
-        {url.pathname.endsWith('/') ? url.pathname.slice(0, -1) : url.pathname}
-      </Link>
-    );
+  return line.split(regex).map((part, index) => {
+    if (!part) return null;
+
+    if (part.match(/https?:\/\/[^\s]+/)) {
+      const url = part.replace(/https?:\/\//, '').replace(/\/$/, '');
+      return (
+        <Link key={index} to={part} className="text-blue-400">
+          {url}
+        </Link>
+      );
+    } else if (part.match(/@[\w.-]+/)) {
+      return (
+        <Link key={index} to={`/profile/${part.slice(1)}`} className="text-blue-400">
+          {part}
+        </Link>
+      );
+    } else {
+      return part;
+    }
   });
 };
 

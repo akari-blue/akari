@@ -11,6 +11,7 @@ import { useSettings } from '../hooks/useSetting';
 import { cn } from '../lib/utils';
 import { Badge } from '../components/ui/Badge';
 import { FollowButton } from '../components/ui/FollowButton';
+import { useTranslation } from 'react-i18next';
 
 export const Route = createLazyFileRoute('/profile/$handle')({
   component: Profile,
@@ -21,6 +22,7 @@ function Profile() {
   const { data: profile, isLoading } = useProfile({ handle });
   const { data: feed } = useAuthorFeed({ handle });
   const { experiments } = useSettings();
+  const { t } = useTranslation('app');
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -46,9 +48,9 @@ function Profile() {
           </div>
           {!experiments.zenMode && (
             <div className="flex gap-2">
-              <FormattedNumber value={profile?.followersCount} unit="followers" />
-              <FormattedNumber value={profile?.followsCount} unit="following" />
-              <FormattedNumber value={profile?.postsCount} unit="posts" />
+              <FormattedNumber value={profile?.followersCount} unit={t('followers')} />
+              <FormattedNumber value={profile?.followsCount} unit={t('following')} />
+              <FormattedNumber value={profile?.postsCount} unit={t('posts')} />
             </div>
           )}
           <p>

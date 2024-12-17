@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Input } from './Input';
 import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs';
+import { useTranslation } from 'react-i18next';
 
 interface HandleInputProps {
   value: string;
@@ -36,6 +37,7 @@ export function HandleInput({
   placeholder = 'Enter handle...',
   className = '',
 }: HandleInputProps) {
+  const { t } = useTranslation('app');
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -73,7 +75,7 @@ export function HandleInput({
       {isOpen && value && (
         <div className="absolute z-10 w-full mt-1 rounded-md shadow-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
           {isLoading ? (
-            <div className="p-4 text-sm text-gray-500 dark:text-gray-400">Loading...</div>
+            <div className="p-4 text-sm text-gray-500 dark:text-gray-400">{t('loading')}</div>
           ) : profiles?.length ? (
             <ul className="max-h-60 overflow-auto">
               {profiles.map((profile) => (
