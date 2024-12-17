@@ -424,7 +424,7 @@ export type BskyPost = {
   likeCount: number;
   quoteCount?: number;
   indexedAt: string;
-  viewer: {
+  viewer?: {
     threadMuted: boolean;
     embeddingDisabled: boolean;
     replyDisabled?: boolean;

@@ -15,6 +15,7 @@ import { useSettings } from '../hooks/useSetting';
 import { FormattedNumber } from './ui/FormattedNumber';
 import TimeAgo from 'react-timeago-i18n';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../lib/bluesky/hooks/useAuth';
 
 type PostCardProps = {
   post: BskyPost | undefined | null;
@@ -48,6 +49,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
   const like = useLike();
   const repost = useRepost();
   // const { data: reply } = usePostThread({ uri: post?.record.reply?.parent.uri });
+  const { isAuthenticated } = useAuth();
   const { experiments } = useSettings();
 
   const handleLike = (uri: string, cid: string, currentLike?: string) => {
@@ -104,43 +106,44 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
         <PostEmbed embed={post.embed} />
       </ErrorBoundary>
       <div className="flex items-center space-x-6 text-gray-500 dark:text-gray-400">
-        <button className="flex items-center space-x-2 hover:text-red-500 transition-colors">
+        <Link
+          to="/profile/$handle/post/$postId"
+          params={{ handle: post.author.handle, postId: post.uri.split('/').pop()! }}
+          className="flex items-center space-x-2 hover:text-blue-500 transition-colors"
+        >
           <MessageCircle size={20} />
-          {!experiments.zenMode && (
-            <Link
-              to="/profile/$handle/post/$postId"
-              params={{ handle: post.author.handle, postId: post.uri.split('/').pop()! }}
+          {!experiments.zenMode && <FormattedNumber value={post.replyCount} unit={t('replies')} />}
+        </Link>
+        {!(experiments.zenMode && !isAuthenticated) && (
+          <>
+            <button
+              onClick={() =>
+                post.viewer?.repost
+                  ? toast.error('You already reposted this post', { duration: 2_000 })
+                  : handleRepost(post.uri, post.cid)
+              }
+              disabled={repost.isPending || !isAuthenticated}
+              className={cn(
+                'flex items-center space-x-2 transition-colors',
+                post.viewer?.repost ? 'text-green-500' : 'hover:text-green-500',
+              )}
             >
-              <FormattedNumber value={post.replyCount} unit={t('replies')} />
-            </Link>
-          )}
-        </button>
-        <button
-          onClick={() =>
-            post.viewer.repost
-              ? toast.error('You already reposted this post', { duration: 2_000 })
-              : handleRepost(post.uri, post.cid)
-          }
-          disabled={repost.isPending}
-          className={cn(
-            'flex items-center space-x-2 transition-colors',
-            post.viewer?.repost ? 'text-green-500' : 'hover:text-green-500',
-          )}
-        >
-          <Repeat size={20} className={cn(post.viewer.repost ? 'stroke-current' : '')} />
-          {!experiments.zenMode && <FormattedNumber value={post.repostCount} unit={t('reposts')} />}
-        </button>
-        <button
-          onClick={() => handleLike(post.uri, post.cid, post.viewer?.like)}
-          disabled={like.isPending}
-          className={cn(
-            'flex items-center space-x-2 transition-colors',
-            post.viewer?.like ? 'text-pink-500' : 'hover:text-pink-500',
-          )}
-        >
-          <Heart size={20} className={cn(post.viewer?.like ? 'fill-current' : '')} />
-          {!experiments.zenMode && <FormattedNumber value={post.likeCount} unit={t('likes')} />}
-        </button>
+              <Repeat size={20} className={cn(post.viewer?.repost ? 'stroke-current' : '')} />
+              {!experiments.zenMode && <FormattedNumber value={post.repostCount} unit={t('reposts')} />}
+            </button>
+            <button
+              onClick={() => handleLike(post.uri, post.cid, post.viewer?.like)}
+              disabled={like.isPending || !isAuthenticated}
+              className={cn(
+                'flex items-center space-x-2 transition-colors',
+                post.viewer?.like ? 'text-pink-500' : 'hover:text-pink-500',
+              )}
+            >
+              <Heart size={20} className={cn(post.viewer?.like ? 'fill-current' : '')} />
+              {!experiments.zenMode && <FormattedNumber value={post.likeCount} unit={t('likes')} />}
+            </button>
+          </>
+        )}
       </div>
       <Debug value={{ post, context }} />
     </div>

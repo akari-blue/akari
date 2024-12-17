@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet, redirect, useRouterState } from '@tanstack/react-router';
+import { createRootRoute, Outlet, redirect, ScrollRestoration, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
@@ -7,10 +7,8 @@ import { useBlueskyStore } from '../lib/bluesky/store';
 import { Toaster } from 'sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
 import { useSettings } from '../hooks/useSetting';
-import { useAuth } from '../lib/bluesky/hooks/useAuth';
-import { Link } from '../components/ui/Link';
-import { useTranslation } from 'react-i18next';
 import { cn } from '../lib/utils';
+import { Navbar } from '../components/Navbar';
 
 // Create a new query client instance
 const queryClient = new QueryClient({
@@ -33,7 +31,6 @@ export const Route = createRootRoute({
     // Attempt to restore the session
     await useBlueskyStore.getState().restoreSession();
 
-    console.info('beforeLoad', location.pathname);
     if (location.pathname.startsWith('/login')) {
       // if already authenticated, redirect to root
       const { isAuthenticated } = useBlueskyStore.getState();
@@ -53,37 +50,11 @@ export const Route = createRootRoute({
         params: { handle: location.pathname.slice(2) },
       });
     }
-
-    // Redirect to login if not authenticated
-    const { isAuthenticated } = useBlueskyStore.getState();
-    if (!isAuthenticated) {
-      throw redirect({
-        to: '/login',
-        search: {
-          // Use the current location to power a redirect after login
-          // (Do not use `router.state.resolvedLocation` as it can
-          // potentially lag behind the actual current location)
-          redirect: location.href.trim(),
-        },
-      });
-    }
   },
 });
 
-const SettingsLink = () => {
-  const { t } = useTranslation('app');
-  return <Link to="/settings">{t('settings')}</Link>;
-};
-
-const LogoutButton = () => {
-  const { logout } = useAuth();
-  const { t } = useTranslation('auth');
-  return <button onClick={logout}>{t('logout')}</button>;
-};
-
 function Root() {
   const { experiments } = useSettings();
-  const { isAuthenticated } = useBlueskyStore.getState();
   const router = useRouterState();
   const pathname = router.location.pathname;
   return (
@@ -97,20 +68,9 @@ function Root() {
             )}
           >
             <div className="flex flex-col gap-2">
-              {isAuthenticated && (
-                <div className="flex flex-col justify-between items-center">
-                  <div className="flex justify-between items-center w-full">
-                    <Link to="/">
-                      <h1 className="text-2xl font-bold">[placeholder name]</h1>
-                    </Link>
-                    <div className="flex flex-row gap-2">
-                      <SettingsLink />
-                      <LogoutButton />
-                    </div>
-                  </div>
-                </div>
-              )}
+              <Navbar />
               <ErrorBoundary>
+                <ScrollRestoration />
                 <Outlet />
               </ErrorBoundary>
             </div>

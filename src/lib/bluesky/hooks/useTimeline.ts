@@ -18,27 +18,26 @@ export function useTimeline() {
   const savedFeedsPrefV2 = isAuthenticated
     ? preferences.data?.find((item) => item.$type === 'app.bsky.actor.defs#savedFeedsPrefV2')
     : null;
-  const feeds =
-    (
-      savedFeedsPrefV2?.items as
-        | (
-            | {
-                type: 'feed';
-                value: `at://${string}`;
-                pinned: boolean;
-                id: string;
-              }
-            | {
-                type: 'timeline';
-                value: string;
-                pinned: boolean;
-                id: string;
-              }
-          )[]
-        | undefined
-    )
-      ?.filter((item) => item.type === 'feed')
-      ?.map((item) => item.value) ?? [];
+  const feeds = (
+    savedFeedsPrefV2?.items as
+      | (
+          | {
+              type: 'feed';
+              value: `at://${string}`;
+              pinned: boolean;
+              id: string;
+            }
+          | {
+              type: 'timeline';
+              value: string;
+              pinned: boolean;
+              id: string;
+            }
+        )[]
+      | undefined
+  )
+    ?.filter((item) => item.type === 'feed')
+    ?.map((item) => item.value) ?? ['at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'];
   const lastSelectedHomeFeed = useSettings((state) => state.lastSelectedHomeFeed);
   const feed = feeds.find((feed) => feed === lastSelectedHomeFeed) ?? feeds[0];
 

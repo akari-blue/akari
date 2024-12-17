@@ -17,16 +17,17 @@ type BlueskyState = {
   restoreSession: () => Promise<void>;
 };
 
-const BLUESKY_SERVICE = 'https://bsky.social';
+const AUTHENTICATED_ENDPOINT = 'https://bsky.social';
+const GUEST_ENDPOINT = 'https://public.api.bsky.app';
 
 export const useBlueskyStore = create<BlueskyState>()(
   persist(
     (set, get) => ({
-      agent: null,
+      agent: new BskyAgent({ service: GUEST_ENDPOINT }),
       isAuthenticated: false,
 
       login: async (credentials: BlueskyCredentials) => {
-        const agent = new BskyAgent({ service: BLUESKY_SERVICE });
+        const agent = new BskyAgent({ service: AUTHENTICATED_ENDPOINT });
         const response = await agent.login({
           identifier: credentials.handle,
           password: credentials.password,
@@ -47,7 +48,7 @@ export const useBlueskyStore = create<BlueskyState>()(
         const { session } = get();
         if (session) {
           try {
-            const agent = new BskyAgent({ service: BLUESKY_SERVICE });
+            const agent = new BskyAgent({ service: AUTHENTICATED_ENDPOINT });
             await agent.resumeSession(session);
             set({ agent, isAuthenticated: true });
           } catch (error) {
