@@ -6,6 +6,8 @@ type Settings = {
     streamerMode: boolean;
     devMode: boolean;
     zenMode: boolean;
+    columns: number;
+    responsiveUI: boolean;
   };
   lastSelectedHomeFeed: string | null;
   setSettings: (
@@ -22,6 +24,8 @@ export const useSettings = create<Settings>()(
         streamerMode: true,
         devMode: false,
         zenMode: false,
+        columns: 1,
+        responsiveUI: false,
       },
       lastSelectedHomeFeed: null,
       setSettings: set,

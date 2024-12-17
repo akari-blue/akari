@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet, redirect } from '@tanstack/react-router';
+import { createRootRoute, Outlet, redirect, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
@@ -10,6 +10,7 @@ import { useSettings } from '../hooks/useSetting';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Link } from '../components/ui/Link';
 import { useTranslation } from 'react-i18next';
+import { cn } from '../lib/utils';
 
 // Create a new query client instance
 const queryClient = new QueryClient({
@@ -83,11 +84,18 @@ const LogoutButton = () => {
 function Root() {
   const { experiments } = useSettings();
   const { isAuthenticated } = useBlueskyStore.getState();
+  const router = useRouterState();
+  const pathname = router.location.pathname;
   return (
-    <main className="text-black dark:text-white">
+    <main className={cn('text-black dark:text-white min-h-screen')}>
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-          <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 max-w-2xl mx-auto py-8 px-4">
+          <div
+            className={cn(
+              'bg-white dark:bg-black text-gray-900 dark:text-gray-100 py-8 px-4',
+              (pathname !== '/' || (pathname === '/' && !experiments.responsiveUI)) && 'max-w-2xl mx-auto',
+            )}
+          >
             <div className="flex flex-col gap-2">
               {isAuthenticated && (
                 <div className="flex flex-col justify-between items-center">
