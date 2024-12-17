@@ -37,7 +37,7 @@ export const resources = {
 i18n
   .use(
     new Pseudo({
-      enabled: true,
+      enabled: process.env.NODE_ENV !== 'production',
     }),
   )
   .use(initReactI18next) // passes i18n down to react-i18next
