@@ -5,9 +5,11 @@ import { useSettings } from '../hooks/useSetting';
 import * as Ariakit from '@ariakit/react';
 import { cn } from '../lib/utils';
 import { Timeline } from './Timeline';
+import { useTranslation } from 'react-i18next';
 
 export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
   const { setSettings, experiments, columns } = useSettings();
+  const { t } = useTranslation('app');
   const { isAuthenticated } = useAuth();
   const { data: preferences } = usePreferences();
   const savedFeedsPrefV2 = isAuthenticated
@@ -37,7 +39,7 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
   const selectedFeed = columns[columnNumber] ?? feeds[0];
 
   if (isLoading) {
-    return <div className="text-gray-600 dark:text-gray-400">Loading feeds...</div>;
+    return <div className="text-gray-600 dark:text-gray-400">{t('loading')}</div>;
   }
 
   if (error) {

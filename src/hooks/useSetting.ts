@@ -8,6 +8,7 @@ type Settings = {
     zenMode: boolean;
     columns: number;
     responsiveUI: boolean;
+    cleanHandles: boolean;
   };
   columns: string[];
   language: 'system' | 'en' | 'fr';
@@ -31,6 +32,7 @@ export const useSettings = create<Settings>()(
         zenMode: false,
         columns: 1,
         responsiveUI: false,
+        cleanHandles: false,
       },
       setSettings: set,
       columns: [],

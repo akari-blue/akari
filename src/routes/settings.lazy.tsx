@@ -18,8 +18,10 @@ function RouteComponent() {
       <div className="border p-2">
         <ToggleSwitch
           on={experiments.devMode}
-          setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, devMode: on } }))}
-          label="Developer Mode"
+          setOn={(on) => {
+            setSettings((state) => ({ experiments: { ...state.experiments, devMode: on } }));
+          }}
+          label={t('developerMode.name')}
         />
         <p>{t('developerMode.description')}</p>
       </div>
@@ -27,7 +29,7 @@ function RouteComponent() {
         <ToggleSwitch
           on={experiments.streamerMode}
           setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, streamerMode: on } }))}
-          label="Streamer Mode"
+          label={t('streamerMode.name')}
         />
         <p>{t('streamerMode.description')}</p>
       </div>
@@ -35,7 +37,7 @@ function RouteComponent() {
         <ToggleSwitch
           on={experiments.zenMode}
           setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, zenMode: on } }))}
-          label="Zen Mode"
+          label={t('zenMode.name')}
         />
         <p>{t('zenMode.description')}</p>
       </div>
@@ -58,7 +60,7 @@ function RouteComponent() {
         <ToggleSwitch
           on={experiments.responsiveUI}
           setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, responsiveUI: on } }))}
-          label="Responsive UI"
+          label={t('responsiveUI.name')}
         />
         <p>{t('responsiveUI.description')}</p>
       </div>
@@ -122,6 +124,14 @@ function RouteComponent() {
           <label>{t('font.size.name')}</label>
         </div>
         <p>{t('font.size.description')}</p>
+      </div>
+      <div className="border p-2">
+        <ToggleSwitch
+          on={experiments.cleanHandles}
+          setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, cleanHandles: on } }))}
+          label={t('cleanHandles.name')}
+        />
+        <p>{t('cleanHandles.description')}</p>
       </div>
     </div>
   );

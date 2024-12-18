@@ -7,6 +7,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useLike } from '../lib/bluesky/hooks/useLike';
 import { useRepost } from '../lib/bluesky/hooks/useRepost';
 import { useSettings } from '../hooks/useSetting';
+import { useTranslation } from 'react-i18next';
 
 export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   const { columns } = useSettings();
@@ -14,6 +15,7 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useTimeline(selectedFeed);
   const { ref, inView } = useInView();
   const { experiments } = useSettings();
+  const { t } = useTranslation('app');
   const like = useLike();
   const repost = useRepost();
   const posts = data?.pages.map((page) => page.feed).flat() ?? [];
@@ -102,7 +104,7 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isLoading) {
-    return <div className="text-center py-8 text-gray-600 dark:text-gray-400">Loading timeline...</div>;
+    return <div className="text-center py-8 text-gray-600 dark:text-gray-400">{t('loading')}</div>;
   }
 
   if (error) {
@@ -122,9 +124,7 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
       ))}
 
       <div ref={ref} className="h-10">
-        {isFetchingNextPage && (
-          <div className="text-center py-4 text-gray-600 dark:text-gray-400">Loading more posts...</div>
-        )}
+        {isFetchingNextPage && <div className="text-center py-4 text-gray-600 dark:text-gray-400">{t('loading')}</div>}
       </div>
     </div>
   );

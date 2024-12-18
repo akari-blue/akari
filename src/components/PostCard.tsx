@@ -16,6 +16,7 @@ import { FormattedNumber } from './ui/FormattedNumber';
 import TimeAgo from 'react-timeago-i18n';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
+import { Handle } from './ui/Handle';
 
 type PostCardProps = {
   post: BskyPost | undefined | null;
@@ -83,7 +84,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
           </div>
           <div className="text-gray-500 dark:text-gray-400 text-sm">
             <Link to="/profile/$handle" params={{ handle: post.author.handle }}>
-              @{post.author.handle}
+              <Handle handle={post.author.handle} />
             </Link>
             {' · '}
             <Link

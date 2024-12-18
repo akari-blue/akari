@@ -9,6 +9,7 @@ import { Debug } from './ui/Debug';
 import { useSettings } from '../hooks/useSetting';
 import TimeAgo from 'react-timeago-i18n';
 import { useTranslation } from 'react-i18next';
+import { Handle } from './ui/Handle';
 
 export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
   const { experiments } = useSettings();
@@ -78,7 +79,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
                 </div>
                 <div className="text-gray-500 dark:text-gray-400 text-sm">
                   <Link to="/profile/$handle" params={{ handle: author.handle }}>
-                    @{author.handle}
+                    <Handle handle={author.handle} />
                   </Link>
                   {' · '}
                   <Link

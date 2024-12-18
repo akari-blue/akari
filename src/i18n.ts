@@ -64,6 +64,10 @@ export const resources = {
           description: 'change the font size of the app.',
         },
       },
+      cleanHandles: {
+        name: 'clean handles',
+        description: 'remove the .bsky.social from handles.',
+      },
     },
     image: {
       noImage: 'no image',
@@ -91,6 +95,7 @@ i18n
   .use(
     new Pseudo({
       enabled: process.env.NODE_ENV !== 'production',
+      wrapped: true,
     }),
   )
   .use(initReactI18next) // passes i18n down to react-i18next
