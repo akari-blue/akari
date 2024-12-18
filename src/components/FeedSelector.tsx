@@ -1,14 +1,15 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { useFeeds } from '../lib/bluesky/hooks/useFeeds';
 import { usePreferences } from '../lib/bluesky/hooks/usePreferences';
 import { useSettings } from '../hooks/useSetting';
+import * as Ariakit from '@ariakit/react';
+import { cn } from '../lib/utils';
+import { Timeline } from './Timeline';
 
-export const FeedSelector = () => {
-  const { setSettings } = useSettings();
+export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
+  const { setSettings, experiments, columns } = useSettings();
   const { isAuthenticated } = useAuth();
   const preferences = usePreferences();
-  const queryClient = useQueryClient();
   const savedFeedsPrefV2 = isAuthenticated
     ? preferences.data?.find((item) => item.$type === 'app.bsky.actor.defs#savedFeedsPrefV2')
     : null;
@@ -33,6 +34,7 @@ export const FeedSelector = () => {
     ?.filter((item) => item.type === 'feed')
     ?.map((item) => item.value) ?? ['at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'];
   const { isLoading, error, data } = useFeeds({ feeds });
+  const selectedFeed = columns[columnNumber] ?? feeds[0];
 
   if (isLoading) {
     return <div className="text-gray-600 dark:text-gray-400">Loading feeds...</div>;
@@ -42,27 +44,51 @@ export const FeedSelector = () => {
     return <div className="text-red-500">{error.message}</div>;
   }
 
-  const onClick = (feedUri: string) => {
-    setSettings({ lastSelectedHomeFeed: feedUri });
-
-    // make the feed mark as stale
-    queryClient.invalidateQueries({
-      queryKey: ['timeline', { feed: feedUri, isAuthenticated: true }],
-    });
-  };
-
-  // if there are less than 2 feeds, don't show the selector
-  if (feeds.length <= 2) return null;
-
   return (
-    <ul className="flex flex-row gap-2 max-w-full overflow-x-scroll">
-      {data?.map((feed) => (
-        <li key={feed.uri} className="p-2 bg-blue-500 w-auto">
-          <button className="text-white whitespace-nowrap" onClick={() => onClick(feed.uri)}>
-            {feed.displayName}
-          </button>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col gap-2 rounded-lg">
+      <Ariakit.TabProvider
+        defaultSelectedId={selectedFeed}
+        setSelectedId={(selectedId) => {
+          if (!selectedId) return;
+          setSettings((state) => {
+            const columns = [...state.columns];
+            columns[columnNumber] = selectedId;
+            return {
+              ...state,
+              columns: columns,
+            };
+          });
+        }}
+      >
+        {/* // if there are less than 2 feeds, don't show the selector */}
+        {feeds.length >= 2 && (
+          <Ariakit.TabList
+            className="flex flex-row gap-4 max-w-full overflow-x-scroll bg-neutral-900 p-2 m-2 mb-0 rounded-md"
+            aria-label="feeds"
+          >
+            {data?.map((feed) => (
+              <Ariakit.Tab
+                id={feed.uri}
+                className={cn(
+                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                  selectedFeed === feed.uri && 'bg-neutral-700',
+                )}
+              >
+                {feed.displayName}
+              </Ariakit.Tab>
+            ))}
+          </Ariakit.TabList>
+        )}
+        <div className="p-2">
+          {data?.map((feed) => (
+            <Ariakit.TabPanel tabId={feed.uri}>
+              <div className={cn(experiments.columns !== 1 && 'h-dvh overflow-scroll')}>
+                <Timeline columnNumber={columnNumber} />
+              </div>
+            </Ariakit.TabPanel>
+          ))}
+        </div>
+      </Ariakit.TabProvider>
+    </div>
   );
 };

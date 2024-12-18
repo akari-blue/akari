@@ -2,7 +2,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
 import { usePreferences } from './usePreferences';
 import { BskyPost } from '../types';
-import { useSettings } from '../../../hooks/useSetting';
 
 type Timeline = {
   feed: {
@@ -12,7 +11,7 @@ type Timeline = {
   cursor: string;
 };
 
-export function useTimeline() {
+export function useTimeline(selectedFeed: string) {
   const { agent, isAuthenticated } = useBlueskyStore();
   const preferences = usePreferences();
   const savedFeedsPrefV2 = isAuthenticated
@@ -38,8 +37,7 @@ export function useTimeline() {
   )
     ?.filter((item) => item.type === 'feed')
     ?.map((item) => item.value) ?? ['at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'];
-  const lastSelectedHomeFeed = useSettings((state) => state.lastSelectedHomeFeed);
-  const feed = feeds.find((feed) => feed === lastSelectedHomeFeed) ?? feeds[0];
+  const feed = feeds.find((feed) => feed === selectedFeed) ?? feeds[0];
 
   return useInfiniteQuery<Timeline>({
     queryKey: ['timeline', { feed, isAuthenticated }],

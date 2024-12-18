@@ -1,6 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 
-import { Timeline } from '../components/Timeline';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { FeedSelector } from '../components/FeedSelector';
 import { cn } from '../lib/utils';
@@ -12,22 +11,18 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
   const { experiments } = useSettings();
+  const columns = experiments.columns || 1;
   return (
     <div
       className={cn('grid gap-4')}
       style={{
-        gridTemplateColumns: `repeat(${experiments.columns}, minmax(0, 1fr))`,
+        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
       }}
     >
-      {Array.from({ length: experiments.columns }).map(() => (
+      {Array.from({ length: columns }).map((_, index) => (
         <div className="flex flex-col gap-2">
           <ErrorBoundary>
-            <FeedSelector />
-          </ErrorBoundary>
-          <ErrorBoundary>
-            <div className={cn(experiments.columns !== 1 && 'h-dvh overflow-scroll')}>
-              <Timeline />
-            </div>
+            <FeedSelector columnNumber={index} />
           </ErrorBoundary>
         </div>
       ))}

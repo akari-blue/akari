@@ -8,8 +8,10 @@ import { useLike } from '../lib/bluesky/hooks/useLike';
 import { useRepost } from '../lib/bluesky/hooks/useRepost';
 import { useSettings } from '../hooks/useSetting';
 
-export function Timeline() {
-  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useTimeline();
+export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
+  const { columns } = useSettings();
+  const selectedFeed = columns[columnNumber];
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useTimeline(selectedFeed);
   const { ref, inView } = useInView();
   const { experiments } = useSettings();
   const like = useLike();
@@ -31,7 +33,7 @@ export function Timeline() {
     'l',
     () => {
       const post = getPost(selectedPost);
-      if (!post) return;
+      if (!post?.viewer) return;
 
       like.mutate({ uri: post.uri, cid: post.cid, like: !post.viewer.like });
     },

@@ -9,7 +9,7 @@ type Settings = {
     columns: number;
     responsiveUI: boolean;
   };
-  lastSelectedHomeFeed: string | null;
+  columns: string[];
   setSettings: (
     partial: Settings | Partial<Settings> | ((state: Settings) => Settings | Partial<Settings>),
     replace?: boolean | undefined,
@@ -27,12 +27,12 @@ export const useSettings = create<Settings>()(
         columns: 1,
         responsiveUI: false,
       },
-      lastSelectedHomeFeed: null,
       setSettings: set,
+      columns: [],
     }),
     {
       name: 'settings',
-      partialize: (state) => ({ experiments: state.experiments }),
+      partialize: (state) => ({ experiments: state.experiments, columns: state.columns }),
     },
   ),
 );
