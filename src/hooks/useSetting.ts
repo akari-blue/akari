@@ -42,7 +42,12 @@ export const useSettings = create<Settings>()(
     }),
     {
       name: 'settings',
-      partialize: (state) => ({ experiments: state.experiments, columns: state.columns, language: state.language }),
+      partialize: (state) => ({
+        experiments: state.experiments,
+        columns: state.columns,
+        language: state.language,
+        font: state.font,
+      }),
     },
   ),
 );
