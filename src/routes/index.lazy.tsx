@@ -11,7 +11,7 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
   const { experiments } = useSettings();
-  const columns = experiments.columns || 1;
+  const columns = Math.min(experiments.columns || 1, 4);
   return (
     <div
       className={cn('grid gap-4')}
