@@ -16,7 +16,7 @@ type Author = {
       allowIncoming: 'all' | 'following';
     };
   };
-  viewer: {
+  viewer?: {
     muted: boolean;
     blockedBy: false;
     following?: `at://did:${string}`;
@@ -42,7 +42,7 @@ type BlockedAuthor = {
 type BSkyAuthor = Author | BlockedAuthor;
 
 export const isAuthorBlocked = (author?: BSkyAuthor): author is BlockedAuthor => {
-  return (author as BlockedAuthor).viewer.blockedBy === true;
+  return author?.viewer?.blockedBy === true;
 };
 
 type BskyFacet =
