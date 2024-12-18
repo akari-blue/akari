@@ -26,12 +26,12 @@ function Profile() {
     uri: `at://${params.handle}/app.bsky.feed.post/${params.postId}`,
   });
   const { experiments } = useSettings();
-  const { t } = useTranslation('app');
+  const { t } = useTranslation(['app', 'profile']);
   const isLoading = isLoadingProfile || isLoadingPost;
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>{t('loading')}</div>;
 
-  if (!profile) return <div>Profile not found</div>;
+  if (!profile) return <div>{t('profile:notFound')}</div>;
 
   return (
     <>
@@ -59,7 +59,7 @@ function Profile() {
             </div>
           )}
           <p>
-            <FormattedText text={profile?.description ?? ''} linkify />
+            <FormattedText text={profile?.description ?? ''} linkify key="profile-description" />
           </p>
           <Debug value={profile} />
         </div>

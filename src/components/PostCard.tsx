@@ -45,7 +45,7 @@ const BetterContext = ({ context }: { context?: string }) => {
 };
 
 export function PostCard({ post, context, className, onClick }: PostCardProps) {
-  const { t } = useTranslation('app');
+  const { t } = useTranslation(['app', 'post']);
   const like = useLike();
   const repost = useRepost();
   // const { data: reply } = usePostThread({ uri: post?.record.reply?.parent.uri });
@@ -61,7 +61,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
   };
 
   if (!post) {
-    return <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow', className)}>No post found</div>;
+    return <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow', className)}>{t('post:notFound')}</div>;
   }
 
   return (
@@ -100,7 +100,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
         </div>
       </div>
       <p className="text-gray-800 dark:text-gray-200 mb-3">
-        <FacetedText text={post.record.text} facets={post.record.facets} />
+        <FacetedText text={post.record.text} facets={post.record.facets} key={`faceted-text-${post.uri}`} />
       </p>
       <ErrorBoundary>
         <PostEmbed embed={post.embed} />

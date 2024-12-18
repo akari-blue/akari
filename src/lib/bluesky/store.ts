@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { BskyAgent } from '@atproto/api';
+import { AtpSessionData, BskyAgent } from '@atproto/api';
 
 export type BlueskyCredentials = {
   handle: string;
@@ -10,8 +10,7 @@ export type BlueskyCredentials = {
 type BlueskyState = {
   agent: BskyAgent | null;
   isAuthenticated: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  session: any;
+  session: AtpSessionData | null;
   login: (credentials: BlueskyCredentials) => Promise<void>;
   logout: () => void;
   restoreSession: () => Promise<void>;
@@ -35,7 +34,14 @@ export const useBlueskyStore = create<BlueskyState>()(
 
         // Store session data
         const session = response.data;
-        set({ agent, isAuthenticated: true, session });
+        set({
+          agent,
+          isAuthenticated: true,
+          session: {
+            ...session,
+            active: true,
+          },
+        });
       },
 
       logout: () => {
@@ -45,8 +51,8 @@ export const useBlueskyStore = create<BlueskyState>()(
       },
 
       restoreSession: async () => {
-        const { session } = get();
-        if (session) {
+        const { session, isAuthenticated } = get();
+        if (session && !isAuthenticated) {
           try {
             const agent = new BskyAgent({ service: AUTHENTICATED_ENDPOINT });
             await agent.resumeSession(session);

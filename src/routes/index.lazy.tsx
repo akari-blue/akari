@@ -22,7 +22,7 @@ function Index() {
       {Array.from({ length: columns }).map((_, index) => (
         <div className="flex flex-col gap-2">
           <ErrorBoundary>
-            <FeedSelector columnNumber={index} />
+            <FeedSelector columnNumber={index} key={`column-${index}`} />
           </ErrorBoundary>
         </div>
       ))}

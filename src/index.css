@@ -6,3 +6,15 @@ html,
 body {
   background-color: black;
 }
+
+@font-face {
+  font-family: 'Atkinson-Hyperlegible';
+  src: url('./assets/fonts/Atkinson-Hyperlegible-Regular-102.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src:
+    url('./assets/fonts/OpenDyslexic-Regular.woff2') format('woff2'),
+    url('./assets/fonts/OpenDyslexic-Regular.woff') format('woff');
+}

@@ -9,9 +9,9 @@ import { Timeline } from './Timeline';
 export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
   const { setSettings, experiments, columns } = useSettings();
   const { isAuthenticated } = useAuth();
-  const preferences = usePreferences();
+  const { data: preferences } = usePreferences();
   const savedFeedsPrefV2 = isAuthenticated
-    ? preferences.data?.find((item) => item.$type === 'app.bsky.actor.defs#savedFeedsPrefV2')
+    ? preferences?.find((item) => item.$type === 'app.bsky.actor.defs#savedFeedsPrefV2')
     : null;
   const feeds = (
     savedFeedsPrefV2?.items as

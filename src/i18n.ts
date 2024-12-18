@@ -18,6 +18,7 @@ export const resources = {
       password: 'password',
     },
     app: {
+      appName: '[placeholder name]',
       loading: 'loading...',
       blueskyHandle: 'bluesky handle e.g. @alice.bsky.social',
       following: 'following',
@@ -27,6 +28,58 @@ export const resources = {
       reposts: 'reposts',
       likes: 'likes',
       settings: 'settings',
+    },
+    settings: {
+      developerMode: {
+        name: 'developer Mode',
+        description: 'enable additional debugging tools.',
+      },
+      streamerMode: {
+        name: 'streamer Mode',
+        description: 'hide sensitive information and blur all media content.',
+      },
+      zenMode: {
+        name: 'zen Mode',
+        description: 'hide all numbers.',
+      },
+      columns: {
+        name: 'columns',
+        description: 'how many columns to display in the home view.',
+      },
+      responsiveUI: {
+        name: 'responsive UI',
+        description: 'Should the UI be fully responsive or fixed width.',
+      },
+      language: {
+        name: 'language',
+        description: 'change the language of the app.',
+      },
+      font: {
+        family: {
+          name: 'font family',
+          description: 'change the font family of the app.',
+        },
+        size: {
+          name: 'font size',
+          description: 'change the font size of the app.',
+        },
+      },
+    },
+    image: {
+      noImage: 'no image',
+    },
+    profile: {
+      profile: 'profile',
+      notFound: 'profile not found',
+    },
+    post: {
+      notFound: 'post not found',
+      blockedAuthor: 'this post is hidden because you have blocked the author.',
+      blockedByAuthor: 'this post is hidden because the author has blocked you.',
+    },
+    error: {
+      somethingWentWrong: 'something went wrong',
+      reloadComponent: 'reload component',
     },
   },
   fr: {

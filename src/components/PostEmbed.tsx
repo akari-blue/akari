@@ -8,9 +8,11 @@ import { Link } from './ui/Link';
 import { Debug } from './ui/Debug';
 import { useSettings } from '../hooks/useSetting';
 import TimeAgo from 'react-timeago-i18n';
+import { useTranslation } from 'react-i18next';
 
 export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
   const { experiments } = useSettings();
+  const { t } = useTranslation('post');
   if (!embed) return null;
 
   switch (embed.$type) {
@@ -56,9 +58,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
       if (isAuthorBlocked(author)) {
         return (
           <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow')}>
-            <div className="text-gray-800 dark:text-gray-200 mb-3">
-              This post is hidden because you have blocked the author.
-            </div>
+            <div className="text-gray-800 dark:text-gray-200 mb-3">{t('blockedAuthor')}</div>
           </div>
         );
       }
@@ -96,7 +96,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
           )}
           {embed.record.$type === 'app.bsky.embed.record#viewRecord' && embed.record.text && (
             <p className="text-gray-800 dark:text-gray-200 mb-3">
-              {<FacetedText text={embed.record.text} facets={embed.record.facets} />}
+              {<FacetedText text={embed.record.text} facets={embed.record.facets} key={embed.record.uri} />}
             </p>
           )}
           {embed.record.$type === 'app.bsky.embed.record#viewRecord' &&

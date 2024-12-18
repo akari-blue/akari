@@ -10,6 +10,11 @@ type Settings = {
     responsiveUI: boolean;
   };
   columns: string[];
+  language: 'system' | 'en' | 'fr';
+  font: {
+    family: 'system' | 'OpenDyslexic' | 'Atkinson-Hyperlegible';
+    size: 'system' | 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
+  };
   setSettings: (
     partial: Settings | Partial<Settings> | ((state: Settings) => Settings | Partial<Settings>),
     replace?: boolean | undefined,
@@ -29,10 +34,15 @@ export const useSettings = create<Settings>()(
       },
       setSettings: set,
       columns: [],
+      language: 'system',
+      font: {
+        family: 'system',
+        size: 'system',
+      },
     }),
     {
       name: 'settings',
-      partialize: (state) => ({ experiments: state.experiments, columns: state.columns }),
+      partialize: (state) => ({ experiments: state.experiments, columns: state.columns, language: state.language }),
     },
   ),
 );

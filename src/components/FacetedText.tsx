@@ -13,7 +13,7 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
   const sortedFacets = facets?.sort((a, b) => a.index.byteStart - b.index.byteStart) ?? [];
 
   if (sortedFacets.length === 0) {
-    return <FormattedText text={text} />;
+    return <FormattedText text={text} key="text" />;
   }
 
   const parts: React.ReactNode[] = [];

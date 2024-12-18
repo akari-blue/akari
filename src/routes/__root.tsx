@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet, redirect, ScrollRestoration, useRouterState } from '@tanstack/react-router';
+import { createRootRoute, Outlet, redirect, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
@@ -54,11 +54,22 @@ export const Route = createRootRoute({
 });
 
 function Root() {
-  const { experiments } = useSettings();
+  const { experiments, font } = useSettings();
   const router = useRouterState();
   const pathname = router.location.pathname;
   return (
-    <main className={cn('text-black dark:text-white min-h-screen')}>
+    <main
+      className={cn(
+        'text-black dark:text-white min-h-screen',
+        font.family === 'OpenDyslexic' && 'font-[OpenDyslexic]',
+        font.family === 'Atkinson-Hyperlegible' && 'font-[Atkinson-Hyperlegible]',
+        font.size === 'extra-small' && 'text-xs',
+        font.size === 'small' && 'text-sm',
+        font.size === 'medium' && 'text-base',
+        font.size === 'large' && 'text-lg',
+        font.size === 'extra-large' && 'text-xl',
+      )}
+    >
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
           <div
@@ -70,8 +81,7 @@ function Root() {
             <div className="flex flex-col gap-2">
               <Navbar />
               <ErrorBoundary>
-                <ScrollRestoration />
-                <Outlet />
+                <Outlet key="app" />
               </ErrorBoundary>
             </div>
           </div>

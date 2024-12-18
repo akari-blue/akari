@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
 import { useSettings } from '../../hooks/useSetting';
+import { useTranslation } from 'react-i18next';
 
 type ImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   type: 'avatar' | 'post' | 'banner';
@@ -8,6 +9,7 @@ type ImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
 
 export const Image = ({ src, alt, type, ...props }: ImageProps) => {
   const { experiments } = useSettings();
+  const { t } = useTranslation('image');
   const [showAltText, setShowAltText] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const altButtonOnClick = () => {
@@ -28,7 +30,7 @@ export const Image = ({ src, alt, type, ...props }: ImageProps) => {
   if (!src) {
     return (
       <div className="bg-neutral-200 dark:bg-neutral-600 text-black dark:text-white text-center aspect-square justify-center items-center flex">
-        <span>No Image</span>
+        <span>{t('noImage')}</span>
       </div>
     );
   }
@@ -51,6 +53,7 @@ export const Image = ({ src, alt, type, ...props }: ImageProps) => {
             </button>
           ))}
         <img
+          loading="lazy"
           src={src}
           alt={alt}
           {...props}
