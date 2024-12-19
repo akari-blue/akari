@@ -1,4 +1,4 @@
-export const en = {
+export const nl = {
   auth: {
     login: {
       default: 'aanmelden',

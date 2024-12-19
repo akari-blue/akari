@@ -5,6 +5,7 @@ import Pseudo from 'i18next-pseudo';
 import { fr } from './lang/fr';
 import { en } from './lang/en';
 import { ko } from './lang/ko';
+import { nl } from './lang/nl';
 
 export const defaultNS = 'app';
 
@@ -12,6 +13,7 @@ export const languages = {
   en,
   fr,
   ko,
+  nl,
 };
 
 i18n

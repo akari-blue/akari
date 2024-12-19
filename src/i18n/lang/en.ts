@@ -75,4 +75,10 @@ export const en = {
     somethingWentWrong: 'something went wrong',
     reloadComponent: 'reload component',
   },
+  handleSearch: {
+    noResultsFound: 'no results found',
+  },
+  debug: {
+    notImplemented: 'NOT IMPLEMENTED: {value}',
+  },
 } as const;
