@@ -11,7 +11,6 @@ type Settings = {
     cleanHandles: boolean;
   };
   columns: string[];
-  language: 'system' | 'en' | 'fr';
   font: {
     family: 'system' | 'OpenDyslexic' | 'Atkinson-Hyperlegible';
     size: 'system' | 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
@@ -47,7 +46,6 @@ export const useSettings = create<Settings>()(
       partialize: (state) => ({
         experiments: state.experiments,
         columns: state.columns,
-        language: state.language,
         font: state.font,
       }),
     },

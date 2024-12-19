@@ -3,15 +3,16 @@ import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { useSettings } from '../hooks/useSetting';
 import { Input } from '../components/ui/Input';
 import { useTranslation } from 'react-i18next';
-import i18n from '../i18n';
+import i18n, { languages } from '../i18n';
 
 export const Route = createLazyFileRoute('/settings')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { setSettings, experiments, language, font } = useSettings();
+  const { setSettings, experiments, font } = useSettings();
   const { t } = useTranslation('settings');
+  const selectedLanguage = localStorage.getItem('i18nextLng') || 'system';
 
   return (
     <div className="flex flex-col gap-4">
@@ -68,15 +69,19 @@ function RouteComponent() {
         <div className="flex items-center space-x-4">
           <select
             className="w-64 p-2 text-black"
-            defaultValue={language}
+            defaultValue={selectedLanguage}
             onChange={(event) => {
-              const value = event.target.value as 'system' | 'en' | 'fr';
-              setSettings(() => ({ language: value }));
-              i18n.changeLanguage(value);
+              const value = event.target.value as 'system' | 'en' | 'fr' | 'ko';
+              if (value === 'system') {
+                i18n.changeLanguage(window.navigator.language);
+                localStorage.removeItem('i18nextLng');
+              } else {
+                i18n.changeLanguage(value);
+              }
             }}
           >
             <>
-              {['system', 'en', 'fr'].map((lang) => (
+              {['system', ...Object.keys(languages)].map((lang) => (
                 <option>{lang}</option>
               ))}
             </>
