@@ -78,4 +78,7 @@ export const en = {
   handleSearch: {
     noResultsFound: 'no results found',
   },
+  debug: {
+    notImplemented: 'NOT IMPLEMENTED: {value}',
+  },
 } as const;
