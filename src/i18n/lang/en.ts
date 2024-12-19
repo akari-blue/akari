@@ -21,15 +21,15 @@ export const en = {
   },
   settings: {
     developerMode: {
-      name: 'developer Mode',
+      name: 'developer mode',
       description: 'enable additional debugging tools.',
     },
     streamerMode: {
-      name: 'streamer Mode',
+      name: 'streamer mode',
       description: 'hide sensitive information and blur all media content.',
     },
     zenMode: {
-      name: 'zen Mode',
+      name: 'zen mode',
       description: 'hide all numbers.',
     },
     columns: {
