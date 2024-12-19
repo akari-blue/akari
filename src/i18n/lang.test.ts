@@ -36,6 +36,7 @@ test('all languages have same structure as English', () => {
 });
 
 // Helper function to recursively find missing keys
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function findMissingKeys(reference: Record<string, any>, target: Record<string, any>, path: string[] = []): string[] {
   const missingKeys: string[] = [];
 
