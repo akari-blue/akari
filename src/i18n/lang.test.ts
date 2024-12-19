@@ -1,39 +1,38 @@
 import { test } from 'vitest';
 import { languages } from './index';
 
-test('all languages have same structure as English', () => {
-  const enShape = JSON.parse(
-    JSON.stringify(languages.en, (_, value) => (typeof value === 'object' ? value : null)),
-  ) as Partial<typeof languages.en>;
+const typedObjectKeys = <T>(obj: T) => Object.keys(obj as object) as (keyof T)[];
 
-  // Get all non-English languages
-  const otherLanguages = Object.entries(languages).filter(([lang]) => lang !== 'en');
+for (const language of typedObjectKeys(languages).filter((lang) => lang !== 'en')) {
+  test(`${language} has the correct structure`, () => {
+    const enShape = JSON.parse(
+      JSON.stringify(languages.en, (_, value) => (typeof value === 'object' ? value : null)),
+    ) as Partial<typeof languages.en>;
 
-  // Store all errors
-  const errors: string[] = [];
+    // Store all errors
+    const errors: string[] = [];
 
-  // Check each language
-  for (const [langName, langObj] of otherLanguages) {
+    // Check each language
     try {
       const langShape = JSON.parse(
-        JSON.stringify(langObj, (_, value) => (typeof value === 'object' ? value : null)),
+        JSON.stringify(languages[language], (_, value) => (typeof value === 'object' ? value : null)),
       ) as Partial<typeof languages.en>;
 
       // Find missing keys
       const missingKeys = findMissingKeys(enShape, langShape, []);
       if (missingKeys.length > 0) {
-        errors.push(`${langName} is missing keys: ${missingKeys.join(', ')}`);
+        errors.push(`${language} is missing keys: ${missingKeys.join(', ')}`);
       }
     } catch (error: unknown) {
-      if (error instanceof Error) errors.push(`Error processing ${langName}: ${error.message}`);
+      if (error instanceof Error) errors.push(`Error processing ${language}: ${error.message}`);
     }
-  }
 
-  // If there are any errors, fail the test with all error messages
-  if (errors.length > 0) {
-    throw new Error('\n' + errors.join('\n'));
-  }
-});
+    // If there are any errors, fail the test with all error messages
+    if (errors.length > 0) {
+      throw new Error('\n' + errors.join('\n'));
+    }
+  });
+}
 
 // Helper function to recursively find missing keys
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
