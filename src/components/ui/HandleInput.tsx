@@ -37,7 +37,7 @@ export function HandleInput({
   placeholder = 'Enter handle...',
   className = '',
 }: HandleInputProps) {
-  const { t } = useTranslation('app');
+  const { t } = useTranslation(['app', 'handleSearch']);
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -97,7 +97,7 @@ export function HandleInput({
               ))}
             </ul>
           ) : (
-            <div className="p-4 text-sm text-gray-500 dark:text-gray-400">No results found</div>
+            <div className="p-4 text-sm text-gray-500 dark:text-gray-400">{t('handleSearch:noResultsFound')}</div>
           )}
         </div>
       )}
