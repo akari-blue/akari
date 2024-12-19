@@ -104,7 +104,9 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
         <FacetedText text={post.record.text} facets={post.record.facets} key={`faceted-text-${post.uri}`} />
       </p>
       <ErrorBoundary>
-        <PostEmbed embed={post.embed} />
+        <div className="border border-neutral-400 mb-3">
+          <PostEmbed embed={post.embed} />
+        </div>
       </ErrorBoundary>
       <div className="flex items-center space-x-6 text-gray-500 dark:text-gray-400">
         <Link

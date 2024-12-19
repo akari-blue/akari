@@ -95,19 +95,36 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
               </div>
             </div>
           )}
-          {embed.record.$type === 'app.bsky.embed.record#viewRecord' && embed.record.text && (
-            <p className="text-gray-800 dark:text-gray-200 mb-3">
-              {<FacetedText text={embed.record.text} facets={embed.record.facets} key={embed.record.uri} />}
-            </p>
-          )}
-          {embed.record.$type === 'app.bsky.embed.record#viewRecord' &&
-            embed.record.embeds &&
-            embed.record.embeds.length >= 1 && <PostEmbed embed={embed.record.embeds?.[0]} />}
-          {embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic' && (
-            <div className="text-gray-800 dark:text-gray-200">
-              <Debug value={embed.record} />
-            </div>
-          )}
+          {(() => {
+            if (embed.record.$type === 'app.bsky.embed.record#viewRecord' && embed.record.text) {
+              return (
+                <p className="text-gray-800 dark:text-gray-200 mb-3">
+                  {<FacetedText text={embed.record.text} facets={embed.record.facets} key={embed.record.uri} />}
+                </p>
+              );
+            }
+
+            if (
+              embed.record.$type === 'app.bsky.embed.record#viewRecord' &&
+              embed.record.embeds &&
+              embed.record.embeds.length >= 1
+            ) {
+              return <PostEmbed embed={embed.record.embeds?.[0]} />;
+            }
+            if (embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic') {
+              return (
+                <div className="text-gray-800 dark:text-gray-200">
+                  <Debug value={embed.record} />
+                </div>
+              );
+            }
+
+            return (
+              <p className="text-gray-800 dark:text-gray-200 mb-3">
+                {<FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />}
+              </p>
+            );
+          })()}
         </div>
       );
     }
