@@ -79,6 +79,6 @@ export const en = {
     noResultsFound: 'no results found',
   },
   debug: {
-    notImplemented: 'NOT IMPLEMENTED: {value}',
+    notImplemented: 'NOT IMPLEMENTED: {{value}}',
   },
 } as const;
