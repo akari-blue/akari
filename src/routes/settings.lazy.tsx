@@ -10,9 +10,8 @@ export const Route = createLazyFileRoute('/settings')({
 });
 
 function RouteComponent() {
-  const { setSettings, experiments, font } = useSettings();
+  const { setSettings, experiments, font, language } = useSettings();
   const { t } = useTranslation('settings');
-  const selectedLanguage = localStorage.getItem('i18nextLng') || 'system';
 
   return (
     <div className="flex flex-col gap-4">
@@ -69,14 +68,15 @@ function RouteComponent() {
         <div className="flex items-center space-x-4">
           <select
             className="w-64 p-2 text-black"
-            defaultValue={selectedLanguage}
+            defaultValue={language}
             onChange={(event) => {
-              const value = event.target.value as 'system' | 'en' | 'fr' | 'ko';
+              const value = event.target.value as 'system' | keyof typeof languages;
               if (value === 'system') {
                 i18n.changeLanguage(window.navigator.language);
-                localStorage.removeItem('i18nextLng');
+                setSettings(() => ({ language: 'system' }));
               } else {
                 i18n.changeLanguage(value);
+                setSettings(() => ({ language: value }));
               }
             }}
           >

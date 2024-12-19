@@ -9,6 +9,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
 import { useSettings } from '../hooks/useSetting';
 import { cn } from '../lib/utils';
 import { Navbar } from '../components/Navbar';
+import i18n from '../i18n';
 
 // Create a new query client instance
 const queryClient = new QueryClient({
@@ -54,11 +55,15 @@ export const Route = createRootRoute({
 });
 
 function Root() {
-  const { experiments, font } = useSettings();
+  const { experiments, font, language } = useSettings();
   const router = useRouterState();
   const pathname = router.location.pathname;
+  const dir = i18n.dir(language);
+
   return (
     <main
+      dir={dir}
+      lang={language}
       className={cn(
         'text-black dark:text-white min-h-screen',
         font.family === 'OpenDyslexic' && 'font-[OpenDyslexic]',
