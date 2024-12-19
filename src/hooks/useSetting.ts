@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { languages } from '../i18n';
 
 type Settings = {
   experiments: {
@@ -11,6 +12,7 @@ type Settings = {
     cleanHandles: boolean;
   };
   columns: string[];
+  language: 'system' | keyof typeof languages;
   font: {
     family: 'system' | 'OpenDyslexic' | 'Atkinson-Hyperlegible';
     size: 'system' | 'extra-small' | 'small' | 'medium' | 'large' | 'extra-large';
@@ -47,6 +49,7 @@ export const useSettings = create<Settings>()(
         experiments: state.experiments,
         columns: state.columns,
         font: state.font,
+        language: state.language,
       }),
     },
   ),
