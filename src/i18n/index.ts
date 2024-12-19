@@ -1,15 +1,17 @@
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Pseudo from 'i18next-pseudo';
+import { initReactI18next } from 'react-i18next';
 import { en } from './lang/en';
 import { nl } from './lang/nl';
+import { ur } from './lang/ur';
 
 export const defaultNS = 'app';
 
 export const languages = {
   en,
   nl,
+  ur,
 };
 
 i18n
