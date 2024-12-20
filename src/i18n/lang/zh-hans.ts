@@ -56,7 +56,7 @@ export const zh_hans = {
       },
     },
     cleanHandles: {
-      name: '清除账户代码',
+      name: '短账户代码',
       description: '将.bsky.social从账户代码中清除。',
     },
   },

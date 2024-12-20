@@ -56,7 +56,7 @@ export const yue = {
       },
     },
     cleanHandles: {
-      name: '清理帳號頭銜',
+      name: '短帳號頭銜',
       description: '喺手柄入面移除「.bsky.social」。',
     },
   },

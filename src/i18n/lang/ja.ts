@@ -56,7 +56,7 @@ export const ja = {
       },
     },
     cleanHandles: {
-      name: 'ハンドルをクリーンする',
+      name: 'きれいなハンドル',
       description: 'ハンドルから「.bsky.social」を削除します。',
     },
   },

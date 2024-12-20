@@ -56,7 +56,7 @@ export const zh_hant = {
       },
     },
     cleanHandles: {
-      name: '清除帳號代碼',
+      name: '短帳號代碼',
       description: '將.bsky.social從帳號代碼中清除。',
     },
   },
