@@ -3,6 +3,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Pseudo from 'i18next-pseudo';
 import { initReactI18next } from 'react-i18next';
 import { en } from './lang/en';
+import { es } from './lang/es';
 import { ja } from './lang/ja';
 import { nl } from './lang/nl';
 import { ur } from './lang/ur';
@@ -14,6 +15,7 @@ export const defaultNS = 'app';
 
 export const languages = {
   en,
+  es,
   ja,
   nl,
   ur,
