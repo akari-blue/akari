@@ -57,7 +57,7 @@ export const yue = {
     },
     cleanHandles: {
       name: '短帳號頭銜',
-      description: '喺手柄入面移除「.bsky.social」。',
+      description: '喺帳號頭銜入面移除「.bsky.social」。',
     },
   },
   image: {
