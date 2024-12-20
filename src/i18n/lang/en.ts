@@ -91,6 +91,10 @@ export const en = {
     mentionedYou: 'mentioned you',
     quotedYourPost: 'quoted your post',
     joinedYourStarterpack: 'joined your starterpack',
+    tabs: {
+      all: 'all',
+      mentions: 'mentions',
+    },
   },
   messages: {
     messages: 'messages',
