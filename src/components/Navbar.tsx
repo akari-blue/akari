@@ -53,8 +53,8 @@ export const Navbar = () => {
           <h1 className="text-2xl font-bold">{t('appName')}</h1>
         </Link>
         <div className="flex flex-row gap-2">
-          <NotificationsLink />
-          <ProfileLink />
+          {isAuthenticated && <NotificationsLink />}
+          {isAuthenticated && <ProfileLink />}
           <SettingsLink />
           {isAuthenticated ? <LogoutButton /> : <LoginButton />}
         </div>
