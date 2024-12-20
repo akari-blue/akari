@@ -1,4 +1,4 @@
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/lazy';
 import { BskyPostEmbed, isAuthorBlocked } from '../lib/bluesky/types';
 import { Image } from './ui/Image';
 import { NotImplementedBox } from './ui/NotImplementedBox';
@@ -33,8 +33,22 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
       );
     case 'app.bsky.embed.video#view':
       return (
-        <div className={cn('mb-3', experiments.streamerMode && 'filter blur-md')}>
-          <ReactPlayer url={embed.playlist} controls={true} width="100%" height="100%" muted={true} />
+        <div className={cn('mb-3 w-full aspect-square', experiments.streamerMode && 'filter blur-md')}>
+          <ReactPlayer
+            url={embed.playlist}
+            controls={true}
+            width="100%"
+            height="100%"
+            muted={true}
+            light={embed.thumbnail}
+            config={{
+              file: {
+                attributes: {
+                  preload: 'none',
+                },
+              },
+            }}
+          />
         </div>
       );
     case 'app.bsky.embed.external#view':
