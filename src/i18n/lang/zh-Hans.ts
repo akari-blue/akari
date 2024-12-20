@@ -1,5 +1,5 @@
 // Simplified Chinese
-export const zh_hans = {
+export const zh_Hans = {
   auth: {
     login: {
       default: '登录',

@@ -1,5 +1,5 @@
 // Traditional Chinese
-export const zh_hant = {
+export const zh_Hant = {
   auth: {
     login: {
       default: '登入',
