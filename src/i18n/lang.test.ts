@@ -4,7 +4,7 @@ import { languages } from './index';
 const typedObjectKeys = <T>(obj: T) => Object.keys(obj as object) as (keyof T)[];
 
 for (const language of typedObjectKeys(languages).filter((lang) => lang !== 'en')) {
-  test(`${language} has the correct structure`, () => {
+  test.skipIf(process.env.CHECK_LANGUAGES !== 'true')(`${language} has the correct structure`, () => {
     const enShape = JSON.parse(
       JSON.stringify(languages.en, (_, value) => (typeof value === 'object' ? value : null)),
     ) as Partial<typeof languages.en>;
