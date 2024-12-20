@@ -92,4 +92,8 @@ export const en = {
     quotedYourPost: 'quoted your post',
     joinedYourStarterpack: 'joined your starterpack',
   },
+  messages: {
+    messages: 'messages',
+    noMessages: 'no messages',
+  },
 } as const;

@@ -7,10 +7,22 @@ export type BlueskyCredentials = {
   password: string;
 };
 
+type Session = AtpSessionData & {
+  didDoc?:
+    | {
+        service: {
+          id: string;
+          serviceEndpoint: string;
+          type: 'AtprotoPersonalDataServer';
+        }[];
+      }
+    | undefined;
+};
+
 type BlueskyState = {
   agent: BskyAgent | null;
   isAuthenticated: boolean;
-  session: AtpSessionData | null;
+  session: Session | null;
   login: (credentials: BlueskyCredentials) => Promise<void>;
   logout: () => void;
   restoreSession: () => Promise<void>;
@@ -40,6 +52,7 @@ export const useBlueskyStore = create<BlueskyState>()(
           session: {
             ...session,
             active: true,
+            didDoc: session.didDoc as Session['didDoc'],
           },
         });
       },

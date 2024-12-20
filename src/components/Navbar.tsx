@@ -3,6 +3,11 @@ import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Link } from './ui/Link';
 import { useBlueskyStore } from '../lib/bluesky/store';
 
+const MessagesLink = () => {
+  const { t } = useTranslation('messages');
+  return <Link to="/messages">{t('messages')}</Link>;
+};
+
 const NotificationsLink = () => {
   const { t } = useTranslation('notifications');
   return <Link to="/notifications">{t('notifications')}</Link>;
@@ -53,6 +58,7 @@ export const Navbar = () => {
           <h1 className="text-2xl font-bold">{t('appName')}</h1>
         </Link>
         <div className="flex flex-row gap-2">
+          {isAuthenticated && <MessagesLink />}
           {isAuthenticated && <NotificationsLink />}
           {isAuthenticated && <ProfileLink />}
           <SettingsLink />
