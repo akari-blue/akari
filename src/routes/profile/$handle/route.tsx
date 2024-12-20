@@ -1,28 +1,25 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
-import { useProfile } from '../lib/bluesky/hooks/useProfile';
-import { Image } from '../components/ui/Image';
-import { Debug } from '../components/ui/Debug';
-import { useAuthorFeed } from '../lib/bluesky/hooks/useAuthorFeed';
-import { PostCard } from '../components/PostCard';
-import { BskyPost } from '../lib/bluesky/types';
-import { FormattedText } from '../components/ui/FormattedText';
-import { FormattedNumber } from '../components/ui/FormattedNumber';
-import { useSettings } from '../hooks/useSetting';
-import { cn } from '../lib/utils';
-import { Badge } from '../components/ui/Badge';
-import { FollowButton } from '../components/ui/FollowButton';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
+import { Debug } from '../../../components/ui/Debug';
+import { FollowButton } from '../../../components/ui/FollowButton';
+import { FormattedNumber } from '../../../components/ui/FormattedNumber';
+import { FormattedText } from '../../../components/ui/FormattedText';
+import { useSettings } from '../../../hooks/useSetting';
+import { useProfile } from '../../../lib/bluesky/hooks/useProfile';
+import { cn } from '../../../lib/utils';
+import { Image } from '../../../components/ui/Image';
+import { Badge } from '../../../components/ui/Badge';
 
-export const Route = createLazyFileRoute('/profile/$handle')({
-  component: Profile,
+export const Route = createFileRoute('/profile/$handle')({
+  component: ProfileLayout,
 });
 
-function Profile() {
+function ProfileLayout() {
   const { handle } = Route.useParams();
-  const { data: profile, isLoading } = useProfile({ handle });
-  const { data: feed } = useAuthorFeed({ handle });
+  const { data: profile, isLoading: isLoadingProfile } = useProfile({ handle });
   const { experiments } = useSettings();
   const { t } = useTranslation(['app', 'profile']);
+  const isLoading = isLoadingProfile;
 
   if (isLoading) return <div>{t('loading')}</div>;
 
@@ -59,12 +56,7 @@ function Profile() {
           <Debug value={profile} />
         </div>
       </div>
-      {feed
-        // Filter out replies
-        ?.filter(({ post }) => !(post.record as BskyPost['record']).reply)
-        // Filter out reposts of other users
-        ?.filter(({ post }) => post.author.handle === handle)
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+      <Outlet />
     </>
   );
 }

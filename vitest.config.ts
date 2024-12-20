@@ -6,5 +6,6 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     setupFiles: ['./src/test-setup.ts'],
+    reporters: process.env.GITHUB_ACTIONS ? ['verbose', 'github-actions'] : ['verbose', 'html'],
   },
 });
