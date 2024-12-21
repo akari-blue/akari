@@ -59,7 +59,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
           </a>
           <Image
             type="post"
-            src={embed.external.thumb}
+            src={embed.external.uri ?? embed.external.thumb}
             alt={embed.external.title}
             className="rounded-lg w-full aspect-square object-cover"
           />
