@@ -2,15 +2,36 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Link } from './ui/Link';
 import { useBlueskyStore } from '../lib/bluesky/store';
+import { BellIcon, HomeIcon, LogOutIcon, MailIcon, SettingsIcon, UserIcon } from 'lucide-react';
+
+const HomeLink = () => {
+  const { t } = useTranslation('app');
+  return (
+    <Link to="/">
+      <HomeIcon className="size-10 md:hidden" />
+      <h1 className="text-2xl font-bold hidden md:block">{t('appName')}</h1>
+    </Link>
+  );
+};
 
 const MessagesLink = () => {
   const { t } = useTranslation('messages');
-  return <Link to="/messages">{t('messages')}</Link>;
+  return (
+    <Link to="/messages">
+      <MailIcon className="size-10 md:hidden" />
+      <span className="hidden md:block">{t('messages')}</span>
+    </Link>
+  );
 };
 
 const NotificationsLink = () => {
   const { t } = useTranslation('notifications');
-  return <Link to="/notifications">{t('notifications')}</Link>;
+  return (
+    <Link to="/notifications">
+      <BellIcon className="size-10 md:hidden" />
+      <span className="hidden md:block">{t('notifications')}</span>
+    </Link>
+  );
 };
 
 const ProfileLink = () => {
@@ -26,20 +47,31 @@ const ProfileLink = () => {
         handle: session?.handle,
       }}
     >
-      {t('profile')}
+      <UserIcon className="size-10 md:hidden" />
+      <span className="hidden md:block">{t('profile')}</span>
     </Link>
   );
 };
 
 const SettingsLink = () => {
   const { t } = useTranslation('app');
-  return <Link to="/settings">{t('settings')}</Link>;
+  return (
+    <Link to="/settings">
+      <SettingsIcon className="size-10 md:hidden" />
+      <span className="hidden md:block">{t('settings')}</span>
+    </Link>
+  );
 };
 
 const LogoutButton = () => {
   const { logout } = useAuth();
   const { t } = useTranslation('auth');
-  return <button onClick={logout}>{t('logout')}</button>;
+  return (
+    <button onClick={logout}>
+      <LogOutIcon className="size-10 md:hidden" />
+      <span className="hidden md:block">{t('logout')}</span>
+    </button>
+  );
 };
 
 const LoginButton = () => {
@@ -49,21 +81,16 @@ const LoginButton = () => {
 
 export const Navbar = () => {
   const { isAuthenticated } = useAuth();
-  const { t } = useTranslation('app');
 
   return (
-    <div className="flex flex-col justify-between items-center">
-      <div className="flex justify-between items-center w-full">
-        <Link to="/">
-          <h1 className="text-2xl font-bold">{t('appName')}</h1>
-        </Link>
-        <div className="flex flex-row gap-2">
-          {isAuthenticated && <MessagesLink />}
-          {isAuthenticated && <NotificationsLink />}
-          {isAuthenticated && <ProfileLink />}
-          <SettingsLink />
-          {isAuthenticated ? <LogoutButton /> : <LoginButton />}
-        </div>
+    <div className="flex flex-col h-full p-2 items-center w-12 md:w-64 md:items-start">
+      <HomeLink />
+      <div className="flex flex-col gap-2 items-start">
+        {isAuthenticated && <MessagesLink />}
+        {isAuthenticated && <NotificationsLink />}
+        {isAuthenticated && <ProfileLink />}
+        <SettingsLink />
+        {isAuthenticated ? <LogoutButton /> : <LoginButton />}
       </div>
     </div>
   );

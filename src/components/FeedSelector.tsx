@@ -47,7 +47,7 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
   }
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg">
+    <div className="flex flex-col gap-2 rounded-lg w-[550px] h-screen">
       <Ariakit.TabProvider
         defaultSelectedId={selectedFeed}
         setSelectedId={(selectedId) => {
@@ -64,32 +64,30 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
       >
         {/* // if there are less than 2 feeds, don't show the selector */}
         {feeds.length >= 2 && (
-          <Ariakit.TabList
-            className="flex flex-row gap-4 max-w-full overflow-x-scroll bg-neutral-900 p-2 m-2 mb-0 rounded-md"
-            aria-label="feeds"
-          >
-            {data?.map((feed) => (
-              <Ariakit.Tab
-                id={feed.uri}
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedFeed === feed.uri && 'bg-neutral-700',
-                )}
-              >
-                {feed.displayName}
-              </Ariakit.Tab>
-            ))}
-          </Ariakit.TabList>
+          <div>
+            <Ariakit.TabList
+              className="flex flex-row gap-4 max-w-full overflow-x-scroll bg-neutral-900 p-2 m-2 mb-0 rounded-md"
+              aria-label="feeds"
+            >
+              {data?.map((feed) => (
+                <Ariakit.Tab
+                  id={feed.uri}
+                  className={cn(
+                    'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                    selectedFeed === feed.uri && 'bg-neutral-700',
+                  )}
+                >
+                  {feed.displayName}
+                </Ariakit.Tab>
+              ))}
+            </Ariakit.TabList>
+          </div>
         )}
-        <div className="p-2">
-          {data?.map((feed) => (
-            <Ariakit.TabPanel tabId={feed.uri}>
-              <div className={cn(experiments.columns !== 1 && 'h-dvh overflow-scroll')}>
-                <Timeline columnNumber={columnNumber} />
-              </div>
-            </Ariakit.TabPanel>
-          ))}
-        </div>
+        {data?.map((feed) => (
+          <Ariakit.TabPanel tabId={feed.uri} className="flex-1 overflow-y-scroll min-h-0">
+            <Timeline columnNumber={columnNumber} />
+          </Ariakit.TabPanel>
+        ))}
       </Ariakit.TabProvider>
     </div>
   );

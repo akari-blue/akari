@@ -66,7 +66,11 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
   }
 
   return (
-    <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow', className)} onClick={onClick} id={post.uri}>
+    <div
+      className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow w-[550px]', className)}
+      onClick={onClick}
+      id={post.uri}
+    >
       {/* {!!post.record.reply && <PostCard post={reply} />} */}
       <div className="flex items-center space-x-3 mb-2">
         {post.author.avatar && (

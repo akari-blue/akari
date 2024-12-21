@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet, redirect, useRouterState } from '@tanstack/react-router';
+import { createRootRoute, Outlet, redirect } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
@@ -56,8 +56,6 @@ export const Route = createRootRoute({
 
 function Root() {
   const { experiments, font, language } = useSettings();
-  const router = useRouterState();
-  const pathname = router.location.pathname;
   const dir = i18n.dir(language);
 
   return (
@@ -77,16 +75,13 @@ function Root() {
     >
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-          <div
-            className={cn(
-              'bg-white dark:bg-black text-gray-900 dark:text-gray-100 py-8 px-4',
-              (pathname !== '/' || (pathname === '/' && !experiments.responsiveUI)) && 'max-w-2xl mx-auto',
-            )}
-          >
-            <div className="flex flex-col gap-2">
+          <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 w-full flex justify-center">
+            <div className="flex flex-row gap-2">
               <Navbar />
               <ErrorBoundary>
-                <Outlet key="app" />
+                <div className="flex flex-col gap-2">
+                  <Outlet key="app" />
+                </div>
               </ErrorBoundary>
             </div>
           </div>
