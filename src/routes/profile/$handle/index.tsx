@@ -115,7 +115,7 @@ function Profile() {
   if (!profile) return <div className="w-[550px] h-screen overflow-y-scroll">{t('profile:notFound')}</div>;
 
   return (
-    <div className="w-[550px] h-screen overflow-y-scroll flex flex-col gap-2">
+    <div className="w-[550px] flex flex-col gap-2">
       <Image type="banner" src={profile?.banner} alt="Banner" className="w-full h-32 object-cover" />
       <div>
         <Image
