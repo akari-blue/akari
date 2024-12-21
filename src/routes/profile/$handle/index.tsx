@@ -1,3 +1,4 @@
+import * as Ariakit from '@ariakit/react';
 import { createFileRoute } from '@tanstack/react-router';
 import { useProfile } from '../../../lib/bluesky/hooks/useProfile';
 import { useAuthorFeed } from '../../../lib/bluesky/hooks/useAuthorFeed';
@@ -12,18 +13,73 @@ import { FollowButton } from '../../../components/ui/FollowButton';
 import { FormattedNumber } from '../../../components/ui/FormattedNumber';
 import { FormattedText } from '../../../components/ui/FormattedText';
 import { Debug } from '../../../components/ui/Debug';
+import { useState } from 'react';
+import { NotImplementedBox } from '../../../components/ui/NotImplementedBox';
 
 export const Route = createFileRoute('/profile/$handle/')({
   component: Profile,
 });
 
+function Posts() {
+  const { t } = useTranslation('app');
+  const { handle } = Route.useParams();
+  const { data: feed, isLoading } = useAuthorFeed({ handle });
+
+  if (isLoading) return t('loading');
+
+  return (
+    <div className="flex flex-col gap-2">
+      {feed
+        // Filter out replies
+        ?.filter(({ post }) => !(post.record as BskyPost['record']).reply)
+        // Filter out reposts of other users
+        ?.filter(({ post }) => post.author.handle === handle)
+        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+    </div>
+  );
+}
+
+function Replies() {
+  const { t } = useTranslation('app');
+  const { handle } = Route.useParams();
+  const { data: feed, isLoading } = useAuthorFeed({ handle });
+
+  if (isLoading) return t('loading');
+
+  return (
+    <div className="flex flex-col gap-2">
+      {feed
+        // Filter to only replies
+        ?.filter(({ post }) => (post.record as BskyPost['record']).reply)
+        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+    </div>
+  );
+}
+
+function Media() {
+  const { t } = useTranslation('app');
+  const { handle } = Route.useParams();
+  const { data: feed, isLoading } = useAuthorFeed({ handle });
+
+  if (isLoading) return t('loading');
+
+  return (
+    <div className="flex flex-col gap-2">
+      {feed
+        // Filter to only media
+        ?.filter(({ post }) => (post.record as BskyPost['record']).embed?.$type === 'app.bsky.embed.images')
+        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+    </div>
+  );
+}
+
 function Profile() {
   const { handle } = Route.useParams();
-  const { data: profile, isLoading: isLoadingProfile } = useProfile({ handle });
+  const { data: profile, isLoading } = useProfile({ handle });
   const { experiments } = useSettings();
   const { t } = useTranslation(['app', 'profile']);
-  const { data: feed, isLoading: isLoadingFeed } = useAuthorFeed({ handle });
-  const isLoading = isLoadingProfile || isLoadingFeed;
+
+  const [selectedTab, setSelectedTab] = useState<string | null>('posts');
 
   if (isLoading) return <div className="w-[550px] h-screen overflow-y-scroll">{t('loading')}</div>;
 
@@ -60,12 +116,78 @@ function Profile() {
           <Debug value={profile} />
         </div>
       </div>
-      {feed
-        // Filter out replies
-        ?.filter(({ post }) => !(post.record as BskyPost['record']).reply)
-        // Filter out reposts of other users
-        ?.filter(({ post }) => post.author.handle === handle)
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+      <Ariakit.TabProvider
+        defaultSelectedId={selectedTab}
+        setSelectedId={(selectedId) => {
+          if (!selectedId) return;
+          setSelectedTab(selectedId);
+        }}
+      >
+        <div>
+          <Ariakit.TabList className="flex flex-row gap-4 max-w-full overflow-x-scroll bg-neutral-900" aria-label="tabs">
+            <Ariakit.Tab
+              id="posts"
+              className={cn(
+                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                selectedTab === 'posts' && 'bg-neutral-700',
+              )}
+            >
+              {t('posts')}
+            </Ariakit.Tab>
+            <Ariakit.Tab
+              id="replies"
+              className={cn(
+                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                selectedTab === 'replies' && 'bg-neutral-700',
+              )}
+            >
+              {t('replies')}
+            </Ariakit.Tab>
+            <Ariakit.Tab
+              id="media"
+              className={cn(
+                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                selectedTab === 'media' && 'bg-neutral-700',
+              )}
+            >
+              {t('media')}
+            </Ariakit.Tab>
+            <Ariakit.Tab
+              id="likes"
+              className={cn(
+                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                selectedTab === 'likes' && 'bg-neutral-700',
+              )}
+            >
+              {t('likes')}
+            </Ariakit.Tab>
+            <Ariakit.Tab
+              id="feeds"
+              className={cn(
+                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                selectedTab === 'feeds' && 'bg-neutral-700',
+              )}
+            >
+              {t('feeds')}
+            </Ariakit.Tab>
+          </Ariakit.TabList>
+        </div>
+        <Ariakit.TabPanel tabId="posts">
+          <Posts />
+        </Ariakit.TabPanel>
+        <Ariakit.TabPanel tabId="replies">
+          <Replies />
+        </Ariakit.TabPanel>
+        <Ariakit.TabPanel tabId="media">
+          <Media />
+        </Ariakit.TabPanel>
+        <Ariakit.TabPanel tabId="likes">
+          <NotImplementedBox type="likes" />
+        </Ariakit.TabPanel>
+        <Ariakit.TabPanel tabId="feeds">
+          <NotImplementedBox type="feeds" />
+        </Ariakit.TabPanel>
+      </Ariakit.TabProvider>
     </div>
   );
 }
