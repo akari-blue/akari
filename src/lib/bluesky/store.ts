@@ -5,6 +5,7 @@ import { AtpSessionData, BskyAgent } from '@atproto/api';
 export type BlueskyCredentials = {
   handle: string;
   password: string;
+  authFactorToken?: string;
 };
 
 type Session = AtpSessionData & {
@@ -42,6 +43,7 @@ export const useBlueskyStore = create<BlueskyState>()(
         const response = await agent.login({
           identifier: credentials.handle,
           password: credentials.password,
+          authFactorToken: credentials.authFactorToken,
         });
 
         // Store session data

@@ -6,10 +6,11 @@ import { Input } from './ui/Input';
 import { Label } from './ui/Label';
 import { Button } from './ui/Button';
 
-interface LoginFormData {
+type LoginFormData = {
   handle: string;
   password: string;
-}
+  authFactorToken?: string;
+};
 
 export function LoginForm() {
   const { t } = useTranslation(['auth', 'app']);
@@ -49,7 +50,21 @@ export function LoginForm() {
         {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
       </div>
 
-      {error && <p className="text-red-500 text-sm">{error.message}</p>}
+      {error &&
+        (error?.message === 'A sign in code has been sent to your email address' || error?.message === 'Token is invalid' ? (
+          <div>
+            <Label htmlFor="authFactorToken">{t('authFactorToken')}</Label>
+            <Input
+              id="authFactorToken"
+              type="text"
+              {...register('authFactorToken', { required: 'Two-factor token is required' })}
+              error={!!errors.authFactorToken}
+            />
+            {errors.authFactorToken && <p className="mt-1 text-sm text-red-500">{errors.authFactorToken?.message}</p>}
+          </div>
+        ) : (
+          <p className="text-red-500 text-sm">{error.message}</p>
+        ))}
 
       <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? t('login.pending') : t('login.default')}

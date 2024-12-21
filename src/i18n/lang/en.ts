@@ -6,6 +6,7 @@ export const en = {
     },
     logout: 'logout',
     password: 'password',
+    authFactorToken: 'two-factor token',
   },
   app: {
     appName: '[placeholder name]',
