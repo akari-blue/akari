@@ -81,4 +81,23 @@ export const en = {
   debug: {
     notImplemented: 'NOT IMPLEMENTED: {{value}}',
   },
+  notifications: {
+    notifications: 'notifications',
+    noNotifications: 'no notifications',
+    followedYou: 'followed you',
+    likedYourPost: 'liked your post',
+    repostedYourPost: 'reposted your post',
+    repliedToYourPost: 'replied to your post',
+    mentionedYou: 'mentioned you',
+    quotedYourPost: 'quoted your post',
+    joinedYourStarterpack: 'joined your starterpack',
+    tabs: {
+      all: 'all',
+      mentions: 'mentions',
+    },
+  },
+  messages: {
+    messages: 'messages',
+    noMessages: 'no messages',
+  },
 } as const;
