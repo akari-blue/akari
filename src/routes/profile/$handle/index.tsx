@@ -25,12 +25,12 @@ function Profile() {
   const { data: feed, isLoading: isLoadingFeed } = useAuthorFeed({ handle });
   const isLoading = isLoadingProfile || isLoadingFeed;
 
-  if (isLoading) return <div>{t('loading')}</div>;
+  if (isLoading) return <div className="w-[550px] h-screen overflow-y-scroll">{t('loading')}</div>;
 
-  if (!profile) return <div>{t('profile:notFound')}</div>;
+  if (!profile) return <div className="w-[550px] h-screen overflow-y-scroll">{t('profile:notFound')}</div>;
 
   return (
-    <div className="w-[550px] h-screen overflow-y-scroll">
+    <div className="w-[550px] h-screen overflow-y-scroll flex flex-col gap-2">
       <Image type="banner" src={profile?.banner} alt="Banner" className="w-full h-32 object-cover" />
       <div>
         <Image

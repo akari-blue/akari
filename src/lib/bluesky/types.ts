@@ -254,7 +254,7 @@ export type BskyPostEmbed =
           quoteCount: number;
           indexedAt: string;
           text?: string;
-          embeds: {
+          embeds?: {
             $type: 'app.bsky.embed.recordWithMedia#view';
             media: {
               $type: 'app.bsky.embed.external#view';

@@ -145,7 +145,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
     case 'app.bsky.embed.recordWithMedia#view':
       return (
         <>
-          <div className={cn(embed.record.record.embeds.length >= 2 && 'grid grid-cols-2', 'gap-2 mb-3')}>
+          <div className={cn((embed.record.record.embeds ?? [])?.length >= 2 && 'grid grid-cols-2', 'gap-2 mb-3')}>
             <Image
               type="post"
               key={embed.media.external.uri}
