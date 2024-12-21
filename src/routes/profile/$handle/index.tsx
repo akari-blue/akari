@@ -20,6 +20,18 @@ export const Route = createFileRoute('/profile/$handle/')({
   component: Profile,
 });
 
+function All() {
+  const { t } = useTranslation('app');
+  const { handle } = Route.useParams();
+  const { data: feed, isLoading } = useAuthorFeed({ handle });
+
+  if (isLoading) return t('loading');
+
+  return (
+    <div className="flex flex-col gap-2">{feed?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}</div>
+  );
+}
+
 function Posts() {
   const { t } = useTranslation('app');
   const { handle } = Route.useParams();
@@ -34,6 +46,23 @@ function Posts() {
         ?.filter(({ post }) => !(post.record as BskyPost['record']).reply)
         // Filter out reposts of other users
         ?.filter(({ post }) => post.author.handle === handle)
+        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+    </div>
+  );
+}
+
+function Reposts() {
+  const { t } = useTranslation('app');
+  const { handle } = Route.useParams();
+  const { data: feed, isLoading } = useAuthorFeed({ handle });
+
+  if (isLoading) return t('loading');
+
+  return (
+    <div className="flex flex-col gap-2">
+      {feed
+        // Filter only reposts
+        ?.filter(({ post }) => post.author.handle !== handle)
         ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
     </div>
   );
@@ -126,6 +155,15 @@ function Profile() {
         <div>
           <Ariakit.TabList className="flex flex-row gap-4 max-w-full overflow-x-scroll bg-neutral-900" aria-label="tabs">
             <Ariakit.Tab
+              id="all"
+              className={cn(
+                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                selectedTab === 'all' && 'bg-neutral-700',
+              )}
+            >
+              {t('all')}
+            </Ariakit.Tab>
+            <Ariakit.Tab
               id="posts"
               className={cn(
                 'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
@@ -133,6 +171,15 @@ function Profile() {
               )}
             >
               {t('posts')}
+            </Ariakit.Tab>
+            <Ariakit.Tab
+              id="reposts"
+              className={cn(
+                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                selectedTab === 'reposts' && 'bg-neutral-700',
+              )}
+            >
+              {t('reposts')}
             </Ariakit.Tab>
             <Ariakit.Tab
               id="replies"
@@ -170,10 +217,34 @@ function Profile() {
             >
               {t('feeds')}
             </Ariakit.Tab>
+            <Ariakit.Tab
+              id="starter-packs"
+              className={cn(
+                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                selectedTab === 'starter-packs' && 'bg-neutral-700',
+              )}
+            >
+              {t('starter-packs')}
+            </Ariakit.Tab>
+            <Ariakit.Tab
+              id="lists"
+              className={cn(
+                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+                selectedTab === 'lists' && 'bg-neutral-700',
+              )}
+            >
+              {t('lists')}
+            </Ariakit.Tab>
           </Ariakit.TabList>
         </div>
+        <Ariakit.TabPanel tabId="all">
+          <All />
+        </Ariakit.TabPanel>
         <Ariakit.TabPanel tabId="posts">
           <Posts />
+        </Ariakit.TabPanel>
+        <Ariakit.TabPanel tabId="reposts">
+          <Reposts />
         </Ariakit.TabPanel>
         <Ariakit.TabPanel tabId="replies">
           <Replies />
@@ -186,6 +257,12 @@ function Profile() {
         </Ariakit.TabPanel>
         <Ariakit.TabPanel tabId="feeds">
           <NotImplementedBox type="feeds" />
+        </Ariakit.TabPanel>
+        <Ariakit.TabPanel tabId="starter-packs">
+          <NotImplementedBox type="starter-packs" />
+        </Ariakit.TabPanel>
+        <Ariakit.TabPanel tabId="lists">
+          <NotImplementedBox type="lists" />
         </Ariakit.TabPanel>
       </Ariakit.TabProvider>
     </div>
