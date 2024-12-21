@@ -1,4 +1,5 @@
-export const fr_fr = {
+// French
+export const fr = {
   auth: {
     login: {
       default: 'connexion',
@@ -38,20 +39,20 @@ export const fr_fr = {
     },
     responsiveUI: {
       name: 'interface utilisateur responsive',
-      description: 'L\'interface utilisateur doit-elle être entièrement responsive ou à largeur fixe.',
+      description: "L'interface utilisateur doit-elle être entièrement responsive ou à largeur fixe.",
     },
     language: {
       name: 'langue',
-      description: 'changer la langue de l\'application.',
+      description: "changer la langue de l'application.",
     },
     font: {
       family: {
-        name: 'police d\'écriture',
-        description: 'changer la police d\'écriture de l\'application.',
+        name: "police d'écriture",
+        description: "changer la police d'écriture de l'application.",
       },
       size: {
         name: 'taille de police',
-        description: 'changer la taille de police d\'écriture de l\'application.',
+        description: "changer la taille de police d'écriture de l'application.",
       },
     },
     cleanHandles: {
@@ -68,11 +69,11 @@ export const fr_fr = {
   },
   post: {
     notFound: 'post non trouvé',
-    blockedAuthor: 'ce post est masqué car vous avez bloqué l\'auteur.',
-    blockedByAuthor: 'ce post est masqué car l\'auteur vous a bloqué.',
+    blockedAuthor: "ce post est masqué car vous avez bloqué l'auteur.",
+    blockedByAuthor: "ce post est masqué car l'auteur vous a bloqué.",
   },
   error: {
-    somethingWentWrong: 'quelque chose s\'est mal passé',
+    somethingWentWrong: "quelque chose s'est mal passé",
     reloadComponent: 'rechargement du composant',
   },
   handleSearch: {
