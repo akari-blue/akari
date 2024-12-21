@@ -113,7 +113,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
             if (embed.record.$type === 'app.bsky.embed.record#viewRecord' && embed.record.text) {
               return (
                 <p className="text-gray-800 dark:text-gray-200 mb-3">
-                  {<FacetedText text={embed.record.text} facets={embed.record.facets} key={embed.record.uri} />}
+                  <FacetedText text={embed.record.text} facets={embed.record.facets} key={embed.record.uri} />
                 </p>
               );
             }
@@ -142,7 +142,22 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
         </div>
       );
     }
+    case 'app.bsky.embed.recordWithMedia#view':
+      return (
+        <>
+          <div className={cn(embed.record.record.embeds.length >= 2 && 'grid grid-cols-2', 'gap-2 mb-3')}>
+            <Image
+              type="post"
+              key={embed.media.external.uri}
+              src={embed.media.external.uri ?? embed.media.external.thumb}
+              alt={embed.media.external.description}
+              className="rounded-lg w-full object-cover"
+            />
+          </div>
+        </>
+      );
     default:
+      // @ts-expect-error - this should never happen
       return <NotImplementedBox type={embed.$type} data={embed.record} />;
   }
 };
