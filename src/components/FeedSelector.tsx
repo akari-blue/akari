@@ -8,7 +8,7 @@ import { Timeline } from './Timeline';
 import { useTranslation } from 'react-i18next';
 
 export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
-  const { setSettings, experiments, columns } = useSettings();
+  const { setSettings, columns } = useSettings();
   const { t } = useTranslation('app');
   const { isAuthenticated } = useAuth();
   const { data: preferences } = usePreferences();
