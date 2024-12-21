@@ -25,11 +25,11 @@ function Profile() {
   if (!profile) return <div>{t('profile:notFound')}</div>;
 
   return (
-    <>
+    <div className="w-[550px] h-screen overflow-y-scroll">
       <PostCard post={postThread?.post as BskyPost} />
       <ErrorBoundary>
         {(postThread?.replies as { post: BskyPost }[])?.map((reply) => reply.post && <PostCard post={reply.post} />)}
       </ErrorBoundary>
-    </>
+    </div>
   );
 }
