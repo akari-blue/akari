@@ -27,48 +27,51 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full max-w-md">
-      <div>
-        <Label htmlFor="handle">{t('app:blueskyHandle')}</Label>
-        <Controller
-          name="handle"
-          control={control}
-          rules={{ required: 'Handle is required' }}
-          render={({ field }) => <HandleInput value={field.value || ''} onChange={field.onChange} className="mt-1" />}
-        />
-        {errors.handle && <p className="mt-1 text-sm text-red-500">{errors.handle.message}</p>}
+    <form onSubmit={handleSubmit(onSubmit)} className="p-2">
+      <div className="flex flex-col gap-2 w-[550px]">
+        <div>
+          <Label htmlFor="handle">{t('app:blueskyHandle')}</Label>
+          <Controller
+            name="handle"
+            control={control}
+            rules={{ required: 'Handle is required' }}
+            render={({ field }) => <HandleInput value={field.value || ''} onChange={field.onChange} className="mt-1" />}
+          />
+          {errors.handle && <p className="mt-1 text-sm text-red-500">{errors.handle.message}</p>}
+        </div>
+
+        <div>
+          <Label htmlFor="password">{t('password')}</Label>
+          <Input
+            id="password"
+            type="password"
+            {...register('password', { required: 'Password is required' })}
+            error={!!errors.password}
+          />
+          {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
+        </div>
+
+        {error &&
+          (error?.message === 'A sign in code has been sent to your email address' ||
+          error?.message === 'Token is invalid' ? (
+            <div>
+              <Label htmlFor="authFactorToken">{t('authFactorToken')}</Label>
+              <Input
+                id="authFactorToken"
+                type="text"
+                {...register('authFactorToken', { required: 'Two-factor token is required' })}
+                error={!!errors.authFactorToken}
+              />
+              {errors.authFactorToken && <p className="mt-1 text-sm text-red-500">{errors.authFactorToken?.message}</p>}
+            </div>
+          ) : (
+            <p className="text-red-500 text-sm">{error.message}</p>
+          ))}
+
+        <Button type="submit" disabled={isLoading} className="w-full">
+          {isLoading ? t('login.pending') : t('login.default')}
+        </Button>
       </div>
-
-      <div>
-        <Label htmlFor="password">{t('password')}</Label>
-        <Input
-          id="password"
-          type="password"
-          {...register('password', { required: 'Password is required' })}
-          error={!!errors.password}
-        />
-        {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
-      </div>
-
-      {error &&
-        (error?.message === 'A sign in code has been sent to your email address' || error?.message === 'Token is invalid' ? (
-          <div>
-            <Label htmlFor="authFactorToken">{t('authFactorToken')}</Label>
-            <Input
-              id="authFactorToken"
-              type="text"
-              {...register('authFactorToken', { required: 'Two-factor token is required' })}
-              error={!!errors.authFactorToken}
-            />
-            {errors.authFactorToken && <p className="mt-1 text-sm text-red-500">{errors.authFactorToken?.message}</p>}
-          </div>
-        ) : (
-          <p className="text-red-500 text-sm">{error.message}</p>
-        ))}
-
-      <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? t('login.pending') : t('login.default')}
-      </Button>
     </form>
   );
 }
