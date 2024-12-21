@@ -1,4 +1,4 @@
-export const fr = {
+export const fr_fr = {
   auth: {
     login: {
       default: 'connexion',
