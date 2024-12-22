@@ -2,7 +2,6 @@ import { createRootRoute, Outlet, redirect, useRouterState } from '@tanstack/rea
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useBlueskyStore } from '../lib/bluesky/store';
 import { Toaster } from 'sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
@@ -10,21 +9,6 @@ import { useSettings } from '../hooks/useSetting';
 import { cn } from '../lib/utils';
 import { Navbar } from '../components/Navbar';
 import i18n from '../i18n';
-
-// Create a new query client instance
-const queryClient = new QueryClient({
-  defaultOptions: {
-    mutations: {
-      onError: (error) => {
-        console.error('Mutation error:', error);
-      },
-    },
-    queries: {
-      retry: 1,
-      staleTime: 1000 * 60, // 1 minute
-    },
-  },
-});
 
 export const Route = createRootRoute({
   component: Root,
@@ -76,23 +60,22 @@ function Root() {
       )}
     >
       <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
-          <div className="flex mx-auto lg:flex-row lg:w-fit lg:gap-2">
-            <Navbar />
-            <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center mx-auto">
-              <ErrorBoundary>
-                <div className={cn('flex flex-col gap-2', pathname !== '/' && 'max-w-[550px]')}>
-                  <Outlet key="app" />
-                </div>
-              </ErrorBoundary>
-            </div>
+        <div className="flex mx-auto lg:flex-row lg:w-fit lg:gap-2">
+          <Navbar />
+          <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center mx-auto">
+            <ErrorBoundary>
+              <div className={cn('flex flex-col gap-2', pathname !== '/' && 'max-w-[550px]')}>
+                <Outlet key="app" />
+              </div>
+            </ErrorBoundary>
           </div>
-          {experiments.devMode && (
-            <div className="fixed bottom-12 right-2">
-              <ReactQueryDevtools buttonPosition="relative" />
-            </div>
-          )}
-        </QueryClientProvider>
+        </div>
+        {experiments.devMode && (
+          <div className="fixed bottom-12 right-2">
+            <ReactQueryDevtools buttonPosition="relative" />
+          </div>
+        )}
+
         {experiments.devMode && (
           <TanStackRouterDevtools
             toggleButtonProps={{
