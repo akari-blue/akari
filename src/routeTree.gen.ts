@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as NotificationsImport } from './routes/notifications'
+import { Route as IndexImport } from './routes/index'
 import { Route as MessagesIndexImport } from './routes/messages/index'
 import { Route as TagTagImport } from './routes/tag.$tag'
 import { Route as MessagesConvoIdImport } from './routes/messages/$convoId'
@@ -24,7 +25,6 @@ import { Route as ProfileHandlePostPostIdImport } from './routes/profile/$handle
 
 const SettingsLazyImport = createFileRoute('/settings')()
 const LoginLazyImport = createFileRoute('/login')()
-const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
 
@@ -46,7 +46,7 @@ const NotificationsRoute = NotificationsImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
@@ -90,7 +90,7 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/notifications': {
@@ -155,7 +155,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
+  '/': typeof IndexRoute
   '/notifications': typeof NotificationsRoute
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
@@ -167,7 +167,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
+  '/': typeof IndexRoute
   '/notifications': typeof NotificationsRoute
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
@@ -180,7 +180,7 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
+  '/': typeof IndexRoute
   '/notifications': typeof NotificationsRoute
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
@@ -229,7 +229,7 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
+  IndexRoute: typeof IndexRoute
   NotificationsRoute: typeof NotificationsRoute
   LoginLazyRoute: typeof LoginLazyRoute
   SettingsLazyRoute: typeof SettingsLazyRoute
@@ -241,7 +241,7 @@ export interface RootRouteChildren {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
+  IndexRoute: IndexRoute,
   NotificationsRoute: NotificationsRoute,
   LoginLazyRoute: LoginLazyRoute,
   SettingsLazyRoute: SettingsLazyRoute,
@@ -274,7 +274,7 @@ export const routeTree = rootRoute
       ]
     },
     "/": {
-      "filePath": "index.lazy.tsx"
+      "filePath": "index.tsx"
     },
     "/notifications": {
       "filePath": "notifications.tsx"

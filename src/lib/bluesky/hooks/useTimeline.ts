@@ -1,7 +1,9 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useBlueskyStore } from '../store';
+import { useInfiniteQuery, infiniteQueryOptions } from '@tanstack/react-query';
+import { BlueskyState, useBlueskyStore } from '../store';
 import { usePreferences } from './usePreferences';
 import { BskyPost } from '../types';
+import { getFeeds } from './useFeeds';
+import { useSettings } from '../../../hooks/useSetting';
 
 type Timeline = {
   feed: {
@@ -11,37 +13,25 @@ type Timeline = {
   cursor: string;
 };
 
-export function useTimeline(selectedFeed: string) {
-  const { agent, isAuthenticated } = useBlueskyStore();
-  const preferences = usePreferences();
-  const savedFeedsPrefV2 = isAuthenticated
-    ? preferences.data?.find((item) => item.$type === 'app.bsky.actor.defs#savedFeedsPrefV2')
-    : null;
-  const feeds = (
-    savedFeedsPrefV2?.items as
-      | (
-          | {
-              type: 'feed';
-              value: `at://${string}`;
-              pinned: boolean;
-              id: string;
-            }
-          | {
-              type: 'timeline';
-              value: string;
-              pinned: boolean;
-              id: string;
-            }
-        )[]
-      | undefined
-  )
-    ?.filter((item) => item.type === 'feed')
-    ?.map((item) => item.value) ?? ['at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'];
-  const feed = feeds.find((feed) => feed === selectedFeed) ?? feeds[0];
+type TimelineQueryOptions = Pick<BlueskyState, 'agent' | 'isAuthenticated'> & {
+  preferences: ReturnType<typeof usePreferences>['data'];
+  columns: string[];
+  columnNumber: number;
+};
 
-  return useInfiniteQuery<Timeline>({
+export const timelineQueryOptions = ({
+  agent,
+  isAuthenticated,
+  preferences,
+  columns,
+  columnNumber,
+}: TimelineQueryOptions) => {
+  const selectedFeed = columns[columnNumber];
+  const feeds = getFeeds({ isAuthenticated, preferences });
+  const feed = feeds.find((feed) => feed === selectedFeed) ?? feeds[0];
+  return infiniteQueryOptions({
     queryKey: ['timeline', { feed, isAuthenticated }],
-    queryFn: async ({ pageParam }) => {
+    queryFn: async ({ pageParam: cursor }) => {
       if (!agent) {
         throw new Error('Not authenticated');
       }
@@ -54,7 +44,6 @@ export function useTimeline(selectedFeed: string) {
       // }
 
       // authenticated
-      const cursor = pageParam as string | undefined;
       const response = await agent.api.app.bsky.feed.getFeed({
         feed,
         cursor,
@@ -63,8 +52,17 @@ export function useTimeline(selectedFeed: string) {
       return response.data as Timeline;
     },
     getNextPageParam: (lastPage) => lastPage.cursor,
-    initialPageParam: undefined,
+    initialPageParam: undefined as string | undefined,
     enabled: !!agent && feed !== undefined,
     retry: 1,
   });
+};
+
+export function useTimeline(columnNumber: number) {
+  const columns = useSettings((state) => state.columns);
+  const agent = useBlueskyStore((state) => state.agent);
+  const isAuthenticated = useBlueskyStore((state) => state.isAuthenticated);
+  const { data: preferences } = usePreferences();
+
+  return useInfiniteQuery(timelineQueryOptions({ agent, isAuthenticated, preferences, columns, columnNumber }));
 }

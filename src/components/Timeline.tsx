@@ -10,11 +10,9 @@ import { useSettings } from '../hooks/useSetting';
 import { useTranslation } from 'react-i18next';
 
 export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
-  const { columns } = useSettings();
-  const selectedFeed = columns[columnNumber];
-  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useTimeline(selectedFeed);
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useTimeline(columnNumber);
   const { ref, inView } = useInView();
-  const { experiments } = useSettings();
+  const experiments = useSettings((state) => state.experiments);
   const { t } = useTranslation('app');
   const like = useLike();
   const repost = useRepost();
