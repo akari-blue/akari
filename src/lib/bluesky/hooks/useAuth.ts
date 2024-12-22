@@ -2,9 +2,12 @@ import { BlueskyCredentials, useBlueskyStore } from '../store';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
+import { useShallow } from 'zustand/react/shallow';
 
 export function useAuth() {
-  const { login, logout, isAuthenticated } = useBlueskyStore();
+  const { login, logout, isAuthenticated } = useBlueskyStore(
+    useShallow((state) => ({ login: state.login, logout: state.logout, isAuthenticated: state.isAuthenticated })),
+  );
   const navigate = useNavigate();
 
   const loginMutation = useMutation({

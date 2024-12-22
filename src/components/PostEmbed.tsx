@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Handle } from './ui/Handle';
 
 export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
-  const { experiments } = useSettings();
+  const experiments = useSettings((state) => state.experiments);
   const { t } = useTranslation('post');
   if (!embed) return null;
 

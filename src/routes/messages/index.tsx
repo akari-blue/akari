@@ -15,7 +15,7 @@ export const Route = createFileRoute('/messages/')({
 });
 
 function Messages() {
-  const { session } = useBlueskyStore();
+  const session = useBlueskyStore((state) => state.session);
   const { data, isLoading } = useConversations();
   const { t } = useTranslation('app');
 

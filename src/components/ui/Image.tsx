@@ -8,7 +8,7 @@ type ImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
 };
 
 export const Image = ({ src, alt, type, ...props }: ImageProps) => {
-  const { experiments } = useSettings();
+  const experiments = useSettings((state) => state.experiments);
   const { t } = useTranslation('image');
   const [showAltText, setShowAltText] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);

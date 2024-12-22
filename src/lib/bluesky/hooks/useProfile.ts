@@ -18,7 +18,7 @@ export const profileQueryOptions = ({ agent, handle }: ProfileQueryOptions) =>
   });
 
 export function useProfile({ handle }: { handle?: string }) {
-  const { agent } = useBlueskyStore();
+  const agent = useBlueskyStore((state) => state.agent);
 
   return useQuery(profileQueryOptions({ agent, handle }));
 }

@@ -113,7 +113,7 @@ function Media() {
 function Profile() {
   const { handle } = Route.useParams();
   const { data: profile, isLoading } = useProfile({ handle });
-  const { experiments } = useSettings();
+  const experiments = useSettings((state) => state.experiments);
   const { t } = useTranslation(['app', 'profile']);
 
   const [selectedTab, setSelectedTab] = useState<string | null>('posts');

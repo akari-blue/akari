@@ -1,6 +1,5 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 import { type BlueskyState, useBlueskyStore } from '../store';
-import { useAuth } from './useAuth';
 
 type ConversationQueryOptions = Pick<BlueskyState, 'agent' | 'session' | 'isAuthenticated'> & {
   convoId: string;
@@ -26,8 +25,9 @@ export const conversationQueryOptions = ({ convoId, agent, isAuthenticated, sess
   });
 
 export function useConversation({ convoId }: { convoId: string }) {
-  const { agent, session } = useBlueskyStore();
-  const { isAuthenticated } = useAuth();
+  const agent = useBlueskyStore((state) => state.agent);
+  const session = useBlueskyStore((state) => state.session);
+  const isAuthenticated = useBlueskyStore((state) => state.isAuthenticated);
 
   return useQuery(conversationQueryOptions({ convoId, agent, isAuthenticated, session }));
 }

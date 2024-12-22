@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSettings } from '../../hooks/useSetting';
 
 export const Debug = ({ value }: { value: unknown }) => {
-  const { experiments } = useSettings();
+  const experiments = useSettings((state) => state.experiments);
   const [open, setOpen] = useState(false);
   const onClick = () => {
     setOpen((prev) => !prev);

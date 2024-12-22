@@ -19,7 +19,7 @@ export const postThreadQueryOptions = ({ agent, uri }: PostThreadQueryOptions) =
   });
 
 export function usePostThread({ uri }: { uri?: string }) {
-  const { agent } = useBlueskyStore();
+  const agent = useBlueskyStore((state) => state.agent);
 
   return useQuery(postThreadQueryOptions({ agent, uri }));
 }

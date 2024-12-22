@@ -46,7 +46,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function Root() {
-  const { experiments, font, language } = useSettings();
+  const experiments = useSettings((state) => state.experiments);
+  const font = useSettings((state) => state.font);
+  const language = useSettings((state) => state.language);
   const dir = i18n.dir(language);
   const location = useLocation();
 

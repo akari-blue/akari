@@ -10,7 +10,10 @@ export const Route = createLazyFileRoute('/settings')({
 });
 
 function RouteComponent() {
-  const { setSettings, experiments, font, language } = useSettings();
+  const experiments = useSettings((state) => state.experiments);
+  const font = useSettings((state) => state.font);
+  const language = useSettings((state) => state.language);
+  const setSettings = useSettings((state) => state.setSettings);
   const { t } = useTranslation('settings');
 
   return (

@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute('/')({
 });
 
 function Index() {
-  const { experiments } = useSettings();
+  const experiments = useSettings((state) => state.experiments);
   const columns = Math.min(experiments.columns || 1, 4);
   return (
     <div

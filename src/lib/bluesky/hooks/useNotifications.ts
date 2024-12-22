@@ -16,7 +16,7 @@ export const notificationsQueryOptions = ({ agent }: NotificationsQueryOptions) 
   });
 
 export function useNotifications() {
-  const { agent } = useBlueskyStore();
+  const agent = useBlueskyStore((state) => state.agent);
 
   return useQuery(notificationsQueryOptions({ agent }));
 }

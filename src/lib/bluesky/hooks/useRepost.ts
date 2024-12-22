@@ -6,7 +6,7 @@ import { BskyPost } from '../types';
 const timelineQueryKey = ['timeline', { isAuthenticated: true }];
 
 export function useRepost() {
-  const { agent } = useBlueskyStore();
+  const agent = useBlueskyStore((state) => state.agent);
   const queryClient = useQueryClient();
 
   return useMutation({

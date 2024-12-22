@@ -35,7 +35,7 @@ const NotificationsLink = () => {
 };
 
 const ProfileLink = () => {
-  const { session } = useBlueskyStore();
+  const session = useBlueskyStore((state) => state.session);
   const { t } = useTranslation('profile');
 
   if (!session?.handle) return null;

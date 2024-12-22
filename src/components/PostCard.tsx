@@ -51,7 +51,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
   const repost = useRepost();
   // const { data: reply } = usePostThread({ uri: post?.record.reply?.parent.uri });
   const { isAuthenticated } = useAuth();
-  const { experiments } = useSettings();
+  const experiments = useSettings((state) => state.experiments);
 
   const handleLike = (uri: string, cid: string, currentLike?: string) => {
     like.mutate({ uri, cid, like: !currentLike });

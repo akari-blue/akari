@@ -19,7 +19,7 @@ export const authorFeedQuerOptions = ({ agent, handle }: AuthorFeedQueryOptions)
   });
 
 export function useAuthorFeed({ handle }: { handle: string }) {
-  const { agent } = useBlueskyStore();
+  const agent = useBlueskyStore((state) => state.agent);
 
   return useQuery(authorFeedQuerOptions({ agent, handle }));
 }

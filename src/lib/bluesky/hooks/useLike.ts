@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { BskyPost } from '../types';
 
 export function useLike() {
-  const { agent } = useBlueskyStore();
+  const agent = useBlueskyStore((state) => state.agent);
   const queryClient = useQueryClient();
 
   return useMutation({

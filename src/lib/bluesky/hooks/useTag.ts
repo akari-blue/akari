@@ -20,7 +20,7 @@ export const tagQueryOptions = ({ agent, tag }: TagQueryOptions) =>
   });
 
 export function useTag({ tag }: { tag: string }) {
-  const { agent } = useBlueskyStore();
+  const agent = useBlueskyStore((state) => state.agent);
 
   return useQuery(tagQueryOptions({ agent, tag }));
 }

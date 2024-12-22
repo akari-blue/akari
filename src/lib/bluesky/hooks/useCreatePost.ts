@@ -3,7 +3,8 @@ import { useBlueskyStore } from '../store';
 import { toast } from 'sonner';
 
 export function useCreatePost() {
-  const { agent, isAuthenticated } = useBlueskyStore();
+  const agent = useBlueskyStore((state) => state.agent);
+  const isAuthenticated = useBlueskyStore((state) => state.isAuthenticated);
   const queryClient = useQueryClient();
 
   return useMutation({
