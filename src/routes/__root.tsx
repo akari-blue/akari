@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet, redirect, useRouterState } from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet, redirect, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
@@ -9,16 +9,23 @@ import { useSettings } from '../hooks/useSetting';
 import { cn } from '../lib/utils';
 import { Navbar } from '../components/Navbar';
 import i18n from '../i18n';
+import { QueryClient } from '@tanstack/react-query';
 
-export const Route = createRootRoute({
+interface RouterContext {
+  queryClient: QueryClient;
+  blueskyStore: typeof useBlueskyStore;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: Root,
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async ({ location, context }) => {
+    const { blueskyStore } = context;
     // Attempt to restore the session
-    await useBlueskyStore.getState().restoreSession();
+    await blueskyStore.getState().restoreSession();
 
     if (location.pathname.startsWith('/login')) {
       // if already authenticated, redirect to root
-      const { isAuthenticated } = useBlueskyStore.getState();
+      const { isAuthenticated } = blueskyStore.getState();
       console.info('isAuthenticated', isAuthenticated);
       if (isAuthenticated) {
         throw redirect({ to: '/' });
