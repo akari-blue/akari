@@ -19,6 +19,7 @@ export const en = {
     reposts: 'reposts',
     likes: 'likes',
     settings: 'settings',
+    arrived_on: 'Arrived on #',
   },
   settings: {
     developerMode: {
