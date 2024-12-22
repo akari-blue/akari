@@ -1,20 +1,12 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { useBlueskyStore } from './lib/bluesky/store';
-
 import './i18n';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-// Register the router instance for type safety
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
-}
 
 // Create a new query client instance
 const queryClient = new QueryClient({
@@ -33,6 +25,13 @@ const queryClient = new QueryClient({
 
 // Create a new router instance
 const router = createRouter({ routeTree, context: { queryClient, blueskyStore: useBlueskyStore } });
+
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 // Render the app
 const rootElement = document.getElementById('root')!;
