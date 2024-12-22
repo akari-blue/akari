@@ -16,7 +16,6 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as NotificationsImport } from './routes/notifications'
 import { Route as MessagesIndexImport } from './routes/messages/index'
 import { Route as MessagesConvoIdImport } from './routes/messages/$convoId'
-import { Route as ProfileHandleRouteImport } from './routes/profile/$handle/route'
 import { Route as ProfileHandleIndexImport } from './routes/profile/$handle/index'
 import { Route as ProfileHandlePostPostIdImport } from './routes/profile/$handle/post.$postId'
 
@@ -71,22 +70,16 @@ const MessagesConvoIdRoute = MessagesConvoIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProfileHandleRouteRoute = ProfileHandleRouteImport.update({
-  id: '/profile/$handle',
-  path: '/profile/$handle',
+const ProfileHandleIndexRoute = ProfileHandleIndexImport.update({
+  id: '/profile/$handle/',
+  path: '/profile/$handle/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProfileHandleIndexRoute = ProfileHandleIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ProfileHandleRouteRoute,
-} as any)
-
 const ProfileHandlePostPostIdRoute = ProfileHandlePostPostIdImport.update({
-  id: '/post/$postId',
-  path: '/post/$postId',
-  getParentRoute: () => ProfileHandleRouteRoute,
+  id: '/profile/$handle/post/$postId',
+  path: '/profile/$handle/post/$postId',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -121,13 +114,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/profile/$handle': {
-      id: '/profile/$handle'
-      path: '/profile/$handle'
-      fullPath: '/profile/$handle'
-      preLoaderRoute: typeof ProfileHandleRouteImport
-      parentRoute: typeof rootRoute
-    }
     '/messages/$convoId': {
       id: '/messages/$convoId'
       path: '/messages/$convoId'
@@ -151,46 +137,32 @@ declare module '@tanstack/react-router' {
     }
     '/profile/$handle/': {
       id: '/profile/$handle/'
-      path: '/'
-      fullPath: '/profile/$handle/'
+      path: '/profile/$handle'
+      fullPath: '/profile/$handle'
       preLoaderRoute: typeof ProfileHandleIndexImport
-      parentRoute: typeof ProfileHandleRouteImport
+      parentRoute: typeof rootRoute
     }
     '/profile/$handle/post/$postId': {
       id: '/profile/$handle/post/$postId'
-      path: '/post/$postId'
+      path: '/profile/$handle/post/$postId'
       fullPath: '/profile/$handle/post/$postId'
       preLoaderRoute: typeof ProfileHandlePostPostIdImport
-      parentRoute: typeof ProfileHandleRouteImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
 
-interface ProfileHandleRouteRouteChildren {
-  ProfileHandleIndexRoute: typeof ProfileHandleIndexRoute
-  ProfileHandlePostPostIdRoute: typeof ProfileHandlePostPostIdRoute
-}
-
-const ProfileHandleRouteRouteChildren: ProfileHandleRouteRouteChildren = {
-  ProfileHandleIndexRoute: ProfileHandleIndexRoute,
-  ProfileHandlePostPostIdRoute: ProfileHandlePostPostIdRoute,
-}
-
-const ProfileHandleRouteRouteWithChildren =
-  ProfileHandleRouteRoute._addFileChildren(ProfileHandleRouteRouteChildren)
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/notifications': typeof NotificationsRoute
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
-  '/profile/$handle': typeof ProfileHandleRouteRouteWithChildren
   '/messages/$convoId': typeof MessagesConvoIdRoute
   '/tag/$tag': typeof TagTagLazyRoute
   '/messages': typeof MessagesIndexRoute
-  '/profile/$handle/': typeof ProfileHandleIndexRoute
+  '/profile/$handle': typeof ProfileHandleIndexRoute
   '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdRoute
 }
 
@@ -212,7 +184,6 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
-  '/profile/$handle': typeof ProfileHandleRouteRouteWithChildren
   '/messages/$convoId': typeof MessagesConvoIdRoute
   '/tag/$tag': typeof TagTagLazyRoute
   '/messages/': typeof MessagesIndexRoute
@@ -227,11 +198,10 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/login'
     | '/settings'
-    | '/profile/$handle'
     | '/messages/$convoId'
     | '/tag/$tag'
     | '/messages'
-    | '/profile/$handle/'
+    | '/profile/$handle'
     | '/profile/$handle/post/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -250,7 +220,6 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/login'
     | '/settings'
-    | '/profile/$handle'
     | '/messages/$convoId'
     | '/tag/$tag'
     | '/messages/'
@@ -264,10 +233,11 @@ export interface RootRouteChildren {
   NotificationsRoute: typeof NotificationsRoute
   LoginLazyRoute: typeof LoginLazyRoute
   SettingsLazyRoute: typeof SettingsLazyRoute
-  ProfileHandleRouteRoute: typeof ProfileHandleRouteRouteWithChildren
   MessagesConvoIdRoute: typeof MessagesConvoIdRoute
   TagTagLazyRoute: typeof TagTagLazyRoute
   MessagesIndexRoute: typeof MessagesIndexRoute
+  ProfileHandleIndexRoute: typeof ProfileHandleIndexRoute
+  ProfileHandlePostPostIdRoute: typeof ProfileHandlePostPostIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -275,10 +245,11 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsRoute: NotificationsRoute,
   LoginLazyRoute: LoginLazyRoute,
   SettingsLazyRoute: SettingsLazyRoute,
-  ProfileHandleRouteRoute: ProfileHandleRouteRouteWithChildren,
   MessagesConvoIdRoute: MessagesConvoIdRoute,
   TagTagLazyRoute: TagTagLazyRoute,
   MessagesIndexRoute: MessagesIndexRoute,
+  ProfileHandleIndexRoute: ProfileHandleIndexRoute,
+  ProfileHandlePostPostIdRoute: ProfileHandlePostPostIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -295,10 +266,11 @@ export const routeTree = rootRoute
         "/notifications",
         "/login",
         "/settings",
-        "/profile/$handle",
         "/messages/$convoId",
         "/tag/$tag",
-        "/messages/"
+        "/messages/",
+        "/profile/$handle/",
+        "/profile/$handle/post/$postId"
       ]
     },
     "/": {
@@ -313,13 +285,6 @@ export const routeTree = rootRoute
     "/settings": {
       "filePath": "settings.lazy.tsx"
     },
-    "/profile/$handle": {
-      "filePath": "profile/$handle/route.tsx",
-      "children": [
-        "/profile/$handle/",
-        "/profile/$handle/post/$postId"
-      ]
-    },
     "/messages/$convoId": {
       "filePath": "messages/$convoId.tsx"
     },
@@ -330,12 +295,10 @@ export const routeTree = rootRoute
       "filePath": "messages/index.tsx"
     },
     "/profile/$handle/": {
-      "filePath": "profile/$handle/index.tsx",
-      "parent": "/profile/$handle"
+      "filePath": "profile/$handle/index.tsx"
     },
     "/profile/$handle/post/$postId": {
-      "filePath": "profile/$handle/post.$postId.tsx",
-      "parent": "/profile/$handle"
+      "filePath": "profile/$handle/post.$postId.tsx"
     }
   }
 }

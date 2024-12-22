@@ -15,7 +15,7 @@ function Messages() {
   const { data, isLoading } = useConversations();
   const { t } = useTranslation('app');
 
-  if (isLoading) return <div>{t('loading')}</div>;
+  if (isLoading) return <div className="w-[550px] h-screen overflow-y-scroll">{t('loading')}</div>;
 
   return (
     <div className="flex flex-col gap-2 overflow-y-auto h-screen">

@@ -233,8 +233,18 @@ export type BskyPostEmbed =
           value: {
             $type: 'app.bsky.feed.post';
             createdAt: string;
-            embed: BskyEmebdRecordWithMedia;
+            embed?: BskyEmebdRecordWithMedia;
             langs: string[];
+            reply?: {
+              parent: {
+                cid: string;
+                uri: string;
+              };
+              root: {
+                cid: string;
+                uri: string;
+              };
+            };
             text: string;
           };
           labels: [];
@@ -243,66 +253,65 @@ export type BskyPostEmbed =
           repostCount: number;
           quoteCount: number;
           indexedAt: string;
-          embeds: [
-            {
-              $type: 'app.bsky.embed.recordWithMedia#view';
-              media: {
-                $type: 'app.bsky.embed.external#view';
-                external: {
-                  uri: string;
-                  title: string;
-                  description: string;
-                  thumb: string;
-                };
+          text?: string;
+          embeds?: {
+            $type: 'app.bsky.embed.recordWithMedia#view';
+            media: {
+              $type: 'app.bsky.embed.external#view';
+              external: {
+                uri: string;
+                title: string;
+                description: string;
+                thumb: string;
               };
+            };
+            record: {
               record: {
-                record: {
-                  $type: 'app.bsky.embed.record#viewRecord';
-                  uri: string;
-                  cid: string;
-                  author: BSkyAuthor;
-                  value: {
-                    $type: 'app.bsky.feed.post';
-                    createdAt: string;
-                    embed: {
-                      $type: 'app.bsky.embed.recordWithMedia';
-                      media: {
-                        $type: 'app.bsky.embed.external';
-                        external: {
-                          description: string;
-                          thumb: {
-                            $type: 'blob';
-                            ref: {
-                              $link: string;
-                            };
-                            mimeType: string;
-                            size: number;
+                $type: 'app.bsky.embed.record#viewRecord';
+                uri: string;
+                cid: string;
+                author: BSkyAuthor;
+                value: {
+                  $type: 'app.bsky.feed.post';
+                  createdAt: string;
+                  embed: {
+                    $type: 'app.bsky.embed.recordWithMedia';
+                    media: {
+                      $type: 'app.bsky.embed.external';
+                      external: {
+                        description: string;
+                        thumb: {
+                          $type: 'blob';
+                          ref: {
+                            $link: string;
                           };
-                          title: string;
-                          uri: string;
+                          mimeType: string;
+                          size: number;
                         };
-                      };
-                      record: {
-                        $type: 'app.bsky.embed.record';
-                        record: {
-                          cid: string;
-                          uri: string;
-                        };
+                        title: string;
+                        uri: string;
                       };
                     };
-                    langs: string[];
-                    text: string;
+                    record: {
+                      $type: 'app.bsky.embed.record';
+                      record: {
+                        cid: string;
+                        uri: string;
+                      };
+                    };
                   };
-                  labels: [];
-                  likeCount: number;
-                  replyCount: number;
-                  repostCount: number;
-                  quoteCount: number;
-                  indexedAt: string;
+                  langs: string[];
+                  text: string;
                 };
+                labels: [];
+                likeCount: number;
+                replyCount: number;
+                repostCount: number;
+                quoteCount: number;
+                indexedAt: string;
               };
-            },
-          ];
+            };
+          }[];
         };
       };
     };
@@ -430,6 +439,7 @@ export type BskyPost = {
     replyDisabled?: boolean;
     like?: string;
     repost?: string;
+    pinned?: boolean;
   };
   labels: [];
   threadgate?: {
@@ -1607,6 +1617,129 @@ const testPost = [
     viewer: {
       threadMuted: false,
       embeddingDisabled: false,
+    },
+    labels: [],
+  },
+  {
+    uri: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.feed.post/3ldryjyc36c2l',
+    cid: 'bafyreigbhxuvtykfhhwpkt57fymhnmqsv7hhm4yb6ulhvsuyfozofhazhe',
+    author: {
+      did: 'did:plc:k6acu4chiwkixvdedcmdgmal',
+      handle: 'imlunahey.com',
+      displayName: 'luna',
+      avatar:
+        'https://cdn.bsky.app/img/avatar/plain/did:plc:k6acu4chiwkixvdedcmdgmal/bafkreihwjqusqk5wyahldrx4spchtozxce6vpd47p2wyfccg2pvhrc3hya@jpeg',
+      associated: {
+        chat: {
+          allowIncoming: 'following',
+        },
+      },
+      viewer: {
+        muted: false,
+        blockedBy: false,
+      },
+      labels: [],
+      createdAt: '2024-10-21T12:09:53.506Z',
+    },
+    record: {
+      $type: 'app.bsky.feed.post',
+      createdAt: '2024-12-21T03:47:38.278Z',
+      embed: {
+        $type: 'app.bsky.embed.recordWithMedia',
+        media: {
+          $type: 'app.bsky.embed.external',
+          external: {
+            description: 'Alt: a cartoon drawing of a deer with the words yep yep yep',
+            thumb: {
+              $type: 'blob',
+              ref: {
+                $link: 'bafkreid75vj2le27rvzxvzlduqvmwxy4sfme3yb3zsnh63x5ncgwlfx6aa',
+              },
+              mimeType: 'image/jpeg',
+              size: 523374,
+            },
+            title: 'a cartoon drawing of a deer with the words yep yep yep',
+            uri: 'https://media.tenor.com/wX-YNsvQpLoAAAAC/fawn-cartoon.gif?hh=487&ww=498',
+          },
+        },
+        record: {
+          $type: 'app.bsky.embed.record',
+          record: {
+            cid: 'bafyreiefuwyfagl267sl2cei727ua2htirbnwdrioi3uvzmq7no6yrbsl4',
+            uri: 'at://did:plc:64htzccuyxwagilntdxo2ity/app.bsky.feed.post/3ldrvyp6vrs2f',
+          },
+        },
+      },
+      langs: ['en'],
+      text: 'more buttons = better\n\nthis is a fact!',
+    },
+    embed: {
+      $type: 'app.bsky.embed.recordWithMedia#view',
+      media: {
+        $type: 'app.bsky.embed.external#view',
+        external: {
+          uri: 'https://media.tenor.com/wX-YNsvQpLoAAAAC/fawn-cartoon.gif?hh=487&ww=498',
+          title: 'a cartoon drawing of a deer with the words yep yep yep',
+          description: 'Alt: a cartoon drawing of a deer with the words yep yep yep',
+          thumb:
+            'https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:k6acu4chiwkixvdedcmdgmal/bafkreid75vj2le27rvzxvzlduqvmwxy4sfme3yb3zsnh63x5ncgwlfx6aa@jpeg',
+        },
+      },
+      record: {
+        record: {
+          $type: 'app.bsky.embed.record#viewRecord',
+          uri: 'at://did:plc:64htzccuyxwagilntdxo2ity/app.bsky.feed.post/3ldrvyp6vrs2f',
+          cid: 'bafyreiefuwyfagl267sl2cei727ua2htirbnwdrioi3uvzmq7no6yrbsl4',
+          author: {
+            did: 'did:plc:64htzccuyxwagilntdxo2ity',
+            handle: 'userquin.bsky.social',
+            displayName: 'Joaquín Sánchez',
+            avatar:
+              'https://cdn.bsky.app/img/avatar/plain/did:plc:64htzccuyxwagilntdxo2ity/bafkreiedqjh5wuc6gpx7ql2foqgnarfrrttzpuuhrx4yzrjn3f5fhwcbsy@jpeg',
+            viewer: {
+              muted: false,
+              blockedBy: false,
+              following: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.graph.follow/3l7wh6zyuek2o',
+              followedBy: 'at://did:plc:64htzccuyxwagilntdxo2ity/app.bsky.graph.follow/3l7uvjlkuxs25',
+            },
+            labels: [],
+            createdAt: '2024-10-26T18:09:14.611Z',
+          },
+          value: {
+            $type: 'app.bsky.feed.post',
+            createdAt: '2024-12-21T03:02:10.827Z',
+            langs: ['en'],
+            reply: {
+              parent: {
+                cid: 'bafyreif5ehzijfhsmpyubcpp7tu2vatzmtv5bh3tdkrom3rtylgfnjs6im',
+                uri: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.feed.post/3ldrvctjgvc2d',
+              },
+              root: {
+                cid: 'bafyreidb7jl7rbvcn76ttohumcxpq2uyfiusjgm3bh5c6fs6g3strg467e',
+                uri: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.feed.post/3ldrobv64n22d',
+              },
+            },
+            text: 'Ohh sorry luna , you want more buttons... long day 4AM and still working',
+          },
+          labels: [],
+          likeCount: 2,
+          replyCount: 1,
+          repostCount: 0,
+          quoteCount: 1,
+          indexedAt: '2024-12-21T03:02:15.547Z',
+          embeds: [],
+        },
+      },
+    },
+    replyCount: 3,
+    repostCount: 1,
+    likeCount: 22,
+    quoteCount: 0,
+    indexedAt: '2024-12-21T03:47:41.447Z',
+    viewer: {
+      threadMuted: false,
+      embeddingDisabled: false,
+      pinned: false,
     },
     labels: [],
   },

@@ -20,9 +20,9 @@ function Profile() {
   const { t } = useTranslation(['app', 'profile']);
   const isLoading = isLoadingProfile || isLoadingPost;
 
-  if (isLoading) return <div>{t('loading')}</div>;
+  if (isLoading) return <div className="w-[550px] h-screen overflow-y-scroll">{t('loading')}</div>;
 
-  if (!profile) return <div>{t('profile:notFound')}</div>;
+  if (!profile) return <div className="w-[550px] h-screen overflow-y-scroll">{t('profile:notFound')}</div>;
 
   return (
     <>

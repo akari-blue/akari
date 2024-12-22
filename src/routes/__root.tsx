@@ -56,9 +56,9 @@ export const Route = createRootRoute({
 
 function Root() {
   const { experiments, font, language } = useSettings();
+  const dir = i18n.dir(language);
   const router = useRouterState();
   const pathname = router.location.pathname;
-  const dir = i18n.dir(language);
 
   return (
     <main
@@ -77,22 +77,33 @@ function Root() {
     >
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-          <div
-            className={cn(
-              'bg-white dark:bg-black text-gray-900 dark:text-gray-100 py-8 px-4',
-              (pathname !== '/' || (pathname === '/' && !experiments.responsiveUI)) && 'max-w-2xl mx-auto',
-            )}
-          >
-            <div className="flex flex-col gap-2">
-              <Navbar />
+          <div className="flex mx-auto lg:flex-row lg:w-fit lg:gap-2">
+            <Navbar />
+            <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center mx-auto">
               <ErrorBoundary>
-                <Outlet key="app" />
+                <div className={cn('flex flex-col gap-2', pathname !== '/' && 'max-w-[550px]')}>
+                  <Outlet key="app" />
+                </div>
               </ErrorBoundary>
             </div>
           </div>
-          {experiments.devMode && <ReactQueryDevtools />}
+          {experiments.devMode && (
+            <div className="fixed bottom-12 right-2">
+              <ReactQueryDevtools buttonPosition="relative" />
+            </div>
+          )}
         </QueryClientProvider>
-        {experiments.devMode && <TanStackRouterDevtools />}
+        {experiments.devMode && (
+          <TanStackRouterDevtools
+            toggleButtonProps={{
+              style: {
+                position: 'fixed',
+                bottom: '4rem',
+                left: '1em',
+              },
+            }}
+          />
+        )}
         <Toaster position="bottom-right" closeButton richColors />
       </ErrorBoundary>
     </main>
