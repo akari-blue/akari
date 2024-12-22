@@ -1,12 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import { useBlueskyStore } from '../store';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+import { BlueskyState, useBlueskyStore } from '../store';
 import { useAuth } from './useAuth';
 
-export function usePreferences() {
-  const { agent } = useBlueskyStore();
-  const { isAuthenticated } = useAuth();
+type PreferencesQueryOptions = Pick<BlueskyState, 'agent' | 'isAuthenticated'>;
 
-  return useQuery({
+export const preferencesQueryOptions = ({ agent, isAuthenticated }: PreferencesQueryOptions) =>
+  queryOptions({
     queryKey: ['preferences'],
     queryFn: async () => {
       const response = await agent?.api.app.bsky.actor.getPreferences();
@@ -14,4 +13,10 @@ export function usePreferences() {
     },
     enabled: !!agent && isAuthenticated,
   });
+
+export function usePreferences() {
+  const { agent } = useBlueskyStore();
+  const { isAuthenticated } = useAuth();
+
+  return useQuery(preferencesQueryOptions({ agent, isAuthenticated }));
 }

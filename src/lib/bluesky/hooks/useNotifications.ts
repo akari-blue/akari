@@ -1,10 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { useBlueskyStore } from '../store';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+import { type BlueskyState, useBlueskyStore } from '../store';
 
-export function useNotifications() {
-  const { agent } = useBlueskyStore();
+type NotificationsQueryOptions = Pick<BlueskyState, 'agent'>;
 
-  return useQuery({
+export const notificationsQueryOptions = ({ agent }: NotificationsQueryOptions) =>
+  queryOptions({
     queryKey: ['notifications'],
     queryFn: async () => {
       if (!agent) throw new Error('Not authenticated');
@@ -14,4 +14,9 @@ export function useNotifications() {
     },
     enabled: !!agent,
   });
+
+export function useNotifications() {
+  const { agent } = useBlueskyStore();
+
+  return useQuery(notificationsQueryOptions({ agent }));
 }

@@ -20,7 +20,7 @@ type Session = AtpSessionData & {
     | undefined;
 };
 
-type BlueskyState = {
+export type BlueskyState = {
   agent: BskyAgent | null;
   isAuthenticated: boolean;
   session: Session | null;

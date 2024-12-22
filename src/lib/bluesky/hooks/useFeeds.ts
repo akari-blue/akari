@@ -1,10 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { useBlueskyStore } from '../store';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+import { type BlueskyState, useBlueskyStore } from '../store';
 
-export function useFeeds({ feeds }: { feeds: string[] }) {
-  const { agent } = useBlueskyStore();
+type FeedsQueryOptions = Pick<BlueskyState, 'agent'> & {
+  feeds: string[];
+};
 
-  return useQuery({
+export const feedsQueryOptions = ({ agent, feeds }: FeedsQueryOptions) =>
+  queryOptions({
     queryKey: ['feeds', { feeds }],
     queryFn: async () => {
       if (feeds.length === 0) throw new Error('No feeds provided');
@@ -17,4 +19,9 @@ export function useFeeds({ feeds }: { feeds: string[] }) {
     },
     enabled: !!agent,
   });
+
+export function useFeeds({ feeds }: { feeds: string[] }) {
+  const { agent } = useBlueskyStore();
+
+  return useQuery(feedsQueryOptions({ agent, feeds }));
 }

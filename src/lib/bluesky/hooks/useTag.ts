@@ -1,11 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
-import { useBlueskyStore } from '../store';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+import { type BlueskyState, useBlueskyStore } from '../store';
 import { BskyPost } from '../types';
 
-export function useTag({ tag }: { tag: string }) {
-  const { agent } = useBlueskyStore();
+type TagQueryOptions = Pick<BlueskyState, 'agent'> & {
+  tag: string;
+};
 
-  return useQuery({
+export const tagQueryOptions = ({ agent, tag }: TagQueryOptions) =>
+  queryOptions({
     queryKey: ['tag', { tag }],
     queryFn: async () => {
       if (!agent) {
@@ -16,4 +18,9 @@ export function useTag({ tag }: { tag: string }) {
     },
     enabled: !!agent,
   });
+
+export function useTag({ tag }: { tag: string }) {
+  const { agent } = useBlueskyStore();
+
+  return useQuery(tagQueryOptions({ agent, tag }));
 }

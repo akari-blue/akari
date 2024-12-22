@@ -1,10 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { useBlueskyStore } from '../store';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+import { type BlueskyState, useBlueskyStore } from '../store';
 
-export function useProfile({ handle }: { handle?: string }) {
-  const { agent } = useBlueskyStore();
+type ProfileQueryOptions = Pick<BlueskyState, 'agent'> & {
+  handle?: string;
+};
 
-  return useQuery({
+export const profileQueryOptions = ({ agent, handle }: ProfileQueryOptions) =>
+  queryOptions({
     queryKey: ['profile', handle],
     queryFn: async () => {
       if (!agent) throw new Error('Not authenticated');
@@ -14,4 +16,9 @@ export function useProfile({ handle }: { handle?: string }) {
     },
     enabled: !!agent && !!handle,
   });
+
+export function useProfile({ handle }: { handle?: string }) {
+  const { agent } = useBlueskyStore();
+
+  return useQuery(profileQueryOptions({ agent, handle }));
 }

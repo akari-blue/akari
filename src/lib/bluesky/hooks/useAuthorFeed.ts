@@ -1,10 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { useBlueskyStore } from '../store';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+import { type BlueskyState, useBlueskyStore } from '../store';
 
-export function useAuthorFeed({ handle }: { handle: string }) {
-  const { agent } = useBlueskyStore();
+type AuthorFeedQueryOptions = Pick<BlueskyState, 'agent'> & {
+  handle: string;
+};
 
-  return useQuery({
+export const authorFeedQuerOptions = ({ agent, handle }: AuthorFeedQueryOptions) =>
+  queryOptions({
     queryKey: ['author-feed', handle],
     queryFn: async () => {
       if (!agent) {
@@ -15,4 +17,9 @@ export function useAuthorFeed({ handle }: { handle: string }) {
     },
     enabled: !!agent,
   });
+
+export function useAuthorFeed({ handle }: { handle: string }) {
+  const { agent } = useBlueskyStore();
+
+  return useQuery(authorFeedQuerOptions({ agent, handle }));
 }
