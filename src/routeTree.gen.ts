@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as NotificationsImport } from './routes/notifications'
 import { Route as MessagesIndexImport } from './routes/messages/index'
+import { Route as TagTagImport } from './routes/tag.$tag'
 import { Route as MessagesConvoIdImport } from './routes/messages/$convoId'
 import { Route as ProfileHandleIndexImport } from './routes/profile/$handle/index'
 import { Route as ProfileHandlePostPostIdImport } from './routes/profile/$handle/post.$postId'
@@ -24,7 +25,6 @@ import { Route as ProfileHandlePostPostIdImport } from './routes/profile/$handle
 const SettingsLazyImport = createFileRoute('/settings')()
 const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
-const TagTagLazyImport = createFileRoute('/tag/$tag')()
 
 // Create/Update Routes
 
@@ -58,7 +58,7 @@ const MessagesIndexRoute = MessagesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TagTagLazyRoute = TagTagLazyImport.update({
+const TagTagRoute = TagTagImport.update({
   id: '/tag/$tag',
   path: '/tag/$tag',
   getParentRoute: () => rootRoute,
@@ -125,7 +125,7 @@ declare module '@tanstack/react-router' {
       id: '/tag/$tag'
       path: '/tag/$tag'
       fullPath: '/tag/$tag'
-      preLoaderRoute: typeof TagTagLazyImport
+      preLoaderRoute: typeof TagTagImport
       parentRoute: typeof rootRoute
     }
     '/messages/': {
@@ -160,7 +160,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
   '/messages/$convoId': typeof MessagesConvoIdRoute
-  '/tag/$tag': typeof TagTagLazyRoute
+  '/tag/$tag': typeof TagTagRoute
   '/messages': typeof MessagesIndexRoute
   '/profile/$handle': typeof ProfileHandleIndexRoute
   '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdRoute
@@ -172,7 +172,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
   '/messages/$convoId': typeof MessagesConvoIdRoute
-  '/tag/$tag': typeof TagTagLazyRoute
+  '/tag/$tag': typeof TagTagRoute
   '/messages': typeof MessagesIndexRoute
   '/profile/$handle': typeof ProfileHandleIndexRoute
   '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdRoute
@@ -185,7 +185,7 @@ export interface FileRoutesById {
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
   '/messages/$convoId': typeof MessagesConvoIdRoute
-  '/tag/$tag': typeof TagTagLazyRoute
+  '/tag/$tag': typeof TagTagRoute
   '/messages/': typeof MessagesIndexRoute
   '/profile/$handle/': typeof ProfileHandleIndexRoute
   '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdRoute
@@ -234,7 +234,7 @@ export interface RootRouteChildren {
   LoginLazyRoute: typeof LoginLazyRoute
   SettingsLazyRoute: typeof SettingsLazyRoute
   MessagesConvoIdRoute: typeof MessagesConvoIdRoute
-  TagTagLazyRoute: typeof TagTagLazyRoute
+  TagTagRoute: typeof TagTagRoute
   MessagesIndexRoute: typeof MessagesIndexRoute
   ProfileHandleIndexRoute: typeof ProfileHandleIndexRoute
   ProfileHandlePostPostIdRoute: typeof ProfileHandlePostPostIdRoute
@@ -246,7 +246,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginLazyRoute: LoginLazyRoute,
   SettingsLazyRoute: SettingsLazyRoute,
   MessagesConvoIdRoute: MessagesConvoIdRoute,
-  TagTagLazyRoute: TagTagLazyRoute,
+  TagTagRoute: TagTagRoute,
   MessagesIndexRoute: MessagesIndexRoute,
   ProfileHandleIndexRoute: ProfileHandleIndexRoute,
   ProfileHandlePostPostIdRoute: ProfileHandlePostPostIdRoute,
@@ -289,7 +289,7 @@ export const routeTree = rootRoute
       "filePath": "messages/$convoId.tsx"
     },
     "/tag/$tag": {
-      "filePath": "tag.$tag.lazy.tsx"
+      "filePath": "tag.$tag.tsx"
     },
     "/messages/": {
       "filePath": "messages/index.tsx"

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useConversations } from '../../lib/bluesky/hooks/useConversations';
+import { useConversations, conversationsQueryOptions } from '../../lib/bluesky/hooks/useConversations';
 import { useTranslation } from 'react-i18next';
 import { Image } from '../../components/ui/Image';
 import { cn } from '../../lib/utils';
@@ -8,6 +8,10 @@ import { Link } from '../../components/ui/Link';
 
 export const Route = createFileRoute('/messages/')({
   component: Messages,
+  loader: async ({ context }) => {
+    const { agent, isAuthenticated, session } = context.blueskyStore.getState();
+    return context.queryClient.ensureQueryData(conversationsQueryOptions({ agent, isAuthenticated, session }));
+  },
 });
 
 function Messages() {

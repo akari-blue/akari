@@ -1,4 +1,4 @@
-import { createRootRouteWithContext, Outlet, redirect, useRouterState } from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet, redirect, useLocation } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
@@ -48,8 +48,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function Root() {
   const { experiments, font, language } = useSettings();
   const dir = i18n.dir(language);
-  const router = useRouterState();
-  const pathname = router.location.pathname;
+  const location = useLocation();
 
   return (
     <main
@@ -71,7 +70,7 @@ function Root() {
           <Navbar />
           <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center mx-auto">
             <ErrorBoundary>
-              <div className={cn('flex flex-col gap-2', pathname !== '/' && 'max-w-[550px]')}>
+              <div className={cn('flex flex-col gap-2', location.pathname !== '/' && 'max-w-[550px]')}>
                 <Outlet key="app" />
               </div>
             </ErrorBoundary>

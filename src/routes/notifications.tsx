@@ -1,7 +1,7 @@
 import * as Ariakit from '@ariakit/react';
 import { createFileRoute } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
-import { useNotifications } from '../lib/bluesky/hooks/useNotifications';
+import { notificationsQueryOptions, useNotifications } from '../lib/bluesky/hooks/useNotifications';
 import { Debug } from '../components/ui/Debug';
 import { Notification as BskyNotification } from '@atproto/api/dist/client/types/app/bsky/notification/listNotifications';
 import { useState } from 'react';
@@ -9,6 +9,10 @@ import { cn } from '../lib/utils';
 
 export const Route = createFileRoute('/notifications')({
   component: RouteComponent,
+  loader: async ({ context }) => {
+    const { agent } = context.blueskyStore.getState();
+    return context.queryClient.ensureQueryData(notificationsQueryOptions({ agent }));
+  },
 });
 
 function RouteComponent() {

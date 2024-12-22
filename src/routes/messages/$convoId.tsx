@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useConversation } from '../../lib/bluesky/hooks/useConversation';
+import { useConversation, conversationQueryOptions } from '../../lib/bluesky/hooks/useConversation';
 import { useTranslation } from 'react-i18next';
 import { Handle } from '../../components/ui/Handle';
 import { Debug } from '../../components/ui/Debug';
@@ -7,6 +7,12 @@ import TimeAgo from 'react-timeago-i18n';
 
 export const Route = createFileRoute('/messages/$convoId')({
   component: RouteComponent,
+  loader: async ({ params, context }) => {
+    const { agent, isAuthenticated, session } = context.blueskyStore.getState();
+    return context.queryClient.ensureQueryData(
+      conversationQueryOptions({ convoId: params.convoId, agent, isAuthenticated, session }),
+    );
+  },
 });
 
 function RouteComponent() {

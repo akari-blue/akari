@@ -1,7 +1,7 @@
 import * as Ariakit from '@ariakit/react';
 import { createFileRoute } from '@tanstack/react-router';
-import { useProfile } from '../../../lib/bluesky/hooks/useProfile';
-import { useAuthorFeed } from '../../../lib/bluesky/hooks/useAuthorFeed';
+import { profileQueryOptions, useProfile } from '../../../lib/bluesky/hooks/useProfile';
+import { authorFeedQuerOptions, useAuthorFeed } from '../../../lib/bluesky/hooks/useAuthorFeed';
 import { PostCard } from '../../../components/PostCard';
 import { BskyPost } from '../../../lib/bluesky/types';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,14 @@ import { NotImplementedBox } from '../../../components/ui/NotImplementedBox';
 
 export const Route = createFileRoute('/profile/$handle/')({
   component: Profile,
+  loader: async ({ params, context }) => {
+    const { agent } = context.blueskyStore.getState();
+    const [profile, authorFeed] = await Promise.all([
+      context.queryClient.ensureQueryData(profileQueryOptions({ handle: params.handle, agent })),
+      context.queryClient.ensureQueryData(authorFeedQuerOptions({ handle: params.handle, agent })),
+    ]);
+    return { profile, authorFeed };
+  },
 });
 
 function All() {
