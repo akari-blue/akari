@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { BSkyPostLabel } from './types/BSkyPostLabel';
+import { TypeCompiler } from '@sinclair/typebox/compiler';
 
 describe('BSkyPostLabel schema validation', () => {
   it('should validate the post data correctly', () => {
@@ -21,17 +22,20 @@ describe('BSkyPostLabel schema validation', () => {
       },
     ];
 
+    const C = TypeCompiler.Compile(BSkyPostLabel);
+
     // Loop over each item in the production data and validate
     prodData.forEach((dataItem) => {
       // Validate each item against the BSkyPostLabel schema
-      const result = BSkyPostLabel.safeParse(dataItem);
+      const result = C.Check(dataItem);
 
       // Test if the result is valid
-      expect(result.success).toBe(true);
+      expect(result).toBe(true);
 
       // Optionally, log or inspect errors if validation fails
-      if (!result.success) {
-        console.error('Validation errors:', result.error.errors);
+      if (!result) {
+        const errors = [...C.Errors(dataItem)];
+        console.error('Validation errors:', errors);
       }
     });
   });
@@ -43,15 +47,25 @@ describe('BSkyPostLabel schema validation', () => {
       // Missing cid, val, and cts fields
     };
 
-    const result = BSkyPostLabel.safeParse(invalidData);
+    const C = TypeCompiler.Compile(BSkyPostLabel);
+
+    const result = C.Check(invalidData);
+    const errors = [...C.Errors(invalidData)];
 
     // Log only the validation error messages
-    if (!result.success) {
-      const errorMessages = result.error.errors.map((err) => `${err.path[0]} is missing or invalid`);
-      expect(errorMessages).toEqual(['cid is missing or invalid', 'val is missing or invalid', 'cts is missing or invalid']);
+    if (!result) {
+      const errorMessages = errors.map((err) => `${err.path.slice(1)} ${err.message}`);
+      expect(errorMessages).toEqual([
+        'cid Expected required property',
+        'val Expected required property',
+        'cts Expected required property',
+        'cid Expected string',
+        'val Expected string',
+        'cts Expected string',
+      ]);
     }
 
     // Expect the validation to fail
-    expect(result.success).toBe(false);
+    expect(result).toBe(false);
   });
 });

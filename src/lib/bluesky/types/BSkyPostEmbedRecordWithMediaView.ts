@@ -1,79 +1,79 @@
-import { z } from 'zod';
 import { BSkyAuthor } from './BskyAuthor';
 import { BSkyPostLabel } from './BSkyPostLabel';
+import { Static, Type } from '@sinclair/typebox';
 
-export const BSkyPostEmbedRecordWithMediaView = z.object({
-  $type: z.literal('app.bsky.embed.recordWithMedia#view'),
-  media: z.object({
-    $type: z.literal('app.bsky.embed.external#view'),
-    external: z.object({
-      uri: z.string(),
-      title: z.string(),
-      description: z.string(),
-      thumb: z.string(),
+export const BSkyPostEmbedRecordWithMediaView = Type.Object({
+  $type: Type.Literal('app.bsky.embed.recordWithMedia#view'),
+  media: Type.Object({
+    $type: Type.Literal('app.bsky.embed.external#view'),
+    external: Type.Object({
+      uri: Type.String(),
+      title: Type.String(),
+      description: Type.String(),
+      thumb: Type.String(),
     }),
   }),
-  record: z.object({
-    record: z.object({
-      $type: z.literal('app.bsky.embed.record#viewRecord'),
-      uri: z.string(),
-      cid: z.string(),
+  record: Type.Object({
+    record: Type.Object({
+      $type: Type.Literal('app.bsky.embed.record#viewRecord'),
+      uri: Type.String(),
+      cid: Type.String(),
       author: BSkyAuthor,
-      value: z.object({
-        $type: z.literal('app.bsky.feed.post'),
-        createdAt: z.string(),
-        embed: z
-          .object({
-            $type: z.literal('app.bsky.embed.recordWithMedia'),
-            media: z.object({
-              $type: z.literal('app.bsky.embed.external'),
-              external: z.object({
-                description: z.string(),
-                thumb: z.object({
-                  $type: z.literal('blob'),
-                  ref: z.object({
-                    $link: z.string(),
+      value: Type.Object({
+        $type: Type.Literal('app.bsky.feed.post'),
+        createdAt: Type.String(),
+        embed: Type.Optional(
+          Type.Object({
+            $type: Type.Literal('app.bsky.embed.recordWithMedia'),
+            media: Type.Object({
+              $type: Type.Literal('app.bsky.embed.external'),
+              external: Type.Object({
+                description: Type.String(),
+                thumb: Type.Object({
+                  $type: Type.Literal('blob'),
+                  ref: Type.Object({
+                    $link: Type.String(),
                   }),
-                  mimeType: z.string(),
-                  size: z.number(),
+                  mimeType: Type.String(),
+                  size: Type.Number(),
                 }),
-                title: z.string(),
-                uri: z.string(),
+                title: Type.String(),
+                uri: Type.String(),
               }),
             }),
-            record: z.object({
-              $type: z.literal('app.bsky.embed.record'),
-              record: z.object({
-                cid: z.string(),
-                uri: z.string(),
+            record: Type.Object({
+              $type: Type.Literal('app.bsky.embed.record'),
+              record: Type.Object({
+                cid: Type.String(),
+                uri: Type.String(),
               }),
             }),
-          })
-          .optional(),
-        langs: z.array(z.string()),
-        reply: z
-          .object({
-            parent: z.object({
-              cid: z.string(),
-              uri: z.string(),
+          }),
+        ),
+        langs: Type.Array(Type.String()),
+        reply: Type.Optional(
+          Type.Object({
+            parent: Type.Object({
+              cid: Type.String(),
+              uri: Type.String(),
             }),
-            root: z.object({
-              cid: z.string(),
-              uri: z.string(),
+            root: Type.Object({
+              cid: Type.String(),
+              uri: Type.String(),
             }),
-          })
-          .optional(),
-        text: z.string(),
+          }),
+        ),
+        text: Type.String(),
       }),
-      labels: z.array(BSkyPostLabel),
-      likeCount: z.number(),
-      replyCount: z.number(),
-      repostCount: z.number(),
-      quoteCount: z.number(),
-      indexedAt: z.string(),
-      embeds: z.array(z.unknown()),
+      labels: Type.Array(BSkyPostLabel),
+      likeCount: Type.Number(),
+      replyCount: Type.Number(),
+      repostCount: Type.Number(),
+      quoteCount: Type.Number(),
+      indexedAt: Type.String(),
+      embeds: Type.Array(Type.Unknown()),
     }),
   }),
 });
 
-export type BSkyPostEmbedRecordWithMediaView = z.infer<typeof BSkyPostEmbedRecordWithMediaView>;
+export type BSkyPostEmbedRecordWithMediaView = Static<typeof BSkyPostEmbedRecordWithMediaView>;

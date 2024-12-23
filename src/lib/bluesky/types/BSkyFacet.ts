@@ -1,33 +1,33 @@
-import { z } from 'zod';
+import { Static, Type } from '@sinclair/typebox';
 
-const LinkFacet = z.object({
-  $type: z.literal('app.bsky.richtext.facet#link'),
-  uri: z.string(),
+const LinkFacet = Type.Object({
+  $type: Type.Literal('app.bsky.richtext.facet#link'),
+  uri: Type.String(),
 });
 
-type LinkFacet = z.infer<typeof LinkFacet>;
+type LinkFacet = Static<typeof LinkFacet>;
 
-const MentionFacet = z.object({
-  $type: z.literal('app.bsky.richtext.facet#mention'),
-  did: z.string(),
+const MentionFacet = Type.Object({
+  $type: Type.Literal('app.bsky.richtext.facet#mention'),
+  did: Type.String(),
 });
 
-type MentionFacet = z.infer<typeof MentionFacet>;
+type MentionFacet = Static<typeof MentionFacet>;
 
-const TagFacet = z.object({
-  $type: z.literal('app.bsky.richtext.facet#tag'),
-  tag: z.string(),
+const TagFacet = Type.Object({
+  $type: Type.Literal('app.bsky.richtext.facet#tag'),
+  tag: Type.String(),
 });
 
-type TagFacet = z.infer<typeof TagFacet>;
+type TagFacet = Static<typeof TagFacet>;
 
-export const BSkyFacet = z.object({
-  $type: z.literal('app.bsky.richtext.facet').optional(),
-  features: z.array(LinkFacet.or(MentionFacet).or(TagFacet)),
-  index: z.object({
-    byteEnd: z.number(),
-    byteStart: z.number(),
+export const BSkyFacet = Type.Object({
+  $type: Type.Optional(Type.Literal('app.bsky.richtext.facet')),
+  features: Type.Array(Type.Union([LinkFacet, MentionFacet, TagFacet])),
+  index: Type.Object({
+    byteEnd: Type.Number(),
+    byteStart: Type.Number(),
   }),
 });
 
-export type BSkyFacet = z.infer<typeof BSkyFacet>;
+export type BSkyFacet = Static<typeof BSkyFacet>;

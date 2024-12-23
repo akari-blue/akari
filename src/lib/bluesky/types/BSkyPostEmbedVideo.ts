@@ -1,15 +1,15 @@
-import { z } from 'zod';
+import { Static, Type } from '@sinclair/typebox';
 
-export const BSkyPostEmbedVideo = z.object({
-  $type: z.literal('app.bsky.embed.video#view'),
-  cid: z.string(),
-  playlist: z.string(),
-  thumbnail: z.string(),
-  aspectRatio: z.object({
-    height: z.number(),
-    width: z.number(),
+export const BSkyPostEmbedVideo = Type.Object({
+  $type: Type.Literal('app.bsky.embed.video#view'),
+  cid: Type.String(),
+  playlist: Type.String(),
+  thumbnail: Type.String(),
+  aspectRatio: Type.Object({
+    height: Type.Number(),
+    width: Type.Number(),
   }),
-  alt: z.string().optional(),
+  alt: Type.Optional(Type.String()),
 });
 
-export type BSkyPostEmbedVideo = z.infer<typeof BSkyPostEmbedVideo>;
+export type BSkyPostEmbedVideo = Static<typeof BSkyPostEmbedVideo>;

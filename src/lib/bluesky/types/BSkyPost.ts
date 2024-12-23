@@ -1,139 +1,140 @@
-import { z } from 'zod';
 import { BlockedAuthor } from './BlockedAuthor';
 import { BSkyPostLabel } from './BSkyPostLabel';
 import { Author } from './Author';
 import { BSkyPostEmbed } from './BSkyPostEmbed';
 import { ThreadGate } from './ThreadGate';
 import { BSkyFacet } from './BSkyFacet';
+import { Static, Type } from '@sinclair/typebox';
 
-export const BSkyPost = z.object({
-  uri: z.string(),
-  cid: z.string(),
-  author: Author.or(BlockedAuthor),
-  record: z.object({
-    $type: z.literal('app.bsky.feed.post'),
-    createdAt: z.string(),
-    embed: z
-      .union([
-        z.object({
-          $type: z.literal('app.bsky.embed.record'),
-          record: z.object({
-            cid: z.string(),
-            uri: z.string(),
+export const BSkyPost = Type.Object({
+  uri: Type.String(),
+  cid: Type.String(),
+  author: Type.Union([Author, BlockedAuthor]),
+  record: Type.Object({
+    $type: Type.Literal('app.bsky.feed.post'),
+    createdAt: Type.String(),
+    embed: Type.Optional(
+      Type.Union([
+        Type.Object({
+          $type: Type.Literal('app.bsky.embed.record'),
+          record: Type.Object({
+            cid: Type.String(),
+            uri: Type.String(),
           }),
         }),
-        z.object({
-          $type: z.literal('app.bsky.embed.recordWithMedia'),
-          media: z.object({
-            $type: z.literal('app.bsky.embed.external'),
-            external: z.object({
-              description: z.string(),
-              thumb: z.object({
-                $type: z.literal('blob'),
-                ref: z.object({
-                  $link: z.string(),
+        Type.Object({
+          $type: Type.Literal('app.bsky.embed.recordWithMedia'),
+          media: Type.Object({
+            $type: Type.Literal('app.bsky.embed.external'),
+            external: Type.Object({
+              description: Type.String(),
+              thumb: Type.Object({
+                $type: Type.Literal('blob'),
+                ref: Type.Object({
+                  $link: Type.String(),
                 }),
-                mimeType: z.string(),
-                size: z.number(),
+                mimeType: Type.String(),
+                size: Type.Number(),
               }),
-              title: z.string(),
-              uri: z.string(),
+              title: Type.String(),
+              uri: Type.String(),
             }),
           }),
-          record: z.object({
-            $type: z.literal('app.bsky.embed.record'),
-            record: z.object({
-              cid: z.string(),
-              uri: z.string(),
+          record: Type.Object({
+            $type: Type.Literal('app.bsky.embed.record'),
+            record: Type.Object({
+              cid: Type.String(),
+              uri: Type.String(),
             }),
           }),
         }),
-        z.object({
-          $type: z.literal('app.bsky.embed.images'),
-          images: z.array(
-            z.object({
-              alt: z.string(),
-              aspectRatio: z.object({
-                height: z.number(),
-                width: z.number(),
+        Type.Object({
+          $type: Type.Literal('app.bsky.embed.images'),
+          images: Type.Array(
+            Type.Object({
+              alt: Type.String(),
+              aspectRatio: Type.Object({
+                height: Type.Number(),
+                width: Type.Number(),
               }),
-              image: z.object({
-                $type: z.literal('blob'),
-                ref: z.object({
-                  $link: z.string(),
+              image: Type.Object({
+                $type: Type.Literal('blob'),
+                ref: Type.Object({
+                  $link: Type.String(),
                 }),
-                mimeType: z.string(),
-                size: z.number(),
+                mimeType: Type.String(),
+                size: Type.Number(),
               }),
             }),
           ),
         }),
-        z.object({
-          $type: z.literal('app.bsky.embed.video'),
-          alt: z.string().optional(),
-          aspectRatio: z.object({
-            height: z.number(),
-            width: z.number(),
+        Type.Object({
+          $type: Type.Literal('app.bsky.embed.video'),
+          alt: Type.Optional(Type.String()),
+          aspectRatio: Type.Object({
+            height: Type.Number(),
+            width: Type.Number(),
           }),
-          video: z.object({
-            $type: z.literal('blob'),
-            ref: z.object({
-              $link: z.string(),
+          video: Type.Object({
+            $type: Type.Literal('blob'),
+            ref: Type.Object({
+              $link: Type.String(),
             }),
-            mimeType: z.string(),
-            size: z.number(),
+            mimeType: Type.String(),
+            size: Type.Number(),
           }),
         }),
-        z.object({
-          $type: z.literal('app.bsky.embed.external'),
-          external: z.object({
-            description: z.string(),
-            thumb: z.object({
-              $type: z.literal('blob'),
-              ref: z.object({
-                $link: z.string(),
+        Type.Object({
+          $type: Type.Literal('app.bsky.embed.external'),
+          external: Type.Object({
+            description: Type.String(),
+            thumb: Type.Object({
+              $type: Type.Literal('blob'),
+              ref: Type.Object({
+                $link: Type.String(),
               }),
-              mimeType: z.string(),
-              size: z.number(),
+              mimeType: Type.String(),
+              size: Type.Number(),
             }),
-            title: z.string(),
-            uri: z.string(),
+
+            title: Type.String(),
+            uri: Type.String(),
           }),
         }),
-      ])
-      .optional(),
-    facets: z.array(BSkyFacet).optional(),
-    langs: z.array(z.string()).optional(),
-    reply: z
-      .object({
-        parent: z.object({
-          cid: z.string(),
-          uri: z.string(),
+      ]),
+    ),
+    facets: Type.Optional(Type.Array(BSkyFacet)),
+    langs: Type.Optional(Type.Array(Type.String())),
+    reply: Type.Optional(
+      Type.Object({
+        parent: Type.Object({
+          cid: Type.String(),
+          uri: Type.String(),
         }),
-        root: z.object({
-          cid: z.string(),
-          uri: z.string(),
+        root: Type.Object({
+          cid: Type.String(),
+          uri: Type.String(),
         }),
-      })
-      .optional(),
-    text: z.string(),
+      }),
+    ),
+    text: Type.String(),
   }),
-  embed: BSkyPostEmbed.optional(),
-  replyCount: z.number(),
-  repostCount: z.number(),
-  likeCount: z.number(),
-  quoteCount: z.number().optional(),
-  indexedAt: z.string(),
-  viewer: z.object({
-    threadMuted: z.boolean(),
-    embeddingDisabled: z.boolean(),
-    replyDisabled: z.boolean().optional(),
-    like: z.string().optional(),
-    repost: z.string().optional(),
-    pinned: z.boolean().optional(),
+  embed: Type.Optional(BSkyPostEmbed),
+  replyCount: Type.Number(),
+  repostCount: Type.Number(),
+  likeCount: Type.Number(),
+  quoteCount: Type.Optional(Type.Number()),
+  indexedAt: Type.String(),
+  viewer: Type.Object({
+    threadMuted: Type.Boolean(),
+    embeddingDisabled: Type.Boolean(),
+    replyDisabled: Type.Optional(Type.Boolean()),
+    like: Type.Optional(Type.String()),
+    repost: Type.Optional(Type.String()),
+    pinned: Type.Optional(Type.Boolean()),
   }),
-  labels: z.array(BSkyPostLabel),
-  threadgate: ThreadGate.optional(),
+  labels: Type.Array(BSkyPostLabel),
+  threadgate: Type.Optional(ThreadGate),
 });
 
-export type BSkyPost = z.infer<typeof BSkyPost>;
+export type BSkyPost = Static<typeof BSkyPost>;

@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { Static, Type } from '@sinclair/typebox';
 import { Author } from './Author';
 import { BlockedAuthor } from './BlockedAuthor';
 
-export const BSkyAuthor = z.union([Author, BlockedAuthor]);
+export const BSkyAuthor = Type.Union([Author, BlockedAuthor]);
 
-export type BSkyAuthor = z.infer<typeof BSkyAuthor>;
+export type BSkyAuthor = Static<typeof BSkyAuthor>;

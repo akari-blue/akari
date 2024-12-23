@@ -1,13 +1,13 @@
-import { z } from 'zod';
+import { Static, Type } from '@sinclair/typebox';
 
-export const BSkyPostEmbedExternal = z.object({
-  $type: z.literal('app.bsky.embed.external#view'),
-  external: z.object({
-    uri: z.string(),
-    title: z.string(),
-    description: z.string(),
-    thumb: z.string(),
+export const BSkyPostEmbedExternal = Type.Object({
+  $type: Type.Literal('app.bsky.embed.external#view'),
+  external: Type.Object({
+    uri: Type.String(),
+    title: Type.String(),
+    description: Type.String(),
+    thumb: Type.String(),
   }),
 });
 
-export type BSkyPostEmbedExternal = z.infer<typeof BSkyPostEmbedExternal>;
+export type BSkyPostEmbedExternal = Static<typeof BSkyPostEmbedExternal>;

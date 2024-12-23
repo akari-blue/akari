@@ -1,26 +1,27 @@
-import { z } from 'zod';
 import { BSkyPostLabel } from './BSkyPostLabel';
 
-export const Author = z.object({
-  did: z.string(),
-  handle: z.string(),
-  displayName: z.string(),
-  avatar: z.string(),
-  associated: z
-    .object({
-      chat: z.object({
-        allowIncoming: z.string(),
-      }),
-    })
-    .optional(),
-  viewer: z.object({
-    muted: z.boolean(),
-    blockedBy: z.boolean(),
-    following: z.string().optional(),
-    followedBy: z.string().optional(),
+import { Type, Static } from '@sinclair/typebox';
+
+export const Author = Type.Object({
+  did: Type.String(),
+  handle: Type.String(),
+  displayName: Type.String(),
+  avatar: Type.String(),
+  viewer: Type.Object({
+    muted: Type.Boolean(),
+    blockedBy: Type.Boolean(),
+    following: Type.Optional(Type.Union([Type.String(), Type.Undefined()])),
+    followedBy: Type.Optional(Type.Union([Type.String(), Type.Undefined()])),
   }),
-  labels: z.array(BSkyPostLabel),
-  createdAt: z.string(),
+  labels: Type.Array(BSkyPostLabel),
+  createdAt: Type.String(),
+  associated: Type.Optional(
+    Type.Object({
+      chat: Type.Object({
+        allowIncoming: Type.String(),
+      }),
+    }),
+  ),
 });
 
-export type Author = z.infer<typeof Author>;
+export type Author = Static<typeof Author>;

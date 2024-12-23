@@ -1,12 +1,12 @@
-import { z } from 'zod';
 import { BSkyPostEmbedExternal } from './BSkyPostEmbedExternal';
 import { BSkyPostEmbedImages } from './BSkyPostEmbedImages';
 import { BSkyPostEmbedRecord } from './BSkyPostEmbedRecord';
 import { BSkyPostEmbedRecordWithMedia } from './BSkyPostEmbedRecordWithMedia';
 import { BSkyPostEmbedVideo } from './BSkyPostEmbedVideo';
 import { BSkyPostEmbedRecordWithMediaView } from './BSkyPostEmbedRecordWithMediaView';
+import { Static, Type } from '@sinclair/typebox';
 
-export const BSkyPostEmbed = z.union([
+export const BSkyPostEmbed = Type.Union([
   BSkyPostEmbedExternal,
   BSkyPostEmbedImages,
   BSkyPostEmbedVideo,
@@ -15,4 +15,4 @@ export const BSkyPostEmbed = z.union([
   BSkyPostEmbedRecordWithMediaView,
 ]);
 
-export type BSkyPostEmbed = z.infer<typeof BSkyPostEmbed>;
+export type BSkyPostEmbed = Static<typeof BSkyPostEmbed>;

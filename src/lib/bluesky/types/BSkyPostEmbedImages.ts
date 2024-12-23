@@ -1,18 +1,18 @@
-import { z } from 'zod';
+import { Static, Type } from '@sinclair/typebox';
 
-export const BSkyPostEmbedImages = z.object({
-  $type: z.literal('app.bsky.embed.images#view'),
-  images: z.array(
-    z.object({
-      thumb: z.string(),
-      fullsize: z.string(),
-      alt: z.string(),
-      aspectRatio: z.object({
-        height: z.number(),
-        width: z.number(),
+export const BSkyPostEmbedImages = Type.Object({
+  $type: Type.Literal('app.bsky.embed.images#view'),
+  images: Type.Array(
+    Type.Object({
+      thumb: Type.String(),
+      fullsize: Type.String(),
+      alt: Type.String(),
+      aspectRatio: Type.Object({
+        height: Type.Number(),
+        width: Type.Number(),
       }),
     }),
   ),
 });
 
-export type BSkyPostEmbedImages = z.infer<typeof BSkyPostEmbedImages>;
+export type BSkyPostEmbedImages = Static<typeof BSkyPostEmbedImages>;

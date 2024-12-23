@@ -1,45 +1,42 @@
-import { z } from 'zod';
 import { BSkyPostLabel } from './BSkyPostLabel';
+import { Static, Type } from '@sinclair/typebox';
 
-export const ThreadGate = z.object({
-  uri: z.string(),
-  cid: z.string(),
-  record: z.object({
-    $type: z.literal('app.bsky.feed.threadgate'),
-    allow: z.array(
-      z
-        .object({
-          $type: z.literal('app.bsky.feed.threadgate#followingRule'),
-        })
-        .or(
-          z.object({
-            $type: z.literal('app.bsky.feed.threadgate#mentionRule'),
-          }),
-        )
-        .or(
-          z.object({
-            $type: z.literal('app.bsky.feed.threadgate#listRule'),
-            list: z.string(),
-          }),
-        ),
+export const ThreadGate = Type.Object({
+  uri: Type.String(),
+  cid: Type.String(),
+  record: Type.Object({
+    $type: Type.Literal('app.bsky.feed.threadgate'),
+    allow: Type.Array(
+      Type.Union([
+        Type.Object({
+          $type: Type.Literal('app.bsky.feed.threadgate#followingRule'),
+        }),
+        Type.Object({
+          $type: Type.Literal('app.bsky.feed.threadgate#mentionRule'),
+        }),
+        Type.Object({
+          $type: Type.Literal('app.bsky.feed.threadgate#listRule'),
+          list: Type.String(),
+        }),
+      ]),
     ),
-    createdAt: z.string(),
-    post: z.string(),
+    createdAt: Type.String(),
+    post: Type.String(),
   }),
-  lists: z.array(
-    z.object({
-      uri: z.string(),
-      cid: z.string(),
-      name: z.string(),
-      purpose: z.literal('app.bsky.graph.defs#curatelist'),
-      listItemCount: z.number(),
-      indexedAt: z.string(),
-      labels: z.array(BSkyPostLabel),
-      viewer: z.object({
-        muted: z.boolean(),
+  lists: Type.Array(
+    Type.Object({
+      uri: Type.String(),
+      cid: Type.String(),
+      name: Type.String(),
+      purpose: Type.Literal('app.bsky.graph.defs#curatelist'),
+      listItemCount: Type.Number(),
+      indexedAt: Type.String(),
+      labels: Type.Array(BSkyPostLabel),
+      viewer: Type.Object({
+        muted: Type.Boolean(),
       }),
     }),
   ),
 });
 
-export type ThreadGate = z.infer<typeof ThreadGate>;
+export type ThreadGate = Static<typeof ThreadGate>;

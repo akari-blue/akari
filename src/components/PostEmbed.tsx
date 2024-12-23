@@ -9,7 +9,8 @@ import { useSettings } from '../hooks/useSetting';
 import TimeAgo from 'react-timeago-i18n';
 import { useTranslation } from 'react-i18next';
 import { Handle } from './ui/Handle';
-import { isAuthorBlocked } from '../lib/bluesky/types/BlockedAuthor';
+import { isBlockedAuthor } from '../lib/bluesky/types/BlockedAuthor';
+import { FacetedText } from './FacetedText';
 
 export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
   const { experiments } = useSettings();
@@ -70,7 +71,7 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
       if (!author) {
         return <Debug value={embed.record} />;
       }
-      if (isAuthorBlocked(author)) {
+      if (isBlockedAuthor(author)) {
         return (
           <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow')}>
             <div className="text-gray-800 dark:text-gray-200 mb-3">{t('blockedAuthor')}</div>
@@ -109,7 +110,7 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
               </div>
             </div>
           )}
-          {/* {(() => {
+          {(() => {
             if (embed.record.$type === 'app.bsky.embed.record#viewRecord' && embed.record.text) {
               return (
                 <p className="text-gray-800 dark:text-gray-200 mb-3">
@@ -138,7 +139,7 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
                 {<FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />}
               </p>
             );
-          })()} */}
+          })()}
         </div>
       );
     }

@@ -1,11 +1,11 @@
-import { z } from 'zod';
+import { Type, Static } from '@sinclair/typebox';
 
-export const BSkyPostLabel = z.object({
-  src: z.string(),
-  uri: z.string(),
-  cid: z.string(),
-  val: z.string(),
-  cts: z.string(),
+export const BSkyPostLabel = Type.Object({
+  src: Type.String(),
+  uri: Type.String(),
+  cid: Type.String(),
+  val: Type.String(),
+  cts: Type.String(),
 });
 
-export type BSkyPostLabel = z.infer<typeof BSkyPostLabel>;
+export type BSkyPostLabel = Static<typeof BSkyPostLabel>;

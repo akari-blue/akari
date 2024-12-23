@@ -58,7 +58,7 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   useHotkeys(
     'j',
     () => {
-      const postUri = getNextPost(selectedPost).post.uri;
+      const postUri = getNextPost(selectedPost)?.post.uri;
       if (!postUri) return;
       setSelectedPost(postUri);
 
@@ -75,7 +75,7 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   useHotkeys(
     'k',
     () => {
-      const postUri = getPrevPost(selectedPost).post.uri;
+      const postUri = getPrevPost(selectedPost)?.post.uri;
       if (!postUri) return;
       setSelectedPost(postUri);
 

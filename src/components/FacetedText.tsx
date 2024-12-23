@@ -23,13 +23,14 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
 
   for (let i = 0; i < sortedFacets.length; i++) {
     const facet = sortedFacets[i];
+    if (!facet) continue;
 
     // Render the facet
     const facetText = stringByteSlice(text, facet.index.byteStart, facet.index.byteEnd);
 
     // Determine rendering based on facet type
     const firstFeature = facet.features[0];
-    switch (firstFeature.$type) {
+    switch (firstFeature?.$type) {
       case 'app.bsky.richtext.facet#link':
         parts.push(
           <>
@@ -60,9 +61,9 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
   }
 
   // Add remaining text after the last facet
-  parts.push(
-    <FormattedText key="text-ending" text={stringByteSlice(text, sortedFacets[sortedFacets.length - 1]?.index.byteEnd)} />,
-  );
+  const lastFacet = sortedFacets[sortedFacets.length - 1];
+
+  parts.push(<FormattedText key="text-ending" text={stringByteSlice(text, lastFacet?.index.byteEnd ?? text.length)} />);
 
   return parts;
 };
