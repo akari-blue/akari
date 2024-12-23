@@ -1,7 +1,7 @@
 import { MessageCircle, Heart, Repeat } from 'lucide-react';
 import { useLike } from '../lib/bluesky/hooks/useLike';
 import { Debug } from './ui/Debug';
-import { BskyPost } from '../lib/bluesky/types';
+import { BSkyPost } from '../lib/bluesky/types/BSkyPost';
 import { cn } from '../lib/utils';
 import { useRepost } from '../lib/bluesky/hooks/useRepost';
 import { toast } from 'sonner';
@@ -19,7 +19,7 @@ import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Handle } from './ui/Handle';
 
 type PostCardProps = {
-  post: BskyPost | undefined | null;
+  post: BSkyPost | undefined | null;
   context?: string;
   className?: string;
   onClick?: () => void;
@@ -105,7 +105,11 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
         </div>
       </div>
       <p className="text-gray-800 dark:text-gray-200 mb-3">
-        <FacetedText text={post.record.text} facets={post.record.facets} key={`faceted-text-${post.uri}`} />
+        {post.record.facets ? (
+          <FacetedText text={post.record.text} facets={post.record.facets} key={`faceted-text-${post.uri}`} />
+        ) : (
+          post.record.text
+        )}
       </p>
       <ErrorBoundary>
         {post.embed && (

@@ -26,3 +26,4 @@ dist-ssr
 # generated files
 html
 dist
+coverage

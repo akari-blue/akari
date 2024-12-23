@@ -1,17 +1,17 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
 import { usePreferences } from './usePreferences';
-import { BskyPost } from '../types';
+import { BSkyPost } from '../types/BSkyPost';
 
 type Timeline = {
   feed: {
-    post: BskyPost;
+    post: BSkyPost;
     feedContext: string;
   }[];
   cursor: string;
 };
 
-export function useTimeline(selectedFeed: string) {
+export function useTimeline(selectedFeed: string | undefined) {
   const { agent, isAuthenticated } = useBlueskyStore();
   const preferences = usePreferences();
   const savedFeedsPrefV2 = isAuthenticated
@@ -42,9 +42,8 @@ export function useTimeline(selectedFeed: string) {
   return useInfiniteQuery<Timeline>({
     queryKey: ['timeline', { feed, isAuthenticated }],
     queryFn: async ({ pageParam }) => {
-      if (!agent) {
-        throw new Error('Not authenticated');
-      }
+      if (!agent) throw new Error('Not authenticated');
+      if (!feed) throw new Error('Feed not found');
 
       // // guest
       // if (!isAuthenticated) {

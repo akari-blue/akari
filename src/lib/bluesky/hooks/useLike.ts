@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
 import { toast } from 'sonner';
-import { BskyPost } from '../types';
+import { BSkyPost } from '../types/BSkyPost';
 
 export function useLike() {
   const { agent } = useBlueskyStore();
@@ -36,7 +36,7 @@ export function useLike() {
         queryClient.setQueryData<{
           pages: {
             feed: {
-              post: BskyPost;
+              post: BSkyPost;
               feedContext: string;
             }[];
             cursor: string;
@@ -76,7 +76,7 @@ export function useLike() {
 
         queryClient.setQueryData<
           {
-            post: BskyPost;
+            post: BSkyPost;
           }[]
         >(query.queryKey, (old) =>
           old?.map(({ post }) => {
@@ -129,7 +129,7 @@ export function useLike() {
         queryClient.setQueryData<{
           pages: {
             feed: {
-              post: BskyPost;
+              post: BSkyPost;
               feedContext: string;
             }[];
             cursor: string;
@@ -168,7 +168,7 @@ export function useLike() {
 
         queryClient.setQueryData<
           {
-            post: BskyPost;
+            post: BSkyPost;
           }[]
         >(query.queryKey, (old) =>
           old?.map(({ post }) => {

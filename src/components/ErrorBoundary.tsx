@@ -3,16 +3,16 @@ import { TFunction } from 'i18next';
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { withTranslation } from 'react-i18next';
 
-interface Props {
+type Props = {
   children: ReactNode;
   fallback?: ReactNode;
   t: TFunction<['error'], undefined>;
-}
+};
 
-interface State {
+type State = {
   hasError: boolean;
   error?: Error;
-}
+};
 
 class ErrorBoundaryInner extends Component<Props, State> {
   public state: State = {

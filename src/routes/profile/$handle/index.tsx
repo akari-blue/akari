@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useProfile } from '../../../lib/bluesky/hooks/useProfile';
 import { useAuthorFeed } from '../../../lib/bluesky/hooks/useAuthorFeed';
 import { PostCard } from '../../../components/PostCard';
-import { BskyPost } from '../../../lib/bluesky/types';
+import { BSkyPost } from '../../../lib/bluesky/types/BSkyPost';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../../../hooks/useSetting';
 import { Image } from '../../../components/ui/Image';
@@ -28,7 +28,7 @@ function All() {
   if (isLoading) return t('loading');
 
   return (
-    <div className="flex flex-col gap-2">{feed?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}</div>
+    <div className="flex flex-col gap-2">{feed?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}</div>
   );
 }
 
@@ -43,10 +43,10 @@ function Posts() {
     <div className="flex flex-col gap-2">
       {feed
         // Filter out replies
-        ?.filter(({ post }) => !(post.record as BskyPost['record']).reply)
+        ?.filter(({ post }) => !(post.record as BSkyPost['record']).reply)
         // Filter out reposts of other users
         ?.filter(({ post }) => post.author.handle === handle)
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+        ?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}
     </div>
   );
 }
@@ -63,7 +63,7 @@ function Reposts() {
       {feed
         // Filter only reposts
         ?.filter(({ post }) => post.author.handle !== handle)
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+        ?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}
     </div>
   );
 }
@@ -79,8 +79,8 @@ function Replies() {
     <div className="flex flex-col gap-2">
       {feed
         // Filter to only replies
-        ?.filter(({ post }) => (post.record as BskyPost['record']).reply)
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+        ?.filter(({ post }) => (post.record as BSkyPost['record']).reply)
+        ?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}
     </div>
   );
 }
@@ -96,8 +96,8 @@ function Media() {
     <div className="flex flex-col gap-2">
       {feed
         // Filter to only media
-        ?.filter(({ post }) => (post.record as BskyPost['record']).embed?.$type === 'app.bsky.embed.images')
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BskyPost} />)}
+        ?.filter(({ post }) => (post.record as BSkyPost['record']).embed?.$type === 'app.bsky.embed.images')
+        ?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}
     </div>
   );
 }
@@ -161,7 +161,7 @@ function Profile() {
                 selectedTab === 'all' && 'bg-neutral-700',
               )}
             >
-              {t('all')}
+              {t('profile:tabs.all')}
             </Ariakit.Tab>
             <Ariakit.Tab
               id="posts"
@@ -170,7 +170,7 @@ function Profile() {
                 selectedTab === 'posts' && 'bg-neutral-700',
               )}
             >
-              {t('posts')}
+              {t('profile:tabs.posts')}
             </Ariakit.Tab>
             <Ariakit.Tab
               id="reposts"
@@ -179,7 +179,7 @@ function Profile() {
                 selectedTab === 'reposts' && 'bg-neutral-700',
               )}
             >
-              {t('reposts')}
+              {t('profile:tabs.reposts')}
             </Ariakit.Tab>
             <Ariakit.Tab
               id="replies"
@@ -197,7 +197,7 @@ function Profile() {
                 selectedTab === 'media' && 'bg-neutral-700',
               )}
             >
-              {t('media')}
+              {t('profile:tabs.media')}
             </Ariakit.Tab>
             <Ariakit.Tab
               id="likes"
@@ -206,7 +206,7 @@ function Profile() {
                 selectedTab === 'likes' && 'bg-neutral-700',
               )}
             >
-              {t('likes')}
+              {t('profile:tabs.likes')}
             </Ariakit.Tab>
             <Ariakit.Tab
               id="feeds"
@@ -215,7 +215,7 @@ function Profile() {
                 selectedTab === 'feeds' && 'bg-neutral-700',
               )}
             >
-              {t('feeds')}
+              {t('profile:tabs.feeds')}
             </Ariakit.Tab>
             <Ariakit.Tab
               id="starter-packs"
@@ -224,7 +224,7 @@ function Profile() {
                 selectedTab === 'starter-packs' && 'bg-neutral-700',
               )}
             >
-              {t('starter-packs')}
+              {t('profile:tabs.starterpacks')}
             </Ariakit.Tab>
             <Ariakit.Tab
               id="lists"
@@ -233,7 +233,7 @@ function Profile() {
                 selectedTab === 'lists' && 'bg-neutral-700',
               )}
             >
-              {t('lists')}
+              {t('profile:tabs.lists')}
             </Ariakit.Tab>
           </Ariakit.TabList>
         </div>

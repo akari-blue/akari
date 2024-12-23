@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useProfile } from '../../../lib/bluesky/hooks/useProfile';
 import { usePostThread } from '../../../lib/bluesky/hooks/usePostThread';
 import { PostCard } from '../../../components/PostCard';
-import { BskyPost } from '../../../lib/bluesky/types';
+import { BSkyPost } from '../../../lib/bluesky/types/BSkyPost';
 import { ErrorBoundary } from '../../../components/ErrorBoundary';
 import { useTranslation } from 'react-i18next';
 
@@ -26,9 +26,9 @@ function Profile() {
 
   return (
     <>
-      <PostCard post={postThread?.post as BskyPost} />
+      <PostCard post={postThread?.post as BSkyPost} />
       <ErrorBoundary>
-        {(postThread?.replies as { post: BskyPost }[])?.map((reply) => reply.post && <PostCard post={reply.post} />)}
+        {(postThread?.replies as { post: BSkyPost }[])?.map((reply) => reply.post && <PostCard post={reply.post} />)}
       </ErrorBoundary>
     </>
   );
