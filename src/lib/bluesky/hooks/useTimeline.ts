@@ -1,11 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
 import { usePreferences } from './usePreferences';
-import { BskyPost } from '../types';
+import { BSkyPost } from '../types/BSkyPost';
 
 type Timeline = {
   feed: {
-    post: BskyPost;
+    post: BSkyPost;
     feedContext: string;
   }[];
   cursor: string;

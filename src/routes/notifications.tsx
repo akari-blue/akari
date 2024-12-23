@@ -33,6 +33,15 @@ function RouteComponent() {
       >
         <Ariakit.TabList className="grid grid-cols-2 gap-4 max-w-full overflow-x-scroll bg-neutral-900 p-2 m-2 mb-0 rounded-md">
           <Ariakit.Tab
+            id="grouped"
+            className={cn(
+              'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
+              selectedTab === 'grouped' && 'bg-neutral-700',
+            )}
+          >
+            {t('notifications:tabs.grouped')}
+          </Ariakit.Tab>
+          <Ariakit.Tab
             id="all"
             className={cn(
               'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
@@ -52,6 +61,9 @@ function RouteComponent() {
           </Ariakit.Tab>
         </Ariakit.TabList>
         <div className="p-2">
+          <Ariakit.TabPanel tabId="grouped">
+            <GroupedNotifications notifications={notifications} />
+          </Ariakit.TabPanel>
           <Ariakit.TabPanel tabId="all">
             {notifications?.map((notification) => <Notification key={notification.uri} notification={notification} />)}
           </Ariakit.TabPanel>
@@ -60,6 +72,40 @@ function RouteComponent() {
           </Ariakit.TabPanel>
         </div>
       </Ariakit.TabProvider>
+    </div>
+  );
+}
+
+// group notifications by uri and group up to 3 notifications per group
+function GroupedNotifications({ notifications }: { notifications: BskyNotification[] }) {
+  const { t } = useTranslation('notifications');
+  const grouped = notifications.reduce(
+    (acc, notification) => {
+      if (notification.reason === 'follow') {
+        return acc;
+      }
+
+      if (!acc[uri]) {
+        acc[uri] = [];
+      }
+
+      acc[uri].push(notification.record);
+
+      return acc;
+    },
+    {} as Record<string, BskyNotification[]>,
+  );
+
+  return (
+    <div>
+      {Object.entries(grouped).map(([uri, notifications]) => (
+        <div key={uri} className="p-2 bg-neutral-800 rounded-lg mb-2">
+          <div className="text-sm text-neutral-400">{t('groupedNotifications')}</div>
+          {notifications.map((notification) => (
+            <Notification key={notification.uri} notification={notification} />
+          ))}
+        </div>
+      ))}
     </div>
   );
 }

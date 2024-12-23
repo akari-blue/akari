@@ -1,17 +1,17 @@
 import ReactPlayer from 'react-player/lazy';
-import { BskyPostEmbed, isAuthorBlocked } from '../lib/bluesky/types';
+import { BSkyPostEmbed } from '../lib/bluesky/types/BSkyPostEmbed';
 import { Image } from './ui/Image';
 import { NotImplementedBox } from './ui/NotImplementedBox';
 import { cn } from '../lib/utils';
-import { FacetedText } from './FacetedText';
 import { Link } from './ui/Link';
 import { Debug } from './ui/Debug';
 import { useSettings } from '../hooks/useSetting';
 import TimeAgo from 'react-timeago-i18n';
 import { useTranslation } from 'react-i18next';
 import { Handle } from './ui/Handle';
+import { isAuthorBlocked } from '../lib/bluesky/types/BlockedAuthor';
 
-export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
+export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
   const { experiments } = useSettings();
   const { t } = useTranslation('post');
   if (!embed) return null;
@@ -109,7 +109,7 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
               </div>
             </div>
           )}
-          {(() => {
+          {/* {(() => {
             if (embed.record.$type === 'app.bsky.embed.record#viewRecord' && embed.record.text) {
               return (
                 <p className="text-gray-800 dark:text-gray-200 mb-3">
@@ -125,20 +125,20 @@ export const PostEmbed = ({ embed }: { embed?: BskyPostEmbed | null }) => {
             ) {
               return <PostEmbed embed={embed.record.embeds?.[0]} />;
             }
-            if (embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic') {
-              return (
-                <div className="text-gray-800 dark:text-gray-200">
-                  <Debug value={embed.record} />
-                </div>
-              );
-            }
+            // if (embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic') {
+            //   return (
+            //     <div className="text-gray-800 dark:text-gray-200">
+            //       <Debug value={embed.record} />
+            //     </div>
+            //   );
+            // }
 
             return (
               <p className="text-gray-800 dark:text-gray-200 mb-3">
                 {<FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />}
               </p>
             );
-          })()}
+          })()} */}
         </div>
       );
     }

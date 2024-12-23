@@ -66,6 +66,16 @@ export const en = {
   profile: {
     profile: 'profile',
     notFound: 'profile not found',
+    tabs: {
+      all: 'all',
+      posts: 'posts',
+      media: 'media',
+      feeds: 'feeds',
+      reposts: 'reposts',
+      likes: 'likes',
+      lists: 'lists',
+      starterpacks: 'starterpacks',
+    },
   },
   post: {
     notFound: 'post not found',
