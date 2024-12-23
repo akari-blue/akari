@@ -3,12 +3,12 @@ import { useBlueskyStore } from '../store';
 import { BSkyNotification } from '../types/BSkyNotification';
 
 export function useNotifications() {
-  const { agent } = useBlueskyStore();
+  const { agent, isAuthenticated } = useBlueskyStore();
 
   return useQuery({
     queryKey: ['notifications'],
     queryFn: async () => {
-      if (!agent) throw new Error('Not authenticated');
+      if (!agent || !isAuthenticated) throw new Error('Not authenticated');
 
       const response = await agent.api.app.bsky.notification.listNotifications();
       return response.data.notifications as BSkyNotification[];

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
 import { useAuth } from './useAuth';
+import { BSkyConvo } from '../types/BSkyConvo';
 
 export function useConversations() {
   const { agent, session } = useBlueskyStore();
@@ -16,7 +17,7 @@ export function useConversations() {
       // @ts-expect-error bsky_chat does in fact work
       const proxy = agent?.withProxy('bsky_chat', 'did:web:api.bsky.chat');
       const response = await proxy?.api.chat.bsky.convo.listConvos();
-      return response?.data.convos;
+      return response?.data.convos as BSkyConvo[];
     },
     enabled: !!agent && isAuthenticated,
   });

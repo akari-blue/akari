@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
 import { useAuth } from './useAuth';
+import { BSkyMessage } from '../types/BSkyMessage';
 
 export function useConversation({ convoId }: { convoId: string }) {
   const { agent, session } = useBlueskyStore();
@@ -19,7 +20,7 @@ export function useConversation({ convoId }: { convoId: string }) {
 
       return response?.data.messages
         .slice(0)
-        .sort((a, b) => new Date(a.sentAt as string).getTime() - new Date(b.sentAt as string).getTime());
+        .sort((a, b) => new Date(a.sentAt as string).getTime() - new Date(b.sentAt as string).getTime()) as BSkyMessage[];
     },
     enabled: !!agent && isAuthenticated,
   });
