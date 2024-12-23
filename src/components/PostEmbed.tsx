@@ -139,13 +139,13 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
             ) {
               return <PostEmbed embed={embed.record.embeds?.[0]} />;
             }
-            // if (embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic') {
-            //   return (
-            //     <div className="text-gray-800 dark:text-gray-200">
-            //       <Debug value={embed.record} />
-            //     </div>
-            //   );
-            // }
+            if (embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic') {
+              return (
+                <div className="text-gray-800 dark:text-gray-200">
+                  <NotImplementedBox type={embed.$type} data={embed.record} />
+                </div>
+              );
+            }
 
             return (
               <p className="text-gray-800 dark:text-gray-200 mb-3">

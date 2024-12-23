@@ -13,8 +13,9 @@ import { FollowButton } from '../../../components/ui/FollowButton';
 import { FormattedNumber } from '../../../components/ui/FormattedNumber';
 import { FormattedText } from '../../../components/ui/FormattedText';
 import { Debug } from '../../../components/ui/Debug';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { NotImplementedBox } from '../../../components/ui/NotImplementedBox';
+import { Virtuoso } from 'react-virtuoso';
 
 export const Route = createFileRoute('/profile/$handle/')({
   component: Profile,
@@ -35,18 +36,29 @@ function All() {
 function Posts() {
   const { t } = useTranslation('app');
   const { handle } = Route.useParams();
-  const { data: feed, isLoading } = useAuthorFeed({ handle });
+  const { data: posts, isLoading } = useAuthorFeed({ handle });
 
   if (isLoading) return t('loading');
+  if (!posts) return null;
+
+  const filteredPosts = posts
+    // Filter out replies
+    ?.filter(({ post }) => !(post.record as BSkyPost['record']).reply)
+    // Filter out reposts of other users
+    ?.filter(({ post }) => post.author.handle === handle);
 
   return (
-    <div className="flex flex-col gap-2">
-      {feed
-        // Filter out replies
-        ?.filter(({ post }) => !(post.record as BSkyPost['record']).reply)
-        // Filter out reposts of other users
-        ?.filter(({ post }) => post.author.handle === handle)
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}
+    <div className="w-[550px]">
+      <Virtuoso
+        useWindowScroll
+        totalCount={filteredPosts.length}
+        components={{
+          List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+        }}
+        itemContent={(index: number) => (
+          <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+        )}
+      />
     </div>
   );
 }

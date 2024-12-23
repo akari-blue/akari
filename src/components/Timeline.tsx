@@ -1,20 +1,17 @@
-import { useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { forwardRef, useState } from 'react';
 import { useTimeline } from '../lib/bluesky/hooks/useTimeline';
 import { PostCard } from './PostCard';
-import { cn } from '../lib/utils';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useLike } from '../lib/bluesky/hooks/useLike';
 import { useRepost } from '../lib/bluesky/hooks/useRepost';
 import { useSettings } from '../hooks/useSetting';
 import { useTranslation } from 'react-i18next';
+import { Virtuoso } from 'react-virtuoso';
 
 export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   const { columns } = useSettings();
   const selectedFeed = columns[columnNumber];
-  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useTimeline(selectedFeed);
-  const { ref, inView } = useInView();
-  const { experiments } = useSettings();
+  const { data, isLoading, error, fetchNextPage, isFetchingNextPage, hasNextPage } = useTimeline(selectedFeed);
   const { t } = useTranslation('app');
   const like = useLike();
   const repost = useRepost();
@@ -97,12 +94,6 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
     [],
   );
 
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
-
   if (isLoading) {
     return <div className="text-center py-8 text-gray-600 dark:text-gray-400">{t('loading')}</div>;
   }
@@ -113,18 +104,16 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
 
   return (
     <div className="flex flex-col gap-4">
-      {posts.map(({ post, feedContext }) => (
-        <PostCard
-          key={post.uri}
-          post={post}
-          context={feedContext}
-          className={cn(experiments.devMode && selectedPost === post.uri && 'outline outline-red-500')}
-          onClick={() => setSelectedPost(post.uri)}
+      <div className="min-w-[550px]">
+        <Virtuoso
+          useWindowScroll
+          totalCount={posts.length}
+          endReached={() => fetchNextPage()}
+          components={{
+            List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+          }}
+          itemContent={(index: number) => <PostCard key={posts[index]?.post.uri} post={posts[index]?.post} />}
         />
-      ))}
-
-      <div ref={ref} className="h-10">
-        {isFetchingNextPage && <div className="text-center py-4 text-gray-600 dark:text-gray-400">{t('loading')}</div>}
       </div>
     </div>
   );

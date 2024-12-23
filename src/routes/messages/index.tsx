@@ -9,6 +9,7 @@ import { Debug } from '../../components/ui/Debug';
 import { BSkyConvo } from '../../lib/bluesky/types/BSkyConvo';
 import TimeAgo from 'react-timeago-i18n';
 import { Handle } from '../../components/ui/Handle';
+import { Virtuoso } from 'react-virtuoso';
 
 function Conversation({ convo }: { convo: BSkyConvo }) {
   const session = useBlueskyStore((state) => state.session);
@@ -48,10 +49,28 @@ export const Route = createFileRoute('/messages/')({
 });
 
 function Messages() {
-  const { data, isLoading } = useConversations();
+  const { data: convos, isLoading } = useConversations();
   const { t } = useTranslation('app');
 
-  if (isLoading) return <div className="w-[550px] h-screen overflow-y-scroll">{t('loading')}</div>;
+  if (isLoading) {
+    return (
+      <div className="w-[550px] h-screen flex items-center justify-center">
+        <span>{t('loading')}</span>
+      </div>
+    );
+  }
 
-  return <div className="flex flex-col gap-2">{data?.map((convo) => <Conversation key={convo.id} convo={convo} />)}</div>;
+  return (
+    <div className="w-[550px]">
+      <Virtuoso
+        useWindowScroll
+        totalCount={convos?.length ?? 0}
+        itemContent={(index: number) => {
+          const convo = convos?.[index];
+          if (!convo) return null;
+          return <Conversation key={convo.id} convo={convo} />;
+        }}
+      />
+    </div>
+  );
 }

@@ -1262,4 +1262,118 @@ export const testPosts = [
     },
     labels: [],
   },
+  {
+    uri: 'at://did:plc:cqhuivxrwyy6dkbojlh5mgt5/app.bsky.feed.post/3ldwdltlejc2f',
+    cid: 'bafyreibdle6swvgxtwfhbf4gvgjkpq3zmhvthmvestl6u6nyubw67pz2mm',
+    author: {
+      did: 'did:plc:cqhuivxrwyy6dkbojlh5mgt5',
+      handle: 'stardustbluepr.com',
+      displayName: 'StardustBluePR 🌴🌏🎬',
+      avatar:
+        'https://cdn.bsky.app/img/avatar/plain/did:plc:cqhuivxrwyy6dkbojlh5mgt5/bafkreiab7wpc347giiznf2wa4rpivv4xq7vnyyqxs3l765qlycrfrv7obm@jpeg',
+      associated: {
+        chat: {
+          allowIncoming: 'following',
+        },
+      },
+      viewer: {
+        muted: false,
+        blockedBy: false,
+      },
+      labels: [
+        {
+          src: 'did:plc:cqhuivxrwyy6dkbojlh5mgt5',
+          uri: 'at://did:plc:cqhuivxrwyy6dkbojlh5mgt5/app.bsky.actor.profile/self',
+          cid: 'bafyreihbbpf253zoacyq5sgudw6alwm62tn5ks6txrt5x4m7yaczqckf4q',
+          val: '!no-unauthenticated',
+          cts: '1970-01-01T00:00:00.000Z',
+        },
+      ],
+      createdAt: '2023-06-09T13:55:25.036Z',
+    },
+    record: {
+      $type: 'app.bsky.feed.post',
+      createdAt: '2024-12-22T21:16:10.561Z',
+      embed: {
+        $type: 'app.bsky.embed.record',
+        record: {
+          cid: 'bafyreiculevof2q46b2uuyogb42vvypojns566y5we5yo5dchcdf4oxy3q',
+          uri: 'at://did:plc:cqhuivxrwyy6dkbojlh5mgt5/app.bsky.graph.starterpack/3ldwcmu4nli2c',
+        },
+      },
+      facets: [
+        {
+          features: [
+            {
+              $type: 'app.bsky.richtext.facet#tag',
+              tag: 'StarterPack',
+            },
+          ],
+          index: {
+            byteEnd: 76,
+            byteStart: 64,
+          },
+        },
+      ],
+      langs: ['en'],
+      text: "I'm on the search for some brilliant new friends to add to this #StarterPack\nScientists, journalists, climate warriors, womans rights.\nComment for a chance to be added! \n💙🌍",
+    },
+    embed: {
+      $type: 'app.bsky.embed.record#view',
+      record: {
+        uri: 'at://did:plc:cqhuivxrwyy6dkbojlh5mgt5/app.bsky.graph.starterpack/3ldwcmu4nli2c',
+        cid: 'bafyreibfemjeii2zga3tfoe3l627livlmcyhehaeqouzhgeqbohbniqcqq',
+        record: {
+          $type: 'app.bsky.graph.starterpack',
+          createdAt: '2024-12-22T20:58:51.484Z',
+          description: 'Connecting with some great new peeps here! Engaging, kind and have important words of wisdom.',
+          feeds: [],
+          list: 'at://did:plc:cqhuivxrwyy6dkbojlh5mgt5/app.bsky.graph.list/3ldwcmtux2f25',
+          name: 'BlueSky Friends & Finds fromStardustBluePR',
+          updatedAt: '2024-12-23T07:15:05.442Z',
+        },
+        creator: {
+          did: 'did:plc:cqhuivxrwyy6dkbojlh5mgt5',
+          handle: 'stardustbluepr.com',
+          displayName: 'StardustBluePR 🌴🌏🎬',
+          avatar:
+            'https://cdn.bsky.app/img/avatar/plain/did:plc:cqhuivxrwyy6dkbojlh5mgt5/bafkreiab7wpc347giiznf2wa4rpivv4xq7vnyyqxs3l765qlycrfrv7obm@jpeg',
+          associated: {
+            chat: {
+              allowIncoming: 'following',
+            },
+          },
+          viewer: {
+            muted: false,
+            blockedBy: false,
+          },
+          labels: [
+            {
+              src: 'did:plc:cqhuivxrwyy6dkbojlh5mgt5',
+              uri: 'at://did:plc:cqhuivxrwyy6dkbojlh5mgt5/app.bsky.actor.profile/self',
+              cid: 'bafyreihbbpf253zoacyq5sgudw6alwm62tn5ks6txrt5x4m7yaczqckf4q',
+              val: '!no-unauthenticated',
+              cts: '1970-01-01T00:00:00.000Z',
+            },
+          ],
+          createdAt: '2023-06-09T13:55:25.036Z',
+        },
+        joinedAllTimeCount: 0,
+        joinedWeekCount: 0,
+        labels: [],
+        indexedAt: '2024-12-23T07:15:05.650Z',
+        $type: 'app.bsky.graph.defs#starterPackViewBasic',
+      },
+    },
+    replyCount: 163,
+    repostCount: 137,
+    likeCount: 419,
+    quoteCount: 22,
+    indexedAt: '2024-12-22T21:16:10.348Z',
+    viewer: {
+      threadMuted: false,
+      embeddingDisabled: false,
+    },
+    labels: [],
+  },
 ] satisfies BSkyPost[];
