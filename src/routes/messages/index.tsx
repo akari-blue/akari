@@ -28,7 +28,9 @@ function Messages() {
                 <Image
                   type="avatar"
                   src={member.avatar}
-                  className={cn('size-24', member.associated?.labeler ? 'aspect-square' : 'rounded-full')}
+                  classNames={{
+                    image: cn('size-24', member.associated?.labeler ? 'aspect-square' : 'rounded-full'),
+                  }}
                 />
                 <div>{convo.lastMessage?.text as string}</div>
               </div>

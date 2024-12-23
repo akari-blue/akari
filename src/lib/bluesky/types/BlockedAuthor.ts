@@ -16,6 +16,7 @@ export const BlockedAuthor = Type.Object({
   }),
   labels: Type.Array(BSkyPostLabel),
   createdAt: Type.String(),
+  indexedAt: Type.Optional(Type.String()),
   associated: Type.Optional(
     Type.Object({
       chat: Type.Object({

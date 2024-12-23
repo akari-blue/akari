@@ -116,13 +116,15 @@ function Profile() {
 
   return (
     <div className="w-[550px] flex flex-col gap-2">
-      <Image type="banner" src={profile?.banner} alt="Banner" className="w-full h-32 object-cover" />
+      <Image type="banner" src={profile?.banner} alt="Banner" classNames={{ image: 'w-full h-32 object-cover' }} />
       <div>
         <Image
           type="avatar"
           src={profile?.avatar}
           alt="Avatar"
-          className={cn('w-24 h-24', profile.associated?.labeler ? 'aspect-square' : 'rounded-full')}
+          classNames={{
+            image: cn('w-24 h-24', profile.associated?.labeler ? 'aspect-square' : 'rounded-full'),
+          }}
         />
         <div>
           <div className="flex gap-2">

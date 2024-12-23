@@ -15,6 +15,7 @@ export const Author = Type.Object({
   }),
   labels: Type.Array(BSkyPostLabel),
   createdAt: Type.String(),
+  indexedAt: Type.Optional(Type.String()),
   associated: Type.Optional(
     Type.Object({
       chat: Type.Object({
@@ -22,6 +23,7 @@ export const Author = Type.Object({
       }),
     }),
   ),
+  description: Type.Optional(Type.String()),
 });
 
 export type Author = Static<typeof Author>;

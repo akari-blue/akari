@@ -3,9 +3,13 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { useNotifications } from '../lib/bluesky/hooks/useNotifications';
 import { Debug } from '../components/ui/Debug';
-import { Notification as BskyNotification } from '@atproto/api/dist/client/types/app/bsky/notification/listNotifications';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
+import { BSkyNotification } from '../lib/bluesky/types/BSkyNotification';
+import { Link } from '../components/ui/Link';
+import { useBlueskyStore } from '../lib/bluesky/store';
+import { Image } from '../components/ui/Image';
+import { Handle } from '../components/ui/Handle';
 
 export const Route = createFileRoute('/notifications')({
   component: RouteComponent,
@@ -62,7 +66,7 @@ function RouteComponent() {
         </Ariakit.TabList>
         <div className="p-2">
           <Ariakit.TabPanel tabId="grouped">
-            <GroupedNotifications notifications={notifications} />
+            {notifications && <GroupedNotifications notifications={notifications} />}
           </Ariakit.TabPanel>
           <Ariakit.TabPanel tabId="all">
             {notifications?.map((notification) => <Notification key={notification.uri} notification={notification} />)}
@@ -76,24 +80,21 @@ function RouteComponent() {
   );
 }
 
-// group notifications by uri and group up to 3 notifications per group
-function GroupedNotifications({ notifications }: { notifications: BskyNotification[] }) {
+// group notifications by uri
+function GroupedNotifications({ notifications }: { notifications: BSkyNotification[] }) {
   const { t } = useTranslation('notifications');
   const grouped = notifications.reduce(
     (acc, notification) => {
-      if (notification.reason === 'follow') {
-        return acc;
+      if (notification.reason === 'like') {
+        if (acc[notification.record.subject.uri]) {
+          acc[notification.record.subject.uri]?.push(notification);
+        } else {
+          acc[notification.record.subject.uri] = [notification];
+        }
       }
-
-      if (!acc[uri]) {
-        acc[uri] = [];
-      }
-
-      acc[uri].push(notification.record);
-
       return acc;
     },
-    {} as Record<string, BskyNotification[]>,
+    {} as Record<string, BSkyNotification[]>,
   );
 
   return (
@@ -101,21 +102,41 @@ function GroupedNotifications({ notifications }: { notifications: BskyNotificati
       {Object.entries(grouped).map(([uri, notifications]) => (
         <div key={uri} className="p-2 bg-neutral-800 rounded-lg mb-2">
           <div className="text-sm text-neutral-400">{t('groupedNotifications')}</div>
-          {notifications.map((notification) => (
-            <Notification key={notification.uri} notification={notification} />
-          ))}
+          <GroupNotification key={notifications[0]?.uri} notifications={notifications} />
         </div>
       ))}
     </div>
   );
 }
 
-function Notification({ notification }: { notification: BskyNotification }) {
+function GroupNotification({ notifications }: { notifications: BSkyNotification[] }) {
+  const notification = notifications[0];
+  if (!notification) return null;
+
+  switch (notification?.reason) {
+    case 'follow':
+      return <FollowNotification notification={notification} />;
+    case 'like':
+      return <LikeNotification notifications={notifications} />;
+    case 'repost':
+      return <RepostNotification notification={notification} />;
+    case 'reply':
+      return <ReplyNotification notification={notification} />;
+    case 'mention':
+      return <MentionNotification notification={notification} />;
+    case 'quote':
+      return <QuoteNotification notification={notification} />;
+    case 'starterpack-joined':
+      return <StarterpackJoinedNotification notification={notification} />;
+  }
+}
+
+function Notification({ notification }: { notification: BSkyNotification }) {
   switch (notification.reason) {
     case 'follow':
       return <FollowNotification notification={notification} />;
     case 'like':
-      return <LikeNotification notification={notification} />;
+      return <LikeNotification notifications={[notification]} />;
     case 'repost':
       return <RepostNotification notification={notification} />;
     case 'reply':
@@ -136,7 +157,7 @@ function Notification({ notification }: { notification: BskyNotification }) {
   );
 }
 
-function FollowNotification({ notification }: { notification: BskyNotification }) {
+function FollowNotification({ notification }: { notification: BSkyNotification }) {
   const { t } = useTranslation('notifications');
   return (
     <div>
@@ -145,16 +166,40 @@ function FollowNotification({ notification }: { notification: BskyNotification }
   );
 }
 
-function LikeNotification({ notification }: { notification: BskyNotification }) {
+function LikeNotification({ notifications }: { notifications: BSkyNotification[] }) {
   const { t } = useTranslation('notifications');
+  const { session } = useBlueskyStore();
+  const notification = notifications[0];
+  if (!notification || !session) return null;
+  const othersCount = notifications.length - 1;
+
   return (
     <div>
-      {notification.author.displayName} {t('likedYourPost')}
+      <div className="flex flex-row gap-1 overflow-hidden max-h-16">
+        {notifications.map((notification) => (
+          <Image type="avatar" classNames={{ wrapper: 'aspect-square size-8' }} src={notification.author.avatar} />
+        ))}
+      </div>
+      <div>
+        <Handle handle={notification.author.handle} />
+        {notifications.map((notification) => notification.author.displayName).slice(-1)}
+        {notifications.length - 1 >= 1 &&
+          `${t('and')} ${othersCount} ${othersCount >= 1 && (othersCount === 1 ? t('other') : t('others'))} `}{' '}
+        <Link
+          to="/profile/$handle/post/$postId"
+          params={{
+            handle: session.did!,
+            postId: notification.record.subject.uri.split('/')[notification.record.subject.uri.split('/').length - 1]!,
+          }}
+        >
+          {t('likedYourPost')}
+        </Link>
+      </div>
     </div>
   );
 }
 
-function RepostNotification({ notification }: { notification: BskyNotification }) {
+function RepostNotification({ notification }: { notification: BSkyNotification }) {
   const { t } = useTranslation('notifications');
   return (
     <div>
@@ -163,7 +208,7 @@ function RepostNotification({ notification }: { notification: BskyNotification }
   );
 }
 
-function ReplyNotification({ notification }: { notification: BskyNotification }) {
+function ReplyNotification({ notification }: { notification: BSkyNotification }) {
   const { t } = useTranslation('notifications');
   return (
     <div>
@@ -172,7 +217,7 @@ function ReplyNotification({ notification }: { notification: BskyNotification })
   );
 }
 
-function MentionNotification({ notification }: { notification: BskyNotification }) {
+function MentionNotification({ notification }: { notification: BSkyNotification }) {
   const { t } = useTranslation('notifications');
   return (
     <div>
@@ -181,7 +226,7 @@ function MentionNotification({ notification }: { notification: BskyNotification 
   );
 }
 
-function QuoteNotification({ notification }: { notification: BskyNotification }) {
+function QuoteNotification({ notification }: { notification: BSkyNotification }) {
   const { t } = useTranslation('notifications');
   return (
     <div>
@@ -190,7 +235,7 @@ function QuoteNotification({ notification }: { notification: BskyNotification })
   );
 }
 
-function StarterpackJoinedNotification({ notification }: { notification: BskyNotification }) {
+function StarterpackJoinedNotification({ notification }: { notification: BSkyNotification }) {
   const { t } = useTranslation('notifications');
   return (
     <div>

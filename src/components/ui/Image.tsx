@@ -3,11 +3,15 @@ import { cn } from '../../lib/utils';
 import { useSettings } from '../../hooks/useSetting';
 import { useTranslation } from 'react-i18next';
 
-type ImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+type ImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'className'> & {
   type: 'avatar' | 'post' | 'banner';
+  classNames: {
+    wrapper?: string;
+    image?: string;
+  };
 };
 
-export const Image = ({ src, alt, type, ...props }: ImageProps) => {
+export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
   const { experiments } = useSettings();
   const { t } = useTranslation('image');
   const [showAltText, setShowAltText] = useState(false);
@@ -37,7 +41,7 @@ export const Image = ({ src, alt, type, ...props }: ImageProps) => {
 
   return (
     <>
-      <div className="relative">
+      <div className={cn('relative', classNames.wrapper)}>
         {alt &&
           type === 'post' &&
           (showAltText ? (
@@ -58,7 +62,7 @@ export const Image = ({ src, alt, type, ...props }: ImageProps) => {
           alt={alt}
           {...props}
           onClick={imageOnClick}
-          className={cn(props.className, experiments.streamerMode && 'filter blur-md')}
+          className={cn(classNames.image, experiments.streamerMode && 'filter blur-md')}
         />
       </div>
       {isFullscreen && (
@@ -71,7 +75,7 @@ export const Image = ({ src, alt, type, ...props }: ImageProps) => {
                   src={src}
                   alt={alt}
                   {...props}
-                  className={cn(props.className, 'h-full w-full', experiments.streamerMode && 'filter blur-md')}
+                  className={cn(classNames.image, 'h-full w-full', experiments.streamerMode && 'filter blur-md')}
                 />
               </div>
             </div>

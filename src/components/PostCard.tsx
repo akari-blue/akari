@@ -74,7 +74,12 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
       {/* {!!post.record.reply && <PostCard post={reply} />} */}
       <div className="flex items-center space-x-3 mb-2">
         {post.author.avatar && (
-          <Image type="avatar" src={post.author.avatar} alt={post.author.handle} className="w-10 h-10 rounded-full" />
+          <Image
+            type="avatar"
+            src={post.author.avatar}
+            alt={post.author.handle}
+            classNames={{ image: 'w-10 h-10 rounded-full' }}
+          />
         )}
         <div>
           <div>

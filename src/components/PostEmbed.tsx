@@ -27,7 +27,9 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
               key={image.thumb}
               src={image.thumb}
               alt={image.alt}
-              className={cn(embed.images.length >= 2 && 'h-48', 'rounded-lg w-full object-cover')}
+              classNames={{
+                image: cn(embed.images.length >= 2 && 'h-48', 'rounded-lg w-full object-cover'),
+              }}
             />
           ))}
         </div>
@@ -62,7 +64,9 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
             type="post"
             src={embed.external.uri ?? embed.external.thumb}
             alt={embed.external.title}
-            className="rounded-lg w-full aspect-square object-cover"
+            classNames={{
+              image: 'rounded-lg w-full aspect-square object-cover',
+            }}
           />
         </div>
       );
@@ -84,7 +88,12 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
           {embed.record.$type === 'app.bsky.embed.record#viewRecord' && (
             <div className="flex items-center space-x-3 mb-2">
               {author.avatar && (
-                <Image type="avatar" src={author.avatar} alt={author.handle} className="w-10 h-10 rounded-full" />
+                <Image
+                  type="avatar"
+                  src={author.avatar}
+                  alt={author.handle}
+                  classNames={{ image: 'w-10 h-10 rounded-full' }}
+                />
               )}
               <div>
                 <div className="font-medium text-gray-900 dark:text-gray-100">
@@ -160,7 +169,9 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
               key={embed.media.external.uri}
               src={embed.media.external.uri ?? embed.media.external.thumb}
               alt={embed.media.external.description}
-              className="rounded-lg w-full object-cover"
+              classNames={{
+                image: 'rounded-lg w-full object-cover',
+              }}
             />
           </div>
         </>
