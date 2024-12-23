@@ -116,7 +116,7 @@ function Media() {
 
 function Profile() {
   const { handle } = Route.useParams();
-  const { data: profile, isLoading } = useProfile({ handle });
+  const { data: profile, isLoading } = useProfile({ handle, forProfilePage: true });
   const { experiments } = useSettings();
   const { t } = useTranslation(['app', 'profile']);
 
@@ -147,10 +147,17 @@ function Profile() {
             {<FollowButton handle={handle} following={!!profile.viewer?.following} />}
           </div>
           {!experiments.zenMode && (
-            <div className="flex gap-2">
-              <FormattedNumber value={profile?.followersCount} unit={t('followers')} />
-              <FormattedNumber value={profile?.followsCount} unit={t('following')} />
-              <FormattedNumber value={profile?.postsCount} unit={t('posts')} />
+            <div className="flex justify-between">
+              <div className="flex gap-2">
+                <FormattedNumber value={profile?.followersCount} unit={t('followers')} />
+                <FormattedNumber value={profile?.followsCount} unit={t('following')} />
+                <FormattedNumber value={profile?.postsCount} unit={t('posts')} />
+              </div>
+              {profile?.pos_bsky && (
+                <a href={'https://skyzoo.blue/stats/' + handle} target="_blank" className="underline">
+                  <FormattedNumber value={profile?.pos_bsky} notation="standard" prefix={t('arrived_on')} />
+                </a>
+              )}
             </div>
           )}
           <p>
