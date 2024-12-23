@@ -5,12 +5,13 @@ import { PostCard } from '../../../components/PostCard';
 import { BSkyPost } from '../../../lib/bluesky/types/BSkyPost';
 import { ErrorBoundary } from '../../../components/ErrorBoundary';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 
 export const Route = createFileRoute('/profile/$handle/post/$postId')({
-  component: Profile,
+  component: Post,
 });
 
-function Profile() {
+function Post() {
   const { handle } = Route.useParams();
   const { data: profile, isLoading: isLoadingProfile } = useProfile({ handle });
   const params = Route.useParams();
@@ -26,6 +27,9 @@ function Profile() {
 
   return (
     <>
+      <Helmet>
+        <link rel="canonical" href={`https://bsky.app/profile/${handle}/post/${params.postId}`} />
+      </Helmet>
       <PostCard post={postThread?.post as BSkyPost} />
       <ErrorBoundary>
         {(postThread?.replies as { post: BSkyPost }[])?.map((reply) => reply.post && <PostCard post={reply.post} />)}
