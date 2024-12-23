@@ -20,7 +20,10 @@ function RouteComponent() {
     <div className="flex flex-col gap-2 overflow-y-auto h-full">
       {messages?.map((message) => (
         <div className={cn('flex flex-col', message.sender.did === session?.did ? 'items-end' : 'items-start')}>
-          <div className="bg-neutral-800 p-2 w-fit" key={message.id as string}>
+          <div
+            className={cn(message.sender.did === session?.did ? 'bg-blue-600' : 'bg-neutral-800', 'p-2 w-fit rounded-sm')}
+            key={message.id as string}
+          >
             {message.text}
           </div>
         </div>
