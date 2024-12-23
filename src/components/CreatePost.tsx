@@ -2,9 +2,9 @@ import { useForm } from 'react-hook-form';
 import { useCreatePost } from '../lib/bluesky/hooks/useCreatePost';
 import { Button } from './ui/Button';
 
-interface PostFormData {
+type PostFormData = {
   text: string;
-}
+};
 
 export function CreatePost() {
   const createPost = useCreatePost();

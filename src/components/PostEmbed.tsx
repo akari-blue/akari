@@ -114,7 +114,11 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
             if (embed.record.$type === 'app.bsky.embed.record#viewRecord' && embed.record.text) {
               return (
                 <p className="text-gray-800 dark:text-gray-200 mb-3">
-                  <FacetedText text={embed.record.text} facets={embed.record.facets} key={embed.record.uri} />
+                  {embed.record.facets ? (
+                    <FacetedText text={embed.record.text} facets={embed.record.facets} key={embed.record.uri} />
+                  ) : (
+                    embed.record.text
+                  )}
                 </p>
               );
             }
@@ -136,7 +140,11 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
 
             return (
               <p className="text-gray-800 dark:text-gray-200 mb-3">
-                {<FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />}
+                {embed.record.facets ? (
+                  <FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />
+                ) : (
+                  embed.record.value.text
+                )}
               </p>
             );
           })()}

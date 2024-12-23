@@ -4,13 +4,13 @@ import { Input } from './Input';
 import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs';
 import { useTranslation } from 'react-i18next';
 
-interface HandleInputProps {
+type HandleInputProps = {
   value: string;
   onChange: (value: string) => void;
   onSelect?: (profile: ProfileViewBasic) => void;
   placeholder?: string;
   className?: string;
-}
+};
 
 const PUBLIC_API = 'https://public.api.bsky.app';
 
