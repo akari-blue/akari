@@ -11,6 +11,7 @@ export const en = {
   app: {
     appName: '[placeholder name]',
     loading: 'loading...',
+    loadMore: 'load more',
     blueskyHandle: 'bluesky handle e.g. @alice.bsky.social',
     following: 'following',
     followers: 'followers',
@@ -105,6 +106,7 @@ export const en = {
     tabs: {
       all: 'all',
       mentions: 'mentions',
+      grouped: 'grouped',
     },
   },
   messages: {

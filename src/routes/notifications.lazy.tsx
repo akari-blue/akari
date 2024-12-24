@@ -122,7 +122,7 @@ function GroupedNotifications() {
                   fetchNextPage();
                 }}
               >
-                load more
+                {t('loadMore')}
               </Button>
             </div>
           );
