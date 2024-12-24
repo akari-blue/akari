@@ -11,7 +11,7 @@ import { Virtuoso } from 'react-virtuoso';
 export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   const { columns } = useSettings();
   const selectedFeed = columns[columnNumber];
-  const { data, isLoading, error, fetchNextPage, isFetchingNextPage, hasNextPage } = useTimeline(selectedFeed);
+  const { data, isLoading, error, fetchNextPage } = useTimeline(selectedFeed);
   const { t } = useTranslation('app');
   const like = useLike();
   const repost = useRepost();
