@@ -60,14 +60,16 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
           <a href={embed.external.uri} target="_blank" rel="noreferrer" className="hover:underline">
             {embed.external.title}
           </a>
-          <Image
-            type="post"
-            src={embed.external.uri ?? embed.external.thumb}
-            alt={embed.external.title}
-            classNames={{
-              image: 'rounded-lg w-full aspect-square object-cover',
-            }}
-          />
+          {!!embed.external.thumb && (
+            <Image
+              type="post"
+              src={embed.external.thumb}
+              alt={embed.external.title}
+              classNames={{
+                image: 'rounded-lg w-full aspect-square object-cover',
+              }}
+            />
+          )}
         </div>
       );
     case 'app.bsky.embed.record#view': {

@@ -1,5 +1,5 @@
 import * as Ariakit from '@ariakit/react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { useNotifications } from '../lib/bluesky/hooks/useNotifications';
 import { Debug } from '../components/ui/Debug';
@@ -13,7 +13,7 @@ import { Handle } from '../components/ui/Handle';
 import { Virtuoso } from 'react-virtuoso';
 import { Button } from '../components/ui/Button';
 
-export const Route = createFileRoute('/notifications')({
+export const Route = createLazyFileRoute('/notifications')({
   component: RouteComponent,
 });
 
@@ -83,7 +83,7 @@ function RouteComponent() {
 
 // group notifications by uri
 function GroupedNotifications() {
-  const { t } = useTranslation('notifications');
+  const { t } = useTranslation(['app', 'notifications']);
   const { data, isLoading, fetchNextPage, isFetching } = useNotifications();
   const notifications = data?.pages.flatMap((page) => page.notifications);
   if (!notifications) return null;

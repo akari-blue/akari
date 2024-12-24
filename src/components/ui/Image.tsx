@@ -33,7 +33,12 @@ export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
 
   if (!src) {
     return (
-      <div className="bg-neutral-200 dark:bg-neutral-600 text-black dark:text-white text-center aspect-square justify-center items-center flex">
+      <div
+        className={cn(
+          'bg-neutral-200 dark:bg-neutral-600 text-black dark:text-white text-center aspect-square justify-center items-center flex',
+          classNames?.image,
+        )}
+      >
         <span>{t('noImage')}</span>
       </div>
     );
