@@ -61,7 +61,7 @@ function Posts() {
   return (
     <Virtuoso
       useWindowScroll
-      totalCount={feed.length}
+      totalCount={filteredPosts.length}
       endReached={() => fetchNextPage()}
       components={{
         List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
@@ -89,7 +89,7 @@ function Reposts() {
   return (
     <Virtuoso
       useWindowScroll
-      totalCount={feed.length}
+      totalCount={filteredPosts.length}
       endReached={() => fetchNextPage()}
       components={{
         List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
@@ -117,7 +117,7 @@ function Replies() {
   return (
     <Virtuoso
       useWindowScroll
-      totalCount={feed.length}
+      totalCount={filteredPosts.length}
       endReached={() => fetchNextPage()}
       components={{
         List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
@@ -145,7 +145,7 @@ function Media() {
   return (
     <Virtuoso
       useWindowScroll
-      totalCount={feed.length}
+      totalCount={filteredPosts.length}
       endReached={() => fetchNextPage()}
       components={{
         List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
