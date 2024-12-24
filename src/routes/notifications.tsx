@@ -3,13 +3,15 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { useNotifications } from '../lib/bluesky/hooks/useNotifications';
 import { Debug } from '../components/ui/Debug';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { cn } from '../lib/utils';
 import { BSkyNotification } from '../lib/bluesky/types/BSkyNotification';
 import { Link } from '../components/ui/Link';
 import { useBlueskyStore } from '../lib/bluesky/store';
 import { Image } from '../components/ui/Image';
 import { Handle } from '../components/ui/Handle';
+import { Virtuoso } from 'react-virtuoso';
+import { Button } from '../components/ui/Button';
 
 export const Route = createFileRoute('/notifications')({
   component: RouteComponent,
@@ -17,7 +19,8 @@ export const Route = createFileRoute('/notifications')({
 
 function RouteComponent() {
   const { t } = useTranslation(['app', 'notifications']);
-  const { data: notifications, isLoading } = useNotifications();
+  const { data, isLoading } = useNotifications();
+  const notifications = data?.pages.flatMap((page) => page.notifications);
   const mentions = notifications?.filter(
     (notification) =>
       notification.reason === 'mention' || notification.reason === 'reply' || notification.reason === 'quote',
@@ -65,9 +68,7 @@ function RouteComponent() {
           </Ariakit.Tab>
         </Ariakit.TabList>
         <div className="p-2">
-          <Ariakit.TabPanel tabId="grouped">
-            {notifications && <GroupedNotifications notifications={notifications} />}
-          </Ariakit.TabPanel>
+          <Ariakit.TabPanel tabId="grouped">{notifications && <GroupedNotifications />}</Ariakit.TabPanel>
           <Ariakit.TabPanel tabId="all">
             {notifications?.map((notification) => <Notification key={notification.uri} notification={notification} />)}
           </Ariakit.TabPanel>
@@ -81,8 +82,11 @@ function RouteComponent() {
 }
 
 // group notifications by uri
-function GroupedNotifications({ notifications }: { notifications: BSkyNotification[] }) {
+function GroupedNotifications() {
   const { t } = useTranslation('notifications');
+  const { data, isLoading, fetchNextPage, isFetching } = useNotifications();
+  const notifications = data?.pages.flatMap((page) => page.notifications);
+  if (!notifications) return null;
   const grouped = notifications.reduce(
     (acc, notification) => {
       if (notification.reason === 'like') {
@@ -97,15 +101,43 @@ function GroupedNotifications({ notifications }: { notifications: BSkyNotificati
     {} as Record<string, BSkyNotification[]>,
   );
 
+  if (isLoading) return <div>{t('loading')}</div>;
+
+  const list = Object.values(grouped);
+
   return (
-    <div>
-      {Object.entries(grouped).map(([uri, notifications]) => (
-        <div key={uri} className="p-2 bg-neutral-800 rounded-lg mb-2">
-          <div className="text-sm text-neutral-400">{t('groupedNotifications')}</div>
-          <GroupNotification key={notifications[0]?.uri} notifications={notifications} />
-        </div>
-      ))}
-    </div>
+    <Virtuoso
+      useWindowScroll
+      totalCount={list.length}
+      endReached={() => fetchNextPage()}
+      components={{
+        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+        Footer: () => {
+          return isFetching ? (
+            <div className="p-2 text-center">{t('loading')}</div>
+          ) : (
+            <div className="p-2 text-center">
+              <Button
+                onClick={() => {
+                  fetchNextPage();
+                }}
+              >
+                load more
+              </Button>
+            </div>
+          );
+        },
+      }}
+      itemContent={(index: number) => {
+        if (!list[index]) return null;
+        return (
+          <div key={list[index][0]?.uri} className="p-2 bg-neutral-800 rounded-lg mb-2">
+            <div className="text-sm text-neutral-400">{t('groupedNotifications')}</div>
+            <GroupNotification key={list[index][0]?.uri} notifications={list[index]} />
+          </div>
+        );
+      }}
+    />
   );
 }
 
