@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 type ImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'className'> & {
   type: 'avatar' | 'post' | 'banner';
-  classNames: {
+  classNames?: {
     wrapper?: string;
     image?: string;
   };
@@ -41,7 +41,7 @@ export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
 
   return (
     <>
-      <div className={cn('relative', classNames.wrapper)}>
+      <div className={cn('relative', classNames?.wrapper)}>
         {alt &&
           type === 'post' &&
           (showAltText ? (
@@ -62,7 +62,7 @@ export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
           alt={alt}
           {...props}
           onClick={imageOnClick}
-          className={cn(classNames.image, experiments.streamerMode && 'filter blur-md')}
+          className={cn(classNames?.image, experiments.streamerMode && 'filter blur-md')}
         />
       </div>
       {isFullscreen && (
@@ -75,7 +75,7 @@ export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
                   src={src}
                   alt={alt}
                   {...props}
-                  className={cn(classNames.image, 'h-full w-full', experiments.streamerMode && 'filter blur-md')}
+                  className={cn(classNames?.image, 'h-full w-full', experiments.streamerMode && 'filter blur-md')}
                 />
               </div>
             </div>

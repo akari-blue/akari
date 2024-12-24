@@ -49,7 +49,6 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
   const { t } = useTranslation(['app', 'post']);
   const like = useLike();
   const repost = useRepost();
-  // const { data: reply } = usePostThread({ uri: post?.record.reply?.parent.uri });
   const { isAuthenticated } = useAuth();
   const { experiments } = useSettings();
 
@@ -61,9 +60,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
     repost.mutate({ uri, cid });
   };
 
-  if (!post) {
-    return <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow', className)}>{t('post:notFound')}</div>;
-  }
+  if (!post) return null;
 
   return (
     <div

@@ -164,15 +164,17 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
       return (
         <>
           <div className={cn((embed.record.record.embeds ?? [])?.length >= 2 && 'grid grid-cols-2', 'gap-2 mb-3')}>
-            <Image
-              type="post"
-              key={embed.media.external.uri}
-              src={embed.media.external.uri ?? embed.media.external.thumb}
-              alt={embed.media.external.description}
-              classNames={{
-                image: 'rounded-lg w-full object-cover',
-              }}
-            />
+            {embed.media.external && (
+              <Image
+                type="post"
+                key={embed.media.external.uri}
+                src={embed.media.external.uri ?? embed.media.external.thumb}
+                alt={embed.media.external.description}
+                classNames={{
+                  image: 'rounded-lg w-full object-cover',
+                }}
+              />
+            )}
           </div>
         </>
       );

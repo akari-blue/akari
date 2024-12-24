@@ -131,12 +131,14 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
       $type: Type.Literal('app.bsky.embed.recordWithMedia#view'),
       media: Type.Object({
         $type: Type.Literal('app.bsky.embed.external#view'),
-        external: Type.Object({
-          uri: Type.String(),
-          title: Type.String(),
-          description: Type.String(),
-          thumb: Type.String(),
-        }),
+        external: Type.Optional(
+          Type.Object({
+            uri: Type.String(),
+            title: Type.String(),
+            description: Type.String(),
+            thumb: Type.String(),
+          }),
+        ),
       }),
       record: Type.Object({
         record: Type.Object({

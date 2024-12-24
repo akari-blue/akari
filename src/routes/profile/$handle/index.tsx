@@ -24,93 +24,136 @@ export const Route = createFileRoute('/profile/$handle/')({
 function All() {
   const { t } = useTranslation('app');
   const { handle } = Route.useParams();
-  const { data: feed, isLoading } = useAuthorFeed({ handle });
+  const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
+  const feed = data?.pages.flatMap((page) => page.feed);
 
   if (isLoading) return t('loading');
+  if (!feed) return null;
 
   return (
-    <div className="flex flex-col gap-2">{feed?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}</div>
+    <Virtuoso
+      useWindowScroll
+      totalCount={feed.length}
+      endReached={() => fetchNextPage()}
+      components={{
+        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+      }}
+      itemContent={(index: number) => <PostCard key={feed[index]?.post.uri} post={feed[index]?.post as BSkyPost} />}
+    />
   );
 }
 
 function Posts() {
   const { t } = useTranslation('app');
   const { handle } = Route.useParams();
-  const { data: posts, isLoading } = useAuthorFeed({ handle });
+  const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
+  const feed = data?.pages.flatMap((page) => page.feed);
 
   if (isLoading) return t('loading');
-  if (!posts) return null;
+  if (!feed) return null;
 
-  const filteredPosts = posts
+  const filteredPosts = feed
     // Filter out replies
     ?.filter(({ post }) => !(post.record as BSkyPost['record']).reply)
     // Filter out reposts of other users
     ?.filter(({ post }) => post.author.handle === handle);
 
   return (
-    <div className="w-[550px]">
-      <Virtuoso
-        useWindowScroll
-        totalCount={filteredPosts.length}
-        components={{
-          List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
-        }}
-        itemContent={(index: number) => (
-          <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
-        )}
-      />
-    </div>
+    <Virtuoso
+      useWindowScroll
+      totalCount={feed.length}
+      endReached={() => fetchNextPage()}
+      components={{
+        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+      }}
+      itemContent={(index: number) => (
+        <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+      )}
+    />
   );
 }
 
 function Reposts() {
   const { t } = useTranslation('app');
   const { handle } = Route.useParams();
-  const { data: feed, isLoading } = useAuthorFeed({ handle });
+  const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
+  const feed = data?.pages.flatMap((page) => page.feed);
 
   if (isLoading) return t('loading');
+  if (!feed) return null;
+
+  const filteredPosts = feed
+    // Filter only reposts
+    ?.filter(({ post }) => post.author.handle !== handle);
 
   return (
-    <div className="flex flex-col gap-2">
-      {feed
-        // Filter only reposts
-        ?.filter(({ post }) => post.author.handle !== handle)
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}
-    </div>
+    <Virtuoso
+      useWindowScroll
+      totalCount={feed.length}
+      endReached={() => fetchNextPage()}
+      components={{
+        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+      }}
+      itemContent={(index: number) => (
+        <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+      )}
+    />
   );
 }
 
 function Replies() {
   const { t } = useTranslation('app');
   const { handle } = Route.useParams();
-  const { data: feed, isLoading } = useAuthorFeed({ handle });
+  const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
+  const feed = data?.pages.flatMap((page) => page.feed);
 
   if (isLoading) return t('loading');
+  if (!feed) return null;
+
+  const filteredPosts = feed
+    // Filter to only replies
+    ?.filter(({ post }) => (post.record as BSkyPost['record']).reply);
 
   return (
-    <div className="flex flex-col gap-2">
-      {feed
-        // Filter to only replies
-        ?.filter(({ post }) => (post.record as BSkyPost['record']).reply)
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}
-    </div>
+    <Virtuoso
+      useWindowScroll
+      totalCount={feed.length}
+      endReached={() => fetchNextPage()}
+      components={{
+        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+      }}
+      itemContent={(index: number) => (
+        <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+      )}
+    />
   );
 }
 
 function Media() {
   const { t } = useTranslation('app');
   const { handle } = Route.useParams();
-  const { data: feed, isLoading } = useAuthorFeed({ handle });
+  const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
+  const feed = data?.pages.flatMap((page) => page.feed);
 
   if (isLoading) return t('loading');
+  if (!feed) return null;
+
+  const filteredPosts = feed
+    // Filter to only media
+    ?.filter(({ post }) => (post.record as BSkyPost['record']).embed?.$type === 'app.bsky.embed.images');
 
   return (
-    <div className="flex flex-col gap-2">
-      {feed
-        // Filter to only media
-        ?.filter(({ post }) => (post.record as BSkyPost['record']).embed?.$type === 'app.bsky.embed.images')
-        ?.map(({ post }) => <PostCard key={post.uri} post={post as BSkyPost} />)}
-    </div>
+    <Virtuoso
+      useWindowScroll
+      totalCount={feed.length}
+      endReached={() => fetchNextPage()}
+      components={{
+        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+      }}
+      itemContent={(index: number) => (
+        <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+      )}
+    />
   );
 }
 
