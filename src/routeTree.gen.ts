@@ -13,10 +13,6 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as MessagesIndexImport } from './routes/messages/index'
-import { Route as MessagesConvoIdImport } from './routes/messages/$convoId'
-import { Route as ProfileHandleIndexImport } from './routes/profile/$handle/index'
-import { Route as ProfileHandlePostPostIdImport } from './routes/profile/$handle/post.$postId'
 
 // Create Virtual Routes
 
@@ -24,7 +20,13 @@ const SettingsLazyImport = createFileRoute('/settings')()
 const NotificationsLazyImport = createFileRoute('/notifications')()
 const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
+const MessagesIndexLazyImport = createFileRoute('/messages/')()
 const TagTagLazyImport = createFileRoute('/tag/$tag')()
+const MessagesConvoIdLazyImport = createFileRoute('/messages/$convoId')()
+const ProfileHandleIndexLazyImport = createFileRoute('/profile/$handle/')()
+const ProfileHandlePostPostIdLazyImport = createFileRoute(
+  '/profile/$handle/post/$postId',
+)()
 
 // Create/Update Routes
 
@@ -52,11 +54,13 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const MessagesIndexRoute = MessagesIndexImport.update({
+const MessagesIndexLazyRoute = MessagesIndexLazyImport.update({
   id: '/messages/',
   path: '/messages/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/messages/index.lazy').then((d) => d.Route),
+)
 
 const TagTagLazyRoute = TagTagLazyImport.update({
   id: '/tag/$tag',
@@ -64,23 +68,30 @@ const TagTagLazyRoute = TagTagLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/tag.$tag.lazy').then((d) => d.Route))
 
-const MessagesConvoIdRoute = MessagesConvoIdImport.update({
+const MessagesConvoIdLazyRoute = MessagesConvoIdLazyImport.update({
   id: '/messages/$convoId',
   path: '/messages/$convoId',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/messages/$convoId.lazy').then((d) => d.Route),
+)
 
-const ProfileHandleIndexRoute = ProfileHandleIndexImport.update({
+const ProfileHandleIndexLazyRoute = ProfileHandleIndexLazyImport.update({
   id: '/profile/$handle/',
   path: '/profile/$handle/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/profile/$handle/index.lazy').then((d) => d.Route),
+)
 
-const ProfileHandlePostPostIdRoute = ProfileHandlePostPostIdImport.update({
-  id: '/profile/$handle/post/$postId',
-  path: '/profile/$handle/post/$postId',
-  getParentRoute: () => rootRoute,
-} as any)
+const ProfileHandlePostPostIdLazyRoute =
+  ProfileHandlePostPostIdLazyImport.update({
+    id: '/profile/$handle/post/$postId',
+    path: '/profile/$handle/post/$postId',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/profile/$handle/post.$postId.lazy').then((d) => d.Route),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -118,7 +129,7 @@ declare module '@tanstack/react-router' {
       id: '/messages/$convoId'
       path: '/messages/$convoId'
       fullPath: '/messages/$convoId'
-      preLoaderRoute: typeof MessagesConvoIdImport
+      preLoaderRoute: typeof MessagesConvoIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/tag/$tag': {
@@ -132,21 +143,21 @@ declare module '@tanstack/react-router' {
       id: '/messages/'
       path: '/messages'
       fullPath: '/messages'
-      preLoaderRoute: typeof MessagesIndexImport
+      preLoaderRoute: typeof MessagesIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/$handle/': {
       id: '/profile/$handle/'
       path: '/profile/$handle'
       fullPath: '/profile/$handle'
-      preLoaderRoute: typeof ProfileHandleIndexImport
+      preLoaderRoute: typeof ProfileHandleIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/$handle/post/$postId': {
       id: '/profile/$handle/post/$postId'
       path: '/profile/$handle/post/$postId'
       fullPath: '/profile/$handle/post/$postId'
-      preLoaderRoute: typeof ProfileHandlePostPostIdImport
+      preLoaderRoute: typeof ProfileHandlePostPostIdLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -159,11 +170,11 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/settings': typeof SettingsLazyRoute
-  '/messages/$convoId': typeof MessagesConvoIdRoute
+  '/messages/$convoId': typeof MessagesConvoIdLazyRoute
   '/tag/$tag': typeof TagTagLazyRoute
-  '/messages': typeof MessagesIndexRoute
-  '/profile/$handle': typeof ProfileHandleIndexRoute
-  '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdRoute
+  '/messages': typeof MessagesIndexLazyRoute
+  '/profile/$handle': typeof ProfileHandleIndexLazyRoute
+  '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -171,11 +182,11 @@ export interface FileRoutesByTo {
   '/login': typeof LoginLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/settings': typeof SettingsLazyRoute
-  '/messages/$convoId': typeof MessagesConvoIdRoute
+  '/messages/$convoId': typeof MessagesConvoIdLazyRoute
   '/tag/$tag': typeof TagTagLazyRoute
-  '/messages': typeof MessagesIndexRoute
-  '/profile/$handle': typeof ProfileHandleIndexRoute
-  '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdRoute
+  '/messages': typeof MessagesIndexLazyRoute
+  '/profile/$handle': typeof ProfileHandleIndexLazyRoute
+  '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdLazyRoute
 }
 
 export interface FileRoutesById {
@@ -184,11 +195,11 @@ export interface FileRoutesById {
   '/login': typeof LoginLazyRoute
   '/notifications': typeof NotificationsLazyRoute
   '/settings': typeof SettingsLazyRoute
-  '/messages/$convoId': typeof MessagesConvoIdRoute
+  '/messages/$convoId': typeof MessagesConvoIdLazyRoute
   '/tag/$tag': typeof TagTagLazyRoute
-  '/messages/': typeof MessagesIndexRoute
-  '/profile/$handle/': typeof ProfileHandleIndexRoute
-  '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdRoute
+  '/messages/': typeof MessagesIndexLazyRoute
+  '/profile/$handle/': typeof ProfileHandleIndexLazyRoute
+  '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -233,11 +244,11 @@ export interface RootRouteChildren {
   LoginLazyRoute: typeof LoginLazyRoute
   NotificationsLazyRoute: typeof NotificationsLazyRoute
   SettingsLazyRoute: typeof SettingsLazyRoute
-  MessagesConvoIdRoute: typeof MessagesConvoIdRoute
+  MessagesConvoIdLazyRoute: typeof MessagesConvoIdLazyRoute
   TagTagLazyRoute: typeof TagTagLazyRoute
-  MessagesIndexRoute: typeof MessagesIndexRoute
-  ProfileHandleIndexRoute: typeof ProfileHandleIndexRoute
-  ProfileHandlePostPostIdRoute: typeof ProfileHandlePostPostIdRoute
+  MessagesIndexLazyRoute: typeof MessagesIndexLazyRoute
+  ProfileHandleIndexLazyRoute: typeof ProfileHandleIndexLazyRoute
+  ProfileHandlePostPostIdLazyRoute: typeof ProfileHandlePostPostIdLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -245,11 +256,11 @@ const rootRouteChildren: RootRouteChildren = {
   LoginLazyRoute: LoginLazyRoute,
   NotificationsLazyRoute: NotificationsLazyRoute,
   SettingsLazyRoute: SettingsLazyRoute,
-  MessagesConvoIdRoute: MessagesConvoIdRoute,
+  MessagesConvoIdLazyRoute: MessagesConvoIdLazyRoute,
   TagTagLazyRoute: TagTagLazyRoute,
-  MessagesIndexRoute: MessagesIndexRoute,
-  ProfileHandleIndexRoute: ProfileHandleIndexRoute,
-  ProfileHandlePostPostIdRoute: ProfileHandlePostPostIdRoute,
+  MessagesIndexLazyRoute: MessagesIndexLazyRoute,
+  ProfileHandleIndexLazyRoute: ProfileHandleIndexLazyRoute,
+  ProfileHandlePostPostIdLazyRoute: ProfileHandlePostPostIdLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -286,19 +297,19 @@ export const routeTree = rootRoute
       "filePath": "settings.lazy.tsx"
     },
     "/messages/$convoId": {
-      "filePath": "messages/$convoId.tsx"
+      "filePath": "messages/$convoId.lazy.tsx"
     },
     "/tag/$tag": {
       "filePath": "tag.$tag.lazy.tsx"
     },
     "/messages/": {
-      "filePath": "messages/index.tsx"
+      "filePath": "messages/index.lazy.tsx"
     },
     "/profile/$handle/": {
-      "filePath": "profile/$handle/index.tsx"
+      "filePath": "profile/$handle/index.lazy.tsx"
     },
     "/profile/$handle/post/$postId": {
-      "filePath": "profile/$handle/post.$postId.tsx"
+      "filePath": "profile/$handle/post.$postId.lazy.tsx"
     }
   }
 }

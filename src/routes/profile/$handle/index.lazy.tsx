@@ -1,5 +1,5 @@
 import * as Ariakit from '@ariakit/react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { useProfile } from '../../../lib/bluesky/hooks/useProfile';
 import { useAuthorFeed } from '../../../lib/bluesky/hooks/useAuthorFeed';
 import { PostCard } from '../../../components/PostCard';
@@ -16,18 +16,19 @@ import { Debug } from '../../../components/ui/Debug';
 import { forwardRef, useState } from 'react';
 import { NotImplementedBox } from '../../../components/ui/NotImplementedBox';
 import { Virtuoso } from 'react-virtuoso';
+import { Loading } from '@/components/ui/loading';
+import { NotFound } from '@/components/ui/not-found';
 
-export const Route = createFileRoute('/profile/$handle/')({
+export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
 });
 
 function All() {
-  const { t } = useTranslation('app');
   const { handle } = Route.useParams();
   const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
   const feed = data?.pages.flatMap((page) => page.feed);
 
-  if (isLoading) return t('loading');
+  if (isLoading) return <Loading />;
   if (!feed) return null;
 
   return (
@@ -44,12 +45,11 @@ function All() {
 }
 
 function Posts() {
-  const { t } = useTranslation('app');
   const { handle } = Route.useParams();
   const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
   const feed = data?.pages.flatMap((page) => page.feed);
 
-  if (isLoading) return t('loading');
+  if (isLoading) return <Loading />;
   if (!feed) return null;
 
   const filteredPosts = feed
@@ -74,12 +74,11 @@ function Posts() {
 }
 
 function Reposts() {
-  const { t } = useTranslation('app');
   const { handle } = Route.useParams();
   const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
   const feed = data?.pages.flatMap((page) => page.feed);
 
-  if (isLoading) return t('loading');
+  if (isLoading) return <Loading />;
   if (!feed) return null;
 
   const filteredPosts = feed
@@ -102,12 +101,11 @@ function Reposts() {
 }
 
 function Replies() {
-  const { t } = useTranslation('app');
   const { handle } = Route.useParams();
   const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
   const feed = data?.pages.flatMap((page) => page.feed);
 
-  if (isLoading) return t('loading');
+  if (isLoading) return <Loading />;
   if (!feed) return null;
 
   const filteredPosts = feed
@@ -130,12 +128,11 @@ function Replies() {
 }
 
 function Media() {
-  const { t } = useTranslation('app');
   const { handle } = Route.useParams();
   const { data, isLoading, fetchNextPage } = useAuthorFeed({ handle });
   const feed = data?.pages.flatMap((page) => page.feed);
 
-  if (isLoading) return t('loading');
+  if (isLoading) return <Loading />;
   if (!feed) return null;
 
   const filteredPosts = feed
@@ -165,9 +162,9 @@ function Profile() {
 
   const [selectedTab, setSelectedTab] = useState<string | null>('posts');
 
-  if (isLoading) return <div className="w-[550px] h-screen overflow-y-scroll">{t('loading')}</div>;
+  if (isLoading) return <Loading />;
 
-  if (!profile) return <div className="w-[550px] h-screen overflow-y-scroll">{t('profile:notFound')}</div>;
+  if (!profile) return <NotFound />;
 
   return (
     <div className="w-[550px] flex flex-col gap-2">

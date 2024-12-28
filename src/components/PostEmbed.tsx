@@ -18,7 +18,7 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
   if (!embed) return null;
 
   switch (embed.$type) {
-    case 'app.bsky.embed.images#view':
+    case 'app.bsky.embed.images#view': {
       return (
         <div className={cn(embed.images.length >= 2 && 'grid grid-cols-2', 'gap-2 mb-3')}>
           {embed.images.map((image) => (
@@ -34,6 +34,7 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
           ))}
         </div>
       );
+    }
     case 'app.bsky.embed.video#view':
       return (
         <div className={cn('mb-3 w-full aspect-square', experiments.streamerMode && 'filter blur-md')}>
@@ -54,16 +55,17 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
           />
         </div>
       );
-    case 'app.bsky.embed.external#view':
+    case 'app.bsky.embed.external#view': {
+      if (!embed.external.thumb) return null;
       return (
         <div className="mb-3 bg-neutral-800 rounded p-2">
           <a href={embed.external.uri} target="_blank" rel="noreferrer" className="hover:underline">
             {embed.external.title}
           </a>
-          {!!embed.external.thumb && (
+          {embed.external.thumb && (
             <Image
               type="post"
-              src={embed.external.thumb}
+              src={embed.external.uri}
               alt={embed.external.title}
               classNames={{
                 image: 'rounded-lg w-full aspect-square object-cover',
@@ -72,6 +74,7 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
           )}
         </div>
       );
+    }
     case 'app.bsky.embed.record#view': {
       const author = embed.record.$type === 'app.bsky.embed.record#viewRecord' ? embed.record.author : embed.record.creator;
       if (!author) {
@@ -162,26 +165,39 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
         </div>
       );
     }
-    case 'app.bsky.embed.recordWithMedia#view':
+    case 'app.bsky.embed.recordWithMedia#view': {
+      const images =
+        embed.media.$type === 'app.bsky.embed.images#view'
+          ? embed.media.images
+          : embed.media.external?.thumb
+            ? [
+                {
+                  thumb: embed.media.external?.uri ?? embed.media.external?.thumb,
+                  alt: embed.media.external?.description,
+                },
+              ]
+            : [];
+
+      if (images.length === 0) break;
+
       return (
-        <>
-          <div className={cn((embed.record.record.embeds ?? [])?.length >= 2 && 'grid grid-cols-2', 'gap-2 mb-3')}>
-            {embed.media.external && (
-              <Image
-                type="post"
-                key={embed.media.external.uri}
-                src={embed.media.external.uri ?? embed.media.external.thumb}
-                alt={embed.media.external.description}
-                classNames={{
-                  image: 'rounded-lg w-full object-cover',
-                }}
-              />
-            )}
-          </div>
-        </>
+        <div className={cn(images.length >= 2 && 'grid grid-cols-2', 'gap-2 mb-3')}>
+          {images.map((image) => (
+            <Image
+              type="post"
+              key={image.thumb}
+              src={image.thumb}
+              alt={image.alt}
+              classNames={{
+                image: cn(images.length >= 2 && 'h-48', 'rounded-lg w-full object-cover'),
+              }}
+            />
+          ))}
+        </div>
       );
-    default:
-      // @ts-expect-error - this should never happen
-      return <NotImplementedBox type={embed.$type} data={embed.record} />;
+    }
   }
+
+  // @ts-expect-error this is a catch-all for any embeds that are not implemented
+  return <NotImplementedBox type={embed.$type} data={embed.record} />;
 };

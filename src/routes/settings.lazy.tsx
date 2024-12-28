@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { useSettings } from '../hooks/useSetting';
-import { Input } from '../components/ui/Input';
+import { Input } from '../components/ui/input';
 import { useTranslation } from 'react-i18next';
 import i18n, { languages } from '../i18n';
 

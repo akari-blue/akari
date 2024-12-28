@@ -3,6 +3,7 @@ import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Link } from './ui/Link';
 import { useBlueskyStore } from '../lib/bluesky/store';
 import { BellIcon, HomeIcon, MailIcon, SettingsIcon, UserIcon } from 'lucide-react';
+import { CreatePost } from './CreatePost';
 
 const HomeLink = () => {
   const { t } = useTranslation('app');
@@ -80,6 +81,7 @@ export const Navbar = () => {
         {isAuthenticated && <ProfileLink />}
         <SettingsLink />
         {!isAuthenticated && <LoginButton />}
+        {isAuthenticated && <CreatePost />}
       </div>
     </div>
   );

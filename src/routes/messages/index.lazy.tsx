@@ -1,6 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { useConversations } from '../../lib/bluesky/hooks/useConversations';
-import { useTranslation } from 'react-i18next';
 import { Image } from '../../components/ui/Image';
 import { cn } from '../../lib/utils';
 import { useBlueskyStore } from '../../lib/bluesky/store';
@@ -10,6 +9,7 @@ import { BSkyConvo } from '../../lib/bluesky/types/BSkyConvo';
 import TimeAgo from 'react-timeago-i18n';
 import { Handle } from '../../components/ui/Handle';
 import { Virtuoso } from 'react-virtuoso';
+import { Loading } from '@/components/ui/loading';
 
 function Conversation({ convo }: { convo: BSkyConvo }) {
   const session = useBlueskyStore((state) => state.session);
@@ -44,21 +44,14 @@ function Conversation({ convo }: { convo: BSkyConvo }) {
   );
 }
 
-export const Route = createFileRoute('/messages/')({
+export const Route = createLazyFileRoute('/messages/')({
   component: Messages,
 });
 
 function Messages() {
   const { data: convos, isLoading } = useConversations();
-  const { t } = useTranslation('app');
 
-  if (isLoading) {
-    return (
-      <div className="w-[550px] h-screen flex items-center justify-center">
-        <span>{t('loading')}</span>
-      </div>
-    );
-  }
+  if (isLoading) return <Loading />;
 
   return (
     <div className="w-[550px]">

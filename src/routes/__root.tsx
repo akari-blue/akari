@@ -3,12 +3,12 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { useBlueskyStore } from '../lib/bluesky/store';
-import { Toaster } from 'sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
 import { useSettings } from '../hooks/useSetting';
 import { cn } from '../lib/utils';
 import { Navbar } from '../components/Navbar';
 import i18n from '../i18n';
+import { Toaster } from '@/components/ui/sonner';
 
 export const Route = createRootRoute({
   component: Root,
@@ -63,7 +63,7 @@ function Root() {
           <Navbar />
           <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center mx-auto">
             <ErrorBoundary>
-              <div className={cn('flex flex-col gap-2', pathname !== '/' && 'max-w-[550px]')}>
+              <div className={cn('flex flex-col gap-2', pathname !== '/' && 'w-[550px]')}>
                 <Outlet key="app" />
               </div>
             </ErrorBoundary>
@@ -86,7 +86,7 @@ function Root() {
             }}
           />
         )}
-        <Toaster position="bottom-right" closeButton richColors />
+        <Toaster position="bottom-right" />
       </ErrorBoundary>
     </main>
   );

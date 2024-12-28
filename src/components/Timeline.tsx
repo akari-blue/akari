@@ -5,14 +5,13 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useLike } from '../lib/bluesky/hooks/useLike';
 import { useRepost } from '../lib/bluesky/hooks/useRepost';
 import { useSettings } from '../hooks/useSetting';
-import { useTranslation } from 'react-i18next';
 import { Virtuoso } from 'react-virtuoso';
+import { Loading } from './ui/loading';
 
 export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   const { columns } = useSettings();
   const selectedFeed = columns[columnNumber];
   const { data, isLoading, error, fetchNextPage } = useTimeline(selectedFeed);
-  const { t } = useTranslation('app');
   const like = useLike();
   const repost = useRepost();
   const posts = data?.pages.map((page) => page.feed).flat() ?? [];
@@ -94,9 +93,7 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
     [],
   );
 
-  if (isLoading) {
-    return <div className="text-center py-8 text-gray-600 dark:text-gray-400">{t('loading')}</div>;
-  }
+  if (isLoading) return <Loading />;
 
   if (error) {
     return <div className="text-red-500 text-center py-8">{error.message}</div>;

@@ -1,11 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { useConversation } from '../../lib/bluesky/hooks/useConversation';
-import { useTranslation } from 'react-i18next';
 import { cn } from '../../lib/utils';
 import { useBlueskyStore } from '../../lib/bluesky/store';
 import { BSkyMessage } from '../../lib/bluesky/types/BSkyMessage';
 import { Virtuoso } from 'react-virtuoso';
 import { forwardRef } from 'react';
+import { Loading } from '@/components/ui/loading';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
@@ -21,23 +21,16 @@ function Message({ message }: { message: BSkyMessage }) {
   );
 }
 
-export const Route = createFileRoute('/messages/$convoId')({
-  component: RouteComponent,
+export const Route = createLazyFileRoute('/messages/$convoId')({
+  component: Messages,
 });
 
-function RouteComponent() {
-  const { t } = useTranslation('app');
+function Messages() {
   const { convoId } = Route.useParams();
 
   const { data: messages, isLoading, isError, error } = useConversation({ convoId });
 
-  if (isLoading) {
-    return (
-      <div className="w-[550px] h-screen flex items-center justify-center">
-        <span>{t('loading')}</span>
-      </div>
-    );
-  }
+  if (isLoading) return <Loading />;
 
   if (isError) {
     return (

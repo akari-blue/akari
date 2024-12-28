@@ -11,7 +11,8 @@ import { useBlueskyStore } from '../lib/bluesky/store';
 import { Image } from '../components/ui/Image';
 import { Handle } from '../components/ui/Handle';
 import { Virtuoso } from 'react-virtuoso';
-import { Button } from '../components/ui/Button';
+import { Button } from '../components/ui/button';
+import { Loading } from '@/components/ui/loading';
 
 export const Route = createLazyFileRoute('/notifications')({
   component: RouteComponent,
@@ -27,7 +28,7 @@ function RouteComponent() {
   );
   const [selectedTab, setSelectedTab] = useState<string | undefined>();
 
-  if (isLoading) return <div>{t('loading')}</div>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="flex flex-col gap-2 rounded-lg">
@@ -101,7 +102,7 @@ function GroupedNotifications() {
     {} as Record<string, BSkyNotification[]>,
   );
 
-  if (isLoading) return <div>{t('loading')}</div>;
+  if (isLoading) return <Loading />;
 
   const list = Object.values(grouped);
 
@@ -114,7 +115,7 @@ function GroupedNotifications() {
         List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
         Footer: () => {
           return isFetching ? (
-            <div className="p-2 text-center">{t('loading')}</div>
+            <Loading />
           ) : (
             <div className="p-2 text-center">
               <Button

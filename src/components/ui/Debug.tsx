@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useSettings } from '../../hooks/useSetting';
+import { cn } from '@/lib/utils';
 
-export const Debug = ({ value }: { value: unknown }) => {
+export const Debug = ({ value, isOpen = false, className }: { value: unknown; isOpen?: boolean; className?: string }) => {
   const { experiments } = useSettings();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(isOpen);
   const onClick = () => {
     setOpen((prev) => !prev);
   };
@@ -19,7 +20,12 @@ export const Debug = ({ value }: { value: unknown }) => {
       </div>
       <div>
         {open && (
-          <pre className="text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-auto h-64">
+          <pre
+            className={cn(
+              'text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-auto h-64 text-left',
+              className,
+            )}
+          >
             {JSON.stringify(value, null, 2)}
           </pre>
         )}

@@ -129,17 +129,33 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
     }),
     Type.Object({
       $type: Type.Literal('app.bsky.embed.recordWithMedia#view'),
-      media: Type.Object({
-        $type: Type.Literal('app.bsky.embed.external#view'),
-        external: Type.Optional(
-          Type.Object({
-            uri: Type.String(),
-            title: Type.String(),
-            description: Type.String(),
-            thumb: Type.String(),
-          }),
-        ),
-      }),
+      media: Type.Union([
+        Type.Object({
+          $type: Type.Literal('app.bsky.embed.external#view'),
+          external: Type.Optional(
+            Type.Object({
+              uri: Type.String(),
+              title: Type.String(),
+              description: Type.String(),
+              thumb: Type.Optional(Type.String()),
+            }),
+          ),
+        }),
+        Type.Object({
+          $type: Type.Literal('app.bsky.embed.images#view'),
+          images: Type.Array(
+            Type.Object({
+              thumb: Type.String(),
+              fullsize: Type.String(),
+              alt: Type.String(),
+              aspectRatio: Type.Object({
+                height: Type.Number(),
+                width: Type.Number(),
+              }),
+            }),
+          ),
+        }),
+      ]),
       record: Type.Object({
         record: Type.Object({
           $type: Type.Literal('app.bsky.embed.record#viewRecord'),
@@ -149,6 +165,7 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
           value: Type.Object({
             $type: Type.Literal('app.bsky.feed.post'),
             createdAt: Type.String(),
+            facets: Type.Optional(Type.Array(BSkyFacet)),
             embed: Type.Optional(
               Type.Object({
                 $type: Type.Literal('app.bsky.embed.recordWithMedia'),
@@ -177,7 +194,7 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
                 }),
               }),
             ),
-            langs: Type.Array(Type.String()),
+            langs: Type.Optional(Type.Array(Type.String())),
             reply: Type.Optional(
               Type.Object({
                 parent: Type.Object({

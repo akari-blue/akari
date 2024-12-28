@@ -1,5 +1,4 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { FeedSelector } from '../components/FeedSelector';
 import { cn } from '../lib/utils';
@@ -12,6 +11,7 @@ export const Route = createLazyFileRoute('/')({
 function Index() {
   const { experiments } = useSettings();
   const columns = Math.min(experiments.columns || 1, 4);
+
   return (
     <div
       className={cn('grid gap-4')}

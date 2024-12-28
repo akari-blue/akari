@@ -6,6 +6,7 @@ import * as Ariakit from '@ariakit/react';
 import { cn } from '../lib/utils';
 import { Timeline } from './Timeline';
 import { useTranslation } from 'react-i18next';
+import { Loading } from './ui/loading';
 
 export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
   const { setSettings, columns } = useSettings();
@@ -38,9 +39,7 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
   const { isLoading, error, data } = useFeeds({ feeds });
   const selectedFeed = columns[columnNumber] ?? feeds[0];
 
-  if (isLoading) {
-    return <div className="text-gray-600 dark:text-gray-400">{t('loading')}</div>;
-  }
+  if (isLoading) return <Loading />;
 
   if (error) {
     return <div className="text-red-500">{error.message}</div>;

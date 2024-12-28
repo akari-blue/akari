@@ -20,6 +20,7 @@ export const en = {
     reposts: 'reposts',
     likes: 'likes',
     settings: 'settings',
+    notFound: 'not found',
   },
   settings: {
     developerMode: {
@@ -80,6 +81,7 @@ export const en = {
   },
   post: {
     notFound: 'post not found',
+    createPost: 'create post',
     blockedAuthor: 'this post is hidden because you have blocked the author.',
     blockedByAuthor: 'this post is hidden because the author has blocked you.',
   },

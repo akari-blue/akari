@@ -28,7 +28,7 @@ export const useSettings = create<Settings>()(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars -- `set` and `get` are required by zustand
     (set, _get) => ({
       experiments: {
-        streamerMode: true,
+        streamerMode: false,
         devMode: false,
         zenMode: false,
         columns: 1,

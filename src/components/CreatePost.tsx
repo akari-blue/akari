@@ -1,41 +1,76 @@
-import { useForm } from 'react-hook-form';
 import { useCreatePost } from '../lib/bluesky/hooks/useCreatePost';
-import { Button } from './ui/Button';
-
-type PostFormData = {
-  text: string;
-};
+import { Button } from './ui/button';
+import { useEffect, useState } from 'react';
+import { type JSONContent } from '@tiptap/react';
+import { MinimalTiptapEditor } from './minimal-tiptap';
+import { Facet } from '@atproto/api';
+import { useBlueskyStore } from '@/lib/bluesky/store';
+import { convertJSONToPost } from './convert';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 
 export function CreatePost() {
-  const createPost = useCreatePost();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<PostFormData>();
+  const { mutate, isPending } = useCreatePost();
+  const [value, setValue] = useState<JSONContent | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [converted, setConverted] = useState<{
+    text: string;
+    facets: Facet[];
+    position: number;
+  } | null>(null);
+  const { isAuthenticated } = useBlueskyStore();
 
-  const onSubmit = (data: PostFormData) => {
-    createPost.mutate(data.text, {
-      onSuccess: () => reset(),
-    });
+  useEffect(() => {
+    if (!value) return;
+    setConverted(convertJSONToPost(value));
+  }, [value]);
+
+  const onClick = () => {
+    if (!converted) return;
+
+    mutate(
+      {
+        text: converted.text,
+        facets: converted.facets ?? [],
+      },
+      {
+        onSuccess() {
+          setValue(null);
+          setConverted(null);
+          setIsOpen(false);
+        },
+      },
+    );
   };
 
+  if (!isAuthenticated) return null;
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="bg-black p-4 rounded-lg shadow mb-4">
-      <textarea
-        {...register('text', { required: 'Post content is required' })}
-        placeholder="What's on your mind?"
-        className="w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
-        rows={3}
-      />
-      {errors.text && <p className="mt-1 text-sm text-red-500">{errors.text.message}</p>}
-      <div className="mt-2 flex justify-end">
-        <Button type="submit" disabled={createPost.isPending}>
-          {createPost.isPending ? 'Posting...' : 'Post'}
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="w-fit">
+          Create a Post
         </Button>
-      </div>
-      {createPost.error && <p className="mt-2 text-red-500 text-sm">{createPost.error.message}</p>}
-    </form>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Create a post</DialogTitle>
+        </DialogHeader>
+        <MinimalTiptapEditor
+          value={value}
+          onChange={(value) => setValue(value as JSONContent)}
+          className="w-full"
+          output="json"
+          placeholder="Type something..."
+          autofocus={true}
+          editable={!isPending}
+          editorClassName="focus:outline-none"
+        />
+        <DialogFooter className="justify-end">
+          <Button type="button" variant="secondary" onClick={onClick} disabled={isPending}>
+            {isPending ? 'Posting...' : 'Post'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

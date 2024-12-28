@@ -2,9 +2,9 @@ import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { HandleInput } from './ui/HandleInput';
-import { Input } from './ui/Input';
-import { Label } from './ui/Label';
-import { Button } from './ui/Button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Button } from './ui/button';
 
 type LoginFormData = {
   handle: string;
