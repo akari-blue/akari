@@ -74,28 +74,39 @@ export function useLike() {
       for (const query of authorFeedQueries) {
         await queryClient.cancelQueries({ queryKey: query.queryKey });
 
-        queryClient.setQueryData<
-          {
-            post: BSkyPost;
-          }[]
-        >(query.queryKey, (old) =>
-          old?.map(({ post }) => {
-            if (post.uri !== uri) {
-              return { post };
-            }
+        queryClient.setQueryData<{
+          pages: {
+            feed: {
+              post: BSkyPost;
+            }[];
+            cursor: string;
+          }[];
+          pageParams: unknown;
+        }>(query.queryKey, (old) => ({
+          pages:
+            old?.pages.map((page) => ({
+              ...page,
+              feed: page.feed.map(({ post }) => {
+                if (post.uri !== uri) {
+                  return {
+                    post,
+                  };
+                }
 
-            return {
-              post: {
-                ...post,
-                likeCount: post.likeCount + (like ? 1 : -1),
-                viewer: {
-                  ...post.viewer,
-                  like: `at://imlunahey.com/app.bsky.feed.like/pending`,
-                },
-              },
-            };
-          }),
-        );
+                return {
+                  post: {
+                    ...post,
+                    likeCount: post.likeCount + (like ? 1 : -1),
+                    viewer: {
+                      ...post.viewer,
+                      like: `at://imlunahey.com/app.bsky.feed.like/pending`,
+                    },
+                  },
+                };
+              }),
+            })) ?? [],
+          pageParams: old?.pageParams,
+        }));
       }
 
       return {
