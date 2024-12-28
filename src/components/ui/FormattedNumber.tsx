@@ -5,7 +5,7 @@ export const FormattedNumber = ({ value, unit }: { value: number | undefined | n
   const compactValue = new Intl.NumberFormat('en-US', { notation: 'compact' }).format(value);
 
   return (
-    <span title={`${formattedValue} ${unit}`}>
+    <span title={`${formattedValue} ${unit}`} className="whitespace-nowrap">
       {compactValue} {unit}
     </span>
   );

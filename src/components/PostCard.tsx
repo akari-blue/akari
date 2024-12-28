@@ -64,7 +64,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
 
   return (
     <div
-      className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow w-[550px]', className)}
+      className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow w-full', className)}
       onClick={onClick}
       id={post.uri}
     >

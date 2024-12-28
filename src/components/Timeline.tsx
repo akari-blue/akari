@@ -101,7 +101,7 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="min-w-[550px]">
+      <div className="w-screen sm:w-full">
         <Virtuoso
           useWindowScroll
           totalCount={posts.length}
