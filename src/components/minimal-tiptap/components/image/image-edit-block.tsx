@@ -3,21 +3,24 @@ import type { Editor } from '@tiptap/react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { useTranslation } from 'react-i18next';
+import { useCallback, useRef, useState } from 'react';
 
-interface ImageEditBlockProps {
+type ImageEditBlockProps = {
   editor: Editor;
   close: () => void;
-}
+};
 
-export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({ editor, close }) => {
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const [link, setLink] = React.useState('');
+export const ImageEditBlock = ({ editor, close }: ImageEditBlockProps) => {
+  const { t } = useTranslation('editor');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [link, setLink] = useState('');
 
-  const handleClick = React.useCallback(() => {
+  const handleClick = useCallback(() => {
     fileInputRef.current?.click();
   }, []);
 
-  const handleFile = React.useCallback(
+  const handleFile = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files;
       if (!files?.length) return;
@@ -55,7 +58,7 @@ export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({ editor, close })
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-1">
-        <Label htmlFor="image-link">Attach an image link</Label>
+        <Label htmlFor="image-link">{t('toolbar.link.displayText')}</Label>
         <div className="flex">
           <Input
             id="image-link"
@@ -67,12 +70,12 @@ export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({ editor, close })
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLink(e.target.value)}
           />
           <Button type="submit" className="ml-2">
-            Submit
+            {t('toolbar.image.submit')}
           </Button>
         </div>
       </div>
       <Button type="button" className="w-full" onClick={handleClick}>
-        Upload from your computer
+        {t('toolbar.image.description')}
       </Button>
       <input type="file" accept="image/*" ref={fileInputRef} multiple className="hidden" onChange={handleFile} />
     </form>
