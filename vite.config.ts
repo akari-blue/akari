@@ -19,7 +19,6 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('graphemer')) return 'graphemer';
-          if (id.includes('@atproto')) return '@atproto';
           if (id.includes('@tiptap')) return '@tiptap';
           if (id.includes('@stdlib')) return '@stdlib';
           if (id.includes('@tanstack/query-devtools')) return '@tanstack/query-devtools';
