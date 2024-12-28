@@ -14,4 +14,20 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('graphemer')) return 'graphemer';
+          if (id.includes('@atproto')) return '@atproto';
+          if (id.includes('@tiptap')) return '@tiptap';
+          if (id.includes('@stdlib')) return '@stdlib';
+          if (id.includes('@tanstack/query-devtools')) return '@tanstack/query-devtools';
+          if (id.includes('@tanstack')) return '@tanstack';
+          if (id.includes('prosemirror')) return 'prosemirror';
+          if (id.includes('node_modules')) return 'vendor';
+        },
+      },
+    },
+  },
 });

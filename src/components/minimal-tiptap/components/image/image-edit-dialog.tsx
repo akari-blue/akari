@@ -6,6 +6,7 @@ import { ImageIcon } from '@radix-ui/react-icons';
 import { ToolbarButton } from '../toolbar-button';
 import { Dialog, DialogContent, DialogHeader, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ImageEditBlock } from './image-edit-block';
+import { useTranslation } from 'react-i18next';
 
 interface ImageEditDialogProps extends VariantProps<typeof toggleVariants> {
   editor: Editor;
@@ -13,6 +14,7 @@ interface ImageEditDialogProps extends VariantProps<typeof toggleVariants> {
 
 export const ImageEditDialog = ({ editor, size, variant }: ImageEditDialogProps) => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation('editor');
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -23,8 +25,8 @@ export const ImageEditDialog = ({ editor, size, variant }: ImageEditDialogProps)
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Select image</DialogTitle>
-          <DialogDescription className="sr-only">Upload an image from your computer</DialogDescription>
+          <DialogTitle>{t('toolbar.selectImage.title')}</DialogTitle>
+          <DialogDescription className="sr-only">{t('toolbar.selectImage.description')}</DialogDescription>
         </DialogHeader>
         <ImageEditBlock editor={editor} close={() => setOpen(false)} />
       </DialogContent>

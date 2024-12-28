@@ -7,8 +7,10 @@ import { Facet } from '@atproto/api';
 import { useBlueskyStore } from '@/lib/bluesky/store';
 import { convertJSONToPost } from './convert';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { useTranslation } from 'react-i18next';
 
 export function CreatePost() {
+  const { t } = useTranslation('post');
   const { mutate, isPending } = useCreatePost();
   const [value, setValue] = useState<JSONContent | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -48,12 +50,12 @@ export function CreatePost() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="w-fit">
-          Create a Post
+          {t('createPost')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Create a post</DialogTitle>
+          <DialogTitle>{t('createPost')}</DialogTitle>
         </DialogHeader>
         <MinimalTiptapEditor
           value={value}

@@ -1,9 +1,10 @@
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+import * as React from 'react';
+import { cn } from '@/lib/utils';
 
-interface SpinnerProps extends React.SVGProps<SVGSVGElement> {}
-
-const SpinnerComponent = React.forwardRef<SVGSVGElement, SpinnerProps>(function Spinner({ className, ...props }, ref) {
+const SpinnerComponent = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(function Spinner(
+  { className, ...props },
+  ref,
+) {
   return (
     <svg
       ref={ref}
@@ -20,9 +21,9 @@ const SpinnerComponent = React.forwardRef<SVGSVGElement, SpinnerProps>(function 
         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
       ></path>
     </svg>
-  )
-})
+  );
+});
 
-SpinnerComponent.displayName = 'Spinner'
+SpinnerComponent.displayName = 'Spinner';
 
-export const Spinner = React.memo(SpinnerComponent)
+export const Spinner = React.memo(SpinnerComponent);

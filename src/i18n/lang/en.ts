@@ -21,6 +21,8 @@ export const en = {
     likes: 'likes',
     settings: 'settings',
     notFound: 'not found',
+    save: 'save',
+    optional: 'optional',
   },
   settings: {
     developerMode: {
@@ -114,5 +116,23 @@ export const en = {
   messages: {
     messages: 'messages',
     noMessages: 'no messages',
+  },
+  dialog: {
+    close: 'close',
+  },
+  editor: {
+    toolbar: {
+      link: {
+        edit: 'edit link',
+        openInNewTab: 'open in new tab',
+        displayText: 'display text',
+      },
+      image: {
+        title: 'upload an image',
+        description: 'upload an image from your computer',
+        failedToLoad: 'failed to load image',
+        submit: 'submit',
+      },
+    },
   },
 } as const;
