@@ -19,6 +19,7 @@ import { Virtuoso } from 'react-virtuoso';
 import { Loading } from '@/components/ui/loading';
 import { NotFound } from '@/components/ui/not-found';
 import { Helmet } from 'react-helmet';
+import { useBlueskyStore } from '@/lib/bluesky/store';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
@@ -159,6 +160,7 @@ function Profile() {
   const { handle } = Route.useParams();
   const { data: profile, isLoading } = useProfile({ handle });
   const { experiments } = useSettings();
+  const { session } = useBlueskyStore();
   const { t } = useTranslation(['app', 'profile']);
 
   const [selectedTab, setSelectedTab] = useState<string | null>('posts');
@@ -172,9 +174,9 @@ function Profile() {
       <Helmet>
         <link rel="canonical" href={`https://bsky.app/profile/${handle}`} />
       </Helmet>
-      <div className="w-[550px] flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <Image type="banner" src={profile?.banner} alt="Banner" classNames={{ image: 'w-full h-32 object-cover' }} />
-        <div>
+        <div className="px-2 sm:p-0">
           <Image
             type="avatar"
             src={profile?.avatar}
@@ -189,7 +191,7 @@ function Profile() {
               <Badge title={profile.viewer?.following && profile.viewer?.followedBy ? 'You both follow each other' : ''}>
                 {profile.viewer?.following && profile.viewer?.followedBy && 'Mutuals'}
               </Badge>
-              {<FollowButton handle={handle} following={!!profile.viewer?.following} />}
+              {handle !== session?.handle && <FollowButton handle={handle} following={!!profile.viewer?.following} />}
             </div>
             {!experiments.zenMode && (
               <div className="flex gap-2">

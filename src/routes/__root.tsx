@@ -63,7 +63,7 @@ function Root() {
           <Navbar />
           <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center mx-auto">
             <ErrorBoundary>
-              <div className={cn('flex flex-col gap-2', pathname !== '/' && 'w-[550px]')}>
+              <div className={cn('flex flex-col gap-2', pathname !== '/' && 'w-screen sm:w-[550px]')}>
                 <Outlet key="app" />
               </div>
             </ErrorBoundary>
