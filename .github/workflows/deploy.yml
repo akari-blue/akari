@@ -1,8 +1,10 @@
 name: deploy
 
 on:
-  push:
-    branches: ['main']
+  workflow_run:
+    workflows: ['build and test']
+    types:
+      - completed
 
 env:
   REGISTRY: ghcr.io
@@ -44,3 +46,29 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+  deploy:
+    needs: build-and-push-image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Link Railway project and deploy
+        env:
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+          RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_ENVIRONMENT_ID: ${{ secrets.RAILWAY_ENVIRONMENT_ID }}
+        run: |
+          railway link --service=$RAILWAY_SERVICE_ID --project-id=$RAILWAY_PROJECT_ID --environment=$RAILWAY_ENVIRONMENT_ID
+          railway redeploy --yes
