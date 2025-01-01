@@ -42,12 +42,7 @@ export function LoginForm() {
 
         <div>
           <Label htmlFor="password">{t('password')}</Label>
-          <Input
-            id="password"
-            type="password"
-            {...register('password', { required: 'Password is required' })}
-            error={!!errors.password}
-          />
+          <Input id="password" type="password" {...register('password', { required: 'Password is required' })} />
           {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
         </div>
 
@@ -60,7 +55,6 @@ export function LoginForm() {
                 id="authFactorToken"
                 type="text"
                 {...register('authFactorToken', { required: 'Two-factor token is required' })}
-                error={!!errors.authFactorToken}
               />
               {errors.authFactorToken && <p className="mt-1 text-sm text-red-500">{errors.authFactorToken?.message}</p>}
             </div>
