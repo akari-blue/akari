@@ -1,4 +1,4 @@
-name: build and test
+name: test
 
 on:
   push:
@@ -27,4 +27,3 @@ jobs:
       - run: CHECK_LANGUAGES=true npm run test lang
         continue-on-error: true
       - run: npm run test
-      - run: npm run build --if-present
