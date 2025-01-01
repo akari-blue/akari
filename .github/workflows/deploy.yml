@@ -1,18 +1,38 @@
-name: deploy
+name: test and deploy
 
 on:
-  workflow_run:
-    workflows: ['test']
-    types:
-      - completed
+  push:
+    branches: ['main']
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: CHECK_LANGUAGES=true npm run test lang
+        continue-on-error: true
+      - run: npm run test
   build-and-push-image:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases
     permissions:
       contents: read
       packages: write
@@ -52,13 +72,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
