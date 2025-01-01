@@ -1,4 +1,13 @@
-import { BSkyNotification } from '@/lib/bluesky/types/BSkyNotification';
+import {
+  BSkyNotification,
+  isBSkyFollowNotification,
+  isBSkyLikeNotifications,
+  isBSkyMentionNotification,
+  isBSkyQuoteNotification,
+  isBSkyReplyNotification,
+  isBSkyRepostNotification,
+  isBSkyStarterpackJoinedNotification,
+} from '@/lib/bluesky/types/BSkyNotification';
 import { StarterpackJoinedNotification } from './StarterpackJoinedNotification';
 import { QuoteNotification } from './QuoteNotification';
 import { MentionNotification } from './MentionNotification';
@@ -11,20 +20,20 @@ export function GroupNotification({ notifications }: { notifications: BSkyNotifi
   const notification = notifications[0];
   if (!notification) return null;
 
-  switch (notification?.reason) {
-    case 'follow':
+  switch (true) {
+    case isBSkyFollowNotification(notification):
       return <FollowNotification notification={notification} />;
-    case 'like':
+    case isBSkyLikeNotifications(notifications):
       return <LikeNotification notifications={notifications} />;
-    case 'repost':
+    case isBSkyRepostNotification(notification):
       return <RepostNotification notification={notification} />;
-    case 'reply':
+    case isBSkyReplyNotification(notification):
       return <ReplyNotification notification={notification} />;
-    case 'mention':
+    case isBSkyMentionNotification(notification):
       return <MentionNotification notification={notification} />;
-    case 'quote':
+    case isBSkyQuoteNotification(notification):
       return <QuoteNotification notification={notification} />;
-    case 'starterpack-joined':
+    case isBSkyStarterpackJoinedNotification(notification):
       return <StarterpackJoinedNotification notification={notification} />;
   }
 }

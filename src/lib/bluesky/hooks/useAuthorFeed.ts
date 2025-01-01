@@ -13,8 +13,6 @@ export function useAuthorFeed({ handle }: { handle: string }) {
   return useInfiniteQuery<AuthorFeed>({
     queryKey: ['author-feed', handle],
     queryFn: async ({ pageParam: cursor }) => {
-      if (!agent) throw new Error('Not authenticated');
-
       const response = await agent.api.app.bsky.feed.getAuthorFeed({ actor: handle, cursor: cursor as string });
       return response.data as AuthorFeed;
     },

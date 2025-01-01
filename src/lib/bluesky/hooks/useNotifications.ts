@@ -8,13 +8,11 @@ type Notifications = {
 };
 
 export function useNotifications() {
-  const { agent, isAuthenticated } = useBlueskyStore();
+  const agent = useBlueskyStore((store) => store.agent);
 
   return useInfiniteQuery<Notifications>({
     queryKey: ['notifications'],
     queryFn: async ({ pageParam: cursor }) => {
-      if (!agent || !isAuthenticated) throw new Error('Not authenticated');
-
       const response = await agent.api.app.bsky.notification.listNotifications({ cursor: cursor as string });
       return response.data as Notifications;
     },

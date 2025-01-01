@@ -1,8 +1,8 @@
 import { Image } from '@/components/ui/Image';
-import { BSkyNotification } from '@/lib/bluesky/types/BSkyNotification';
+import { BSkyMentionNotification } from '@/lib/bluesky/types/BSkyNotification';
 import { useTranslation } from 'react-i18next';
 
-export function MentionNotification({ notification }: { notification: BSkyNotification }) {
+export function MentionNotification({ notification }: { notification: BSkyMentionNotification }) {
   const { t } = useTranslation('notifications');
   return (
     <div>

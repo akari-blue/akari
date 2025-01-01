@@ -5,14 +5,12 @@ import { toast } from 'sonner';
 import { Facet } from '@atproto/api';
 
 export function useCreatePost() {
-  const { agent, isAuthenticated } = useBlueskyStore();
+  const { agent } = useBlueskyStore();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   return useMutation({
     mutationFn: async ({ text, facets }: { text: string; facets: Facet[] }) => {
-      if (!agent || !isAuthenticated) throw new Error('Not authenticated');
-
       try {
         const result = await agent.post({
           text,

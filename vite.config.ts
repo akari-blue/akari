@@ -14,7 +14,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true,
+        enabled: process.env.NODE_ENV !== 'test',
       },
       includeAssets: ['src/assets/images/**/*'],
       manifest: {

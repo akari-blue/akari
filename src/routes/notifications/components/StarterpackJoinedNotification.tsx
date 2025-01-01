@@ -1,8 +1,8 @@
 import { Image } from '@/components/ui/Image';
-import { BSkyNotification } from '@/lib/bluesky/types/BSkyNotification';
+import { BSkyStarterpackJoinedNotification } from '@/lib/bluesky/types/BSkyNotification';
 import { useTranslation } from 'react-i18next';
 
-export function StarterpackJoinedNotification({ notification }: { notification: BSkyNotification }) {
+export function StarterpackJoinedNotification({ notification }: { notification: BSkyStarterpackJoinedNotification }) {
   const { t } = useTranslation('notifications');
   return (
     <div>

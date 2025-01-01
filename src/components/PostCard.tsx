@@ -63,102 +63,99 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
   if (!post) return null;
 
   return (
-    <div
-      className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow w-full', className)}
-      onClick={onClick}
-      id={post.uri}
-    >
-      {/* {!!post.record.reply && <PostCard post={reply} />} */}
-      <div className="flex items-center space-x-3 mb-2">
-        {post.author.avatar && (
-          <Image
-            type="avatar"
-            src={post.author.avatar}
-            alt={post.author.handle}
-            classNames={{ image: 'w-10 h-10 rounded-full' }}
-          />
-        )}
+    <div className="bg-white dark:bg-neutral-900 rounded-lg shadow flex flex-col">
+      <div className={cn('p-3 w-full max-w-[550px] gap-2 flex flex-row', className)} onClick={onClick} id={post.uri}>
+        <div className="aspect-square flex-shrink-0">
+          {post.author.avatar && (
+            <Image
+              type="avatar"
+              src={post.author.avatar}
+              alt={post.author.handle}
+              classNames={{ image: 'w-10 h-10 rounded-full' }}
+            />
+          )}
+        </div>
         <div>
           <div>
-            <Link
-              to="/profile/$handle"
-              params={{ handle: post.author.handle }}
-              className="font-medium text-gray-900 dark:text-gray-100"
-            >
-              {post.author.displayName || post.author.handle}
-            </Link>
+            <div>
+              <Link
+                to="/profile/$handle"
+                params={{ handle: post.author.handle }}
+                className="font-medium text-gray-900 dark:text-gray-100"
+              >
+                {post.author.displayName || post.author.handle}
+              </Link>
+            </div>
+            <div className="text-gray-500 dark:text-gray-400 text-sm">
+              <Link to="/profile/$handle" params={{ handle: post.author.handle }}>
+                <Handle handle={post.author.handle} />
+              </Link>
+              {' · '}
+              <Link
+                to="/profile/$handle/post/$postId"
+                params={{
+                  handle: post.author.handle,
+                  postId: post.uri.split('/').pop()!,
+                }}
+              >
+                <TimeAgo date={post.record.createdAt} />
+              </Link>
+              {!experiments.zenMode && <BetterContext context={context} />}
+            </div>
           </div>
-          <div className="text-gray-500 dark:text-gray-400 text-sm">
-            <Link to="/profile/$handle" params={{ handle: post.author.handle }}>
-              <Handle handle={post.author.handle} />
-            </Link>
-            {' · '}
-            <Link
-              to="/profile/$handle/post/$postId"
-              params={{
-                handle: post.author.handle,
-                postId: post.uri.split('/').pop()!,
-              }}
-            >
-              <TimeAgo date={post.record.createdAt} />
-            </Link>
-            {!experiments.zenMode && <BetterContext context={context} />}
+          <div className="flex flex-col gap-2">
+            <p className="text-gray-800 dark:text-gray-200">
+              {post.record.facets ? (
+                <FacetedText text={post.record.text} facets={post.record.facets} key={`faceted-text-${post.uri}`} />
+              ) : (
+                post.record.text
+              )}
+            </p>
+            <ErrorBoundary>{post.embed && <PostEmbed embed={post.embed} />}</ErrorBoundary>
+            <div>
+              <div className="flex items-center space-x-6 text-gray-500 dark:text-gray-400">
+                <Link
+                  to="/profile/$handle/post/$postId"
+                  params={{ handle: post.author.handle, postId: post.uri.split('/').pop()! }}
+                  className="flex items-center space-x-2 hover:text-blue-500 transition-colors"
+                >
+                  <MessageCircle size={20} />
+                  {!experiments.zenMode && <FormattedNumber value={post.replyCount} unit={t('replies')} />}
+                </Link>
+                {!(experiments.zenMode && !isAuthenticated) && (
+                  <>
+                    <button
+                      onClick={() =>
+                        post.viewer?.repost
+                          ? toast.error('You already reposted this post', { duration: 2_000 })
+                          : handleRepost(post.uri, post.cid)
+                      }
+                      disabled={repost.isPending || !isAuthenticated}
+                      className={cn(
+                        'flex items-center space-x-2 transition-colors',
+                        post.viewer?.repost ? 'text-green-500' : 'hover:text-green-500',
+                      )}
+                    >
+                      <Repeat size={20} className={cn(post.viewer?.repost ? 'stroke-current' : '')} />
+                      {!experiments.zenMode && <FormattedNumber value={post.repostCount} unit={t('reposts')} />}
+                    </button>
+                    <button
+                      onClick={() => handleLike(post.uri, post.cid, post.viewer?.like)}
+                      disabled={like.isPending || !isAuthenticated}
+                      className={cn(
+                        'flex items-center space-x-2 transition-colors',
+                        post.viewer?.like ? 'text-pink-500' : 'hover:text-pink-500',
+                      )}
+                    >
+                      <Heart size={20} className={cn(post.viewer?.like ? 'fill-current' : '')} />
+                      {!experiments.zenMode && <FormattedNumber value={post.likeCount} unit={t('likes')} />}
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <p className="text-gray-800 dark:text-gray-200 mb-3">
-        {post.record.facets ? (
-          <FacetedText text={post.record.text} facets={post.record.facets} key={`faceted-text-${post.uri}`} />
-        ) : (
-          post.record.text
-        )}
-      </p>
-      <ErrorBoundary>
-        {post.embed && (
-          <div className="border border-neutral-400 mb-3">
-            <PostEmbed embed={post.embed} />
-          </div>
-        )}
-      </ErrorBoundary>
-      <div className="flex items-center space-x-6 text-gray-500 dark:text-gray-400">
-        <Link
-          to="/profile/$handle/post/$postId"
-          params={{ handle: post.author.handle, postId: post.uri.split('/').pop()! }}
-          className="flex items-center space-x-2 hover:text-blue-500 transition-colors"
-        >
-          <MessageCircle size={20} />
-          {!experiments.zenMode && <FormattedNumber value={post.replyCount} unit={t('replies')} />}
-        </Link>
-        {!(experiments.zenMode && !isAuthenticated) && (
-          <>
-            <button
-              onClick={() =>
-                post.viewer?.repost
-                  ? toast.error('You already reposted this post', { duration: 2_000 })
-                  : handleRepost(post.uri, post.cid)
-              }
-              disabled={repost.isPending || !isAuthenticated}
-              className={cn(
-                'flex items-center space-x-2 transition-colors',
-                post.viewer?.repost ? 'text-green-500' : 'hover:text-green-500',
-              )}
-            >
-              <Repeat size={20} className={cn(post.viewer?.repost ? 'stroke-current' : '')} />
-              {!experiments.zenMode && <FormattedNumber value={post.repostCount} unit={t('reposts')} />}
-            </button>
-            <button
-              onClick={() => handleLike(post.uri, post.cid, post.viewer?.like)}
-              disabled={like.isPending || !isAuthenticated}
-              className={cn(
-                'flex items-center space-x-2 transition-colors',
-                post.viewer?.like ? 'text-pink-500' : 'hover:text-pink-500',
-              )}
-            >
-              <Heart size={20} className={cn(post.viewer?.like ? 'fill-current' : '')} />
-              {!experiments.zenMode && <FormattedNumber value={post.likeCount} unit={t('likes')} />}
-            </button>
-          </>
-        )}
       </div>
       <Debug value={{ post, context }} />
     </div>

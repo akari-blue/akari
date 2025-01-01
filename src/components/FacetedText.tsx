@@ -3,11 +3,6 @@ import { Link } from './ui/Link';
 import { FormattedText } from './ui/FormattedText';
 import { BSkyFacet } from '../lib/bluesky/types/BSkyFacet';
 
-type FacetedTextProps = {
-  text: string;
-  facets: BSkyFacet[];
-};
-
 export const FacetedText = ({ text, facets }: FacetedTextProps) => {
   // Sort facets by start index to process them in order
   const sortedFacets = facets?.sort((a, b) => a.index.byteStart - b.index.byteStart) ?? [];
@@ -87,3 +82,8 @@ function HashTag({ tag }: { tag: string }) {
     </Link>
   );
 }
+
+type FacetedTextProps = {
+  text: string;
+  facets: BSkyFacet[];
+};

@@ -12,7 +12,8 @@ type Timeline = {
 };
 
 export function useTimeline(selectedFeed: string | undefined) {
-  const { agent, isAuthenticated } = useBlueskyStore();
+  const agent = useBlueskyStore((store) => store.agent);
+  const isAuthenticated = useBlueskyStore((store) => store.isAuthenticated);
   const preferences = usePreferences();
   const savedFeedsPrefV2 = isAuthenticated
     ? preferences.data?.find((item) => item.$type === 'app.bsky.actor.defs#savedFeedsPrefV2')
@@ -42,7 +43,6 @@ export function useTimeline(selectedFeed: string | undefined) {
   return useInfiniteQuery<Timeline>({
     queryKey: ['timeline', { feed, isAuthenticated }],
     queryFn: async ({ pageParam }) => {
-      if (!agent) throw new Error('Not authenticated');
       if (!feed) throw new Error('Feed not found');
 
       // // guest

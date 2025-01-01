@@ -10,8 +10,6 @@ export function useLike() {
   return useMutation({
     mutationKey: ['like'],
     mutationFn: async ({ uri, cid, like }: { uri: string; cid: string; like: boolean }) => {
-      if (!agent) throw new Error('Not authenticated');
-
       toast.info('Updating like status for ' + uri + ' to ' + like);
 
       if (like) {

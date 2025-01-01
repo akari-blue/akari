@@ -36,4 +36,3 @@ export function useAuth() {
     error: loginMutation.error,
   };
 }
-// A sign in code has been sent to your email address

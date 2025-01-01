@@ -10,6 +10,7 @@ import TimeAgo from 'react-timeago-i18n';
 import { Handle } from '../../components/ui/Handle';
 import { Virtuoso } from 'react-virtuoso';
 import { Loading } from '@/components/ui/loading';
+import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 
 function Conversation({ convo }: { convo: BSkyConvo }) {
   const session = useBlueskyStore((state) => state.session);
@@ -18,9 +19,10 @@ function Conversation({ convo }: { convo: BSkyConvo }) {
   return (
     <>
       <Debug value={convo} />
-      <Link key={convo.id} to="/messages/$convoId" params={{ convoId: convo.id }}>
-        {members.map((member) => (
-          <div className="flex gap-2" key={member.did}>
+
+      {members.map((member) => (
+        <div className="flex gap-2" key={member.did}>
+          <Link to="/profile/$handle" params={{ handle: member.handle ?? member.did }}>
             <Image
               type="avatar"
               src={member.avatar}
@@ -29,6 +31,8 @@ function Conversation({ convo }: { convo: BSkyConvo }) {
                 wrapper: 'size-24 aspect-square',
               }}
             />
+          </Link>
+          <Link to="/messages/$convoId" params={{ convoId: convo.id }}>
             <div className="flex flex-col">
               <div className="flex flex-row gap-2">
                 <Handle handle={member.handle ?? member.did} />
@@ -37,9 +41,9 @@ function Conversation({ convo }: { convo: BSkyConvo }) {
               </div>
               <div>{convo.lastMessage.text}</div>
             </div>
-          </div>
-        ))}
-      </Link>
+          </Link>
+        </div>
+      ))}
     </>
   );
 }
@@ -62,6 +66,11 @@ function Messages() {
           const convo = convos?.[index];
           if (!convo) return null;
           return <Conversation key={convo.id} convo={convo} />;
+        }}
+        components={{
+          List: forwardRef(function List(props: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
+            return <div ref={ref} {...props} className="flex flex-col gap-2" />;
+          }),
         }}
       />
     </div>

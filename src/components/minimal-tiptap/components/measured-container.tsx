@@ -1,33 +1,33 @@
-import * as React from 'react'
-import { useContainerSize } from '../hooks/use-container-size'
+import { ElementType, ReactNode, forwardRef, ComponentProps, Ref, useRef, useImperativeHandle } from 'react';
+import { useContainerSize } from '../hooks/use-container-size';
 
-interface MeasuredContainerProps<T extends React.ElementType> {
-  as: T
-  name: string
-  children?: React.ReactNode
+interface MeasuredContainerProps<T extends ElementType> {
+  as: T;
+  name: string;
+  children?: ReactNode;
 }
 
-export const MeasuredContainer = React.forwardRef(
-  <T extends React.ElementType>(
-    { as: Component, name, children, style = {}, ...props }: MeasuredContainerProps<T> & React.ComponentProps<T>,
-    ref: React.Ref<HTMLElement>
+export const MeasuredContainer = forwardRef(
+  <T extends ElementType>(
+    { as: Component, name, children, style = {}, ...props }: MeasuredContainerProps<T> & ComponentProps<T>,
+    ref: Ref<HTMLElement>,
   ) => {
-    const innerRef = React.useRef<HTMLElement>(null)
-    const rect = useContainerSize(innerRef.current)
+    const innerRef = useRef<HTMLElement>(null);
+    const rect = useContainerSize(innerRef.current);
 
-    React.useImperativeHandle(ref, () => innerRef.current as HTMLElement)
+    useImperativeHandle(ref, () => innerRef.current as HTMLElement);
 
     const customStyle = {
       [`--${name}-width`]: `${rect.width}px`,
-      [`--${name}-height`]: `${rect.height}px`
-    }
+      [`--${name}-height`]: `${rect.height}px`,
+    };
 
     return (
       <Component {...props} ref={innerRef} style={{ ...customStyle, ...style }}>
         {children}
       </Component>
-    )
-  }
-)
+    );
+  },
+);
 
-MeasuredContainer.displayName = 'MeasuredContainer'
+MeasuredContainer.displayName = 'MeasuredContainer';

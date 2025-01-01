@@ -3,7 +3,7 @@ import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { useSettings } from '../hooks/useSetting';
 import { Input } from '../components/ui/input';
 import { useTranslation } from 'react-i18next';
-import i18n, { languages } from '../i18n';
+import i18n, { languages } from '@/i18n';
 
 export const Route = createLazyFileRoute('/settings')({
   component: RouteComponent,
@@ -82,7 +82,7 @@ function RouteComponent() {
           >
             <>
               {['system', ...Object.keys(languages)].map((lang) => (
-                <option>{lang}</option>
+                <option key={lang}>{lang}</option>
               ))}
             </>
           </select>
@@ -102,7 +102,7 @@ function RouteComponent() {
           >
             <>
               {['system', 'OpenDyslexic', 'Atkinson-Hyperlegible'].map((fontFamily) => (
-                <option>{fontFamily}</option>
+                <option key={fontFamily}>{fontFamily}</option>
               ))}
             </>
           </select>
@@ -122,7 +122,7 @@ function RouteComponent() {
           >
             <>
               {['system', 'extra-small', 'small', 'medium', 'large', 'extra-large'].map((fontName) => (
-                <option>{fontName}</option>
+                <option key={fontName}>{fontName}</option>
               ))}
             </>
           </select>

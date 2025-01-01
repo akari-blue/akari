@@ -4,7 +4,7 @@ import { cn } from '../../lib/utils';
 import { useBlueskyStore } from '../../lib/bluesky/store';
 import { BSkyMessage } from '../../lib/bluesky/types/BSkyMessage';
 import { Virtuoso } from 'react-virtuoso';
-import { forwardRef } from 'react';
+import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { Loading } from '@/components/ui/loading';
 
 function Message({ message }: { message: BSkyMessage }) {
@@ -45,11 +45,13 @@ function Messages() {
       <Virtuoso
         initialTopMostItemIndex={(messages?.length ?? 0) - 1}
         components={{
-          List: forwardRef(({ children, style }, ref) => (
-            <div className="flex flex-col gap-2" ref={ref} style={style}>
-              {children}
-            </div>
-          )),
+          List: forwardRef(function List({ children, style }: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
+            return (
+              <div className="flex flex-col gap-2" ref={ref} style={style}>
+                {children}
+              </div>
+            );
+          }),
         }}
         useWindowScroll
         totalCount={messages?.length ?? 0}

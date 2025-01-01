@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Editor } from '@tiptap/react';
 import type { Content, UseEditorOptions } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
@@ -22,6 +21,7 @@ import { cn } from '@/lib/utils';
 import { fileToBase64, getOutput, randomId } from '../utils';
 import { useThrottle } from '../hooks/use-throttle';
 import { toast } from 'sonner';
+import { useCallback } from 'react';
 
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
   value?: Content;
@@ -170,14 +170,14 @@ export const useMinimalTiptapEditor = ({
   onBlur,
   ...props
 }: UseMinimalTiptapEditorProps) => {
-  const throttledSetValue = useThrottle((value: Content) => onUpdate?.(value), throttleDelay);
+  const throttledSetValue = useThrottle((value) => onUpdate?.(value as Content), throttleDelay);
 
-  const handleUpdate = React.useCallback(
+  const handleUpdate = useCallback(
     (editor: Editor) => throttledSetValue(getOutput(editor, output)),
     [output, throttledSetValue],
   );
 
-  const handleCreate = React.useCallback(
+  const handleCreate = useCallback(
     (editor: Editor) => {
       if (value && editor.isEmpty) {
         editor.commands.setContent(value);
@@ -186,7 +186,7 @@ export const useMinimalTiptapEditor = ({
     [value],
   );
 
-  const handleBlur = React.useCallback((editor: Editor) => onBlur?.(getOutput(editor, output)), [output, onBlur]);
+  const handleBlur = useCallback((editor: Editor) => onBlur?.(getOutput(editor, output)), [output, onBlur]);
 
   const editor = useEditor({
     extensions: createExtensions(placeholder),

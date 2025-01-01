@@ -1,15 +1,17 @@
-import * as React from 'react';
+import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { createLink, LinkComponent } from '@tanstack/react-router';
 import { cn } from '../../lib/utils';
 
-const BasicLinkComponent = React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
-  (props, ref) => {
-    return <a ref={ref} {...props} className={cn('hover:underline', props.className)} />;
-  },
-);
+const BasicLinkComponent = forwardRef(function BasicLinkComponent(
+  props: HtmlHTMLAttributes<HTMLAnchorElement>,
+  ref: Ref<HTMLAnchorElement>,
+) {
+  return <a ref={ref} {...props} className={cn('hover:underline', props.className)} />;
+});
 
 const CreatedLinkComponent = createLink(BasicLinkComponent);
 
-export const Link: LinkComponent<typeof BasicLinkComponent> = (props) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const Link: LinkComponent<typeof BasicLinkComponent> = (props: any) => {
   return <CreatedLinkComponent to={props.href} {...props} />;
 };

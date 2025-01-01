@@ -21,7 +21,7 @@ type Session = AtpSessionData & {
 };
 
 type BlueskyState = {
-  agent: BskyAgent | null;
+  agent: BskyAgent;
   isAuthenticated: boolean;
   session: Session | null;
   login: (credentials: BlueskyCredentials) => Promise<void>;
@@ -60,7 +60,7 @@ export const useBlueskyStore = create<BlueskyState>()(
       },
 
       logout: () => {
-        set({ agent: null, isAuthenticated: false, session: null });
+        set({ agent: new BskyAgent({ service: GUEST_ENDPOINT }), isAuthenticated: false, session: null });
         // reload the page after logout
         window.location.reload();
       },
@@ -74,7 +74,7 @@ export const useBlueskyStore = create<BlueskyState>()(
             set({ agent, isAuthenticated: true });
           } catch (error) {
             console.error('Failed to restore session:', error);
-            set({ agent: null, isAuthenticated: false, session: null });
+            set({ agent: new BskyAgent({ service: GUEST_ENDPOINT }), isAuthenticated: false, session: null });
           }
         }
       },

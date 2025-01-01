@@ -57,7 +57,7 @@ function RouteComponent() {
           <Ariakit.TabPanel tabId="all">{notifications && <GroupedNotifications />}</Ariakit.TabPanel>
           <Ariakit.TabPanel tabId="mentions" className="flex flex-col gap-2">
             {mentions?.map((notification) => (
-              <div className="p-2 bg-neutral-800 rounded-lg">
+              <div className="p-2 bg-neutral-800 rounded-lg" key={notification.uri}>
                 <Notification key={notification.uri} notification={notification} />
               </div>
             ))}

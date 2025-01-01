@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Loading } from '@/components/ui/loading';
 import { useNotifications } from '@/lib/bluesky/hooks/useNotifications';
 import { BSkyNotification } from '@/lib/bluesky/types/BSkyNotification';
-import { forwardRef } from 'react';
+import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Virtuoso } from 'react-virtuoso';
 import { GroupNotification } from './GroupNotification';
@@ -39,7 +39,9 @@ export function GroupedNotifications() {
       totalCount={list.length}
       endReached={() => fetchNextPage()}
       components={{
-        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+        List: forwardRef(function List(props: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
+          return <div ref={ref} {...props} className="flex flex-col gap-2" />;
+        }),
         Footer: () => {
           return isFetching ? (
             <Loading />

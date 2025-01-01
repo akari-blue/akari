@@ -13,7 +13,7 @@ import { FollowButton } from '@/components/ui/FollowButton';
 import { FormattedNumber } from '@/components/ui/FormattedNumber';
 import { FormattedText } from '@/components/ui/FormattedText';
 import { Debug } from '@/components/ui/Debug';
-import { forwardRef, useState } from 'react';
+import { forwardRef, HtmlHTMLAttributes, Ref, useState } from 'react';
 import { NotImplementedBox } from '@/components/ui/NotImplementedBox';
 import { Virtuoso } from 'react-virtuoso';
 import { Loading } from '@/components/ui/loading';
@@ -23,6 +23,10 @@ import { useBlueskyStore } from '@/lib/bluesky/store';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
+});
+
+const List = forwardRef(function List(props: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
+  return <div ref={ref} {...props} className="flex flex-col gap-2" />;
 });
 
 function All() {
@@ -39,7 +43,7 @@ function All() {
       totalCount={feed.length}
       endReached={() => fetchNextPage()}
       components={{
-        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+        List,
       }}
       itemContent={(index: number) => <PostCard key={feed[index]?.post.uri} post={feed[index]?.post as BSkyPost} />}
     />
@@ -66,7 +70,7 @@ function Posts() {
       totalCount={filteredPosts.length}
       endReached={() => fetchNextPage()}
       components={{
-        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+        List,
       }}
       itemContent={(index: number) => (
         <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
@@ -93,7 +97,7 @@ function Reposts() {
       totalCount={filteredPosts.length}
       endReached={() => fetchNextPage()}
       components={{
-        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+        List,
       }}
       itemContent={(index: number) => (
         <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
@@ -120,7 +124,7 @@ function Replies() {
       totalCount={filteredPosts.length}
       endReached={() => fetchNextPage()}
       components={{
-        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+        List,
       }}
       itemContent={(index: number) => (
         <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
@@ -147,7 +151,7 @@ function Media() {
       totalCount={filteredPosts.length}
       endReached={() => fetchNextPage()}
       components={{
-        List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+        List,
       }}
       itemContent={(index: number) => (
         <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
