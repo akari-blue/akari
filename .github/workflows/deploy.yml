@@ -90,5 +90,5 @@ jobs:
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
           RAILWAY_ENVIRONMENT_ID: ${{ secrets.RAILWAY_ENVIRONMENT_ID }}
         run: |
-          railway link --service=$RAILWAY_SERVICE_ID --project_id=$RAILWAY_PROJECT_ID --environment=$RAILWAY_ENVIRONMENT_ID
+          railway link --service=$RAILWAY_SERVICE_ID --project=$RAILWAY_PROJECT_ID --environment=$RAILWAY_ENVIRONMENT_ID
           railway redeploy --yes
