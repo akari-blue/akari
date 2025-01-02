@@ -30,6 +30,7 @@ export function useAuth() {
     logout: () => {
       logout();
       toast.success('Successfully logged out');
+      navigate({ to: '/' });
     },
     isAuthenticated,
     isLoading: loginMutation.isPending,
