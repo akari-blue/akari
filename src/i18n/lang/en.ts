@@ -22,6 +22,7 @@ export const en = {
     settings: 'settings',
     notFound: 'not found',
     save: 'save',
+    cancel: 'cancel',
     optional: 'optional',
   },
   settings: {

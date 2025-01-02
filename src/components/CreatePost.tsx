@@ -6,13 +6,13 @@ import { MinimalTiptapEditor } from './minimal-tiptap';
 import { Facet } from '@atproto/api';
 import { useBlueskyStore } from '@/lib/bluesky/store';
 import { convertJSONToPost } from './convert';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from './ui/dialog';
 import { useTranslation } from 'react-i18next';
 import { PencilIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function CreatePost() {
-  const { t } = useTranslation('post');
+  const { t } = useTranslation(['app', 'post']);
   const { mutate, isPending } = useCreatePost();
   const [value, setValue] = useState<JSONContent | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +28,7 @@ export function CreatePost() {
     setConverted(convertJSONToPost(value));
   }, [value]);
 
-  const onClick = () => {
+  const onClickPost = () => {
     if (!converted) return;
 
     mutate(
@@ -44,6 +44,12 @@ export function CreatePost() {
         },
       },
     );
+  };
+
+  const onClickCancel = () => {
+    setValue(null);
+    setConverted(null);
+    setIsOpen(false);
   };
 
   if (!isAuthenticated) return null;
@@ -62,29 +68,30 @@ export function CreatePost() {
             'lg:relative lg:right-0 lg:rounded-none lg:aspect-auto lg:size-auto lg:w-fit',
           )}
         >
-          <span className="hidden lg:block">{t('createPost')}</span>
+          <span className="hidden lg:block">{t('post:createPost')}</span>
           <PencilIcon className="block lg:hidden size-10" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{t('createPost')}</DialogTitle>
+
+      <DialogContent className="[&>button]:hidden p-0 border">
+        <DialogHeader className="justify-between w-full p-2">
+          <Button type="button" variant="ghost" onClick={onClickCancel} disabled={isPending} className="text-gray-500">
+            {t('cancel')}
+          </Button>
+          <Button type="button" variant="outline" onClick={onClickPost} disabled={isPending}>
+            {isPending ? 'Posting...' : 'Post'}
+          </Button>
         </DialogHeader>
         <MinimalTiptapEditor
           value={value}
           onChange={(value) => setValue(value as JSONContent)}
-          className="w-full"
+          className="w-full border-none"
           output="json"
           placeholder="Type something..."
           autofocus={true}
           editable={!isPending}
-          editorClassName="focus:outline-none"
+          editorClassName="border-none pt-0"
         />
-        <DialogFooter className="justify-end">
-          <Button type="button" variant="secondary" onClick={onClick} disabled={isPending}>
-            {isPending ? 'Posting...' : 'Post'}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
