@@ -74,12 +74,11 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
       }
       return (
         <Link href={embed.external.uri} target="_blank" rel="noreferrer">
-          <div className="bg-neutral-800 rounded p-2">
-            {embed.external.title}
+          <div className="rounded-lg">
             {embed.external.thumb && (
               <Image
                 type="post"
-                src={embed.external.thumb}
+                src={embed.external.uri.includes('.gif') ? embed.external.uri : embed.external.thumb}
                 alt={embed.external.title}
                 classNames={{
                   image: 'rounded-lg w-full object-cover aspect-video',
