@@ -9,7 +9,6 @@ export const en = {
     authFactorToken: 'two-factor token',
   },
   app: {
-    appName: 'akari',
     loading: 'loading...',
     loadMore: 'load more',
     blueskyHandle: 'bluesky handle e.g. @alice.bsky.social',

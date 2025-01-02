@@ -9,7 +9,6 @@ export const yue = {
     password: '密碼',
   },
   app: {
-    appName: '[placeholder name]',
     loading: '載入緊 ...',
     blueskyHandle: 'bluesky 帳號頭銜 例如：@alice.bsky.social',
     following: '跟緊',

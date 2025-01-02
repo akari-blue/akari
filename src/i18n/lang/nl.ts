@@ -8,7 +8,6 @@ export const nl = {
     password: 'wachtwoord',
   },
   app: {
-    appName: '[placeholder name]',
     loading: 'laden...',
     blueskyHandle: 'bluesky handle b.v. @alice.bsky.social',
     following: 'volgen',

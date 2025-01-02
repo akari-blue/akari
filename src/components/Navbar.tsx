@@ -6,13 +6,13 @@ import { useBlueskyStore } from '../lib/bluesky/store';
 import { BellIcon, HomeIcon, MailIcon, SettingsIcon, UserIcon } from 'lucide-react';
 import { CreatePost } from './CreatePost';
 import { cn } from '@/lib/utils';
+import { appName } from '@/config';
 
 const HomeLink = () => {
-  const { t } = useTranslation('app');
   return (
     <Link to="/">
       <HomeIcon className="size-7 lg:hidden" />
-      <h1 className="text-2xl font-bold hidden lg:block">{t('appName')}</h1>
+      <h1 className="text-2xl font-bold hidden lg:block">{appName}</h1>
     </Link>
   );
 };
