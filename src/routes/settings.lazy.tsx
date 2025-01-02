@@ -4,6 +4,8 @@ import { useSettings } from '../hooks/useSetting';
 import { Input } from '../components/ui/input';
 import { useTranslation } from 'react-i18next';
 import i18n, { languages } from '@/i18n';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/lib/bluesky/hooks/useAuth';
 
 export const Route = createLazyFileRoute('/settings')({
   component: RouteComponent,
@@ -11,7 +13,8 @@ export const Route = createLazyFileRoute('/settings')({
 
 function RouteComponent() {
   const { setSettings, experiments, font, language } = useSettings();
-  const { t } = useTranslation('settings');
+  const { logout, isAuthenticated } = useAuth();
+  const { t } = useTranslation(['settings', 'auth']);
 
   return (
     <div className="flex flex-col gap-4">
@@ -138,6 +141,7 @@ function RouteComponent() {
         />
         <p>{t('cleanHandles.description')}</p>
       </div>
+      {isAuthenticated && <Button onClick={logout}>{t('auth:logout')}</Button>}
     </div>
   );
 }

@@ -28,7 +28,7 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-2">
-      <div className="flex flex-col gap-2 w-[550px]">
+      <div className="flex flex-col gap-2">
         <div>
           <Label htmlFor="handle">{t('app:blueskyHandle')}</Label>
           <Controller

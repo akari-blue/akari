@@ -8,6 +8,8 @@ import { useBlueskyStore } from '@/lib/bluesky/store';
 import { convertJSONToPost } from './convert';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { useTranslation } from 'react-i18next';
+import { PencilIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function CreatePost() {
   const { t } = useTranslation('post');
@@ -49,8 +51,19 @@ export function CreatePost() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-fit">
-          {t('createPost')}
+        <Button
+          variant="outline"
+          className={cn(
+            // mobile
+            'fixed bottom-20 right-2 rounded-full aspect-square size-16',
+            // tablet
+            'md:bottom-2',
+            // desktop
+            'lg:relative lg:right-0 lg:rounded-none lg:aspect-auto lg:size-auto lg:w-fit',
+          )}
+        >
+          <span className="hidden lg:block">{t('createPost')}</span>
+          <PencilIcon className="block lg:hidden size-10" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
