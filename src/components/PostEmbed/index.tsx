@@ -80,7 +80,7 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
               src={embed.external.uri.includes('.gif') ? embed.external.uri : embed.external.thumb}
               alt={embed.external.title}
               classNames={{
-                image: 'rounded-lg w-full object-cover aspect-video',
+                image: 'rounded-lg w-full object-cover',
               }}
               clickable={false}
             />
