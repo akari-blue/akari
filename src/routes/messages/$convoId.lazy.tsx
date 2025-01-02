@@ -7,7 +7,6 @@ import { Virtuoso } from 'react-virtuoso';
 import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { Loading } from '@/components/ui/loading';
 import TimeAgo from 'react-timeago-i18n';
-import { MinimalTiptapEditor } from '@/components/minimal-tiptap';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);

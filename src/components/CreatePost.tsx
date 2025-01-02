@@ -6,7 +6,7 @@ import { MinimalTiptapEditor } from './minimal-tiptap';
 import { Facet } from '@atproto/api';
 import { useBlueskyStore } from '@/lib/bluesky/store';
 import { convertJSONToPost } from './convert';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from './ui/dialog';
 import { useTranslation } from 'react-i18next';
 import { PencilIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
