@@ -10,7 +10,7 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204
     strategy:
       matrix:
         node-version: [22.x]
@@ -29,7 +29,7 @@ jobs:
       - run: npm run test
   build-and-push-image:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204
     strategy:
       matrix:
         node-version: [22.x]
@@ -70,7 +70,11 @@ jobs:
 
   deploy:
     needs: build-and-push-image
-    runs-on: ubuntu-latest
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases
     environment:
       name: production
       url: https://bsky-client.imlunahey.com
