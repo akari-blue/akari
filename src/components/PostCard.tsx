@@ -65,13 +65,13 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-lg shadow flex flex-col">
       <div className={cn('p-3 w-full max-w-[550px] gap-2 flex flex-row', className)} onClick={onClick} id={post.uri}>
-        <div className="aspect-square flex-shrink-0">
+        <div className="flex-shrink-0">
           {post.author.avatar && (
             <Image
               type="avatar"
               src={post.author.avatar}
               alt={post.author.handle}
-              classNames={{ image: 'w-10 h-10 rounded-full' }}
+              classNames={{ image: 'size-10 rounded-full aspect-square' }}
             />
           )}
         </div>
