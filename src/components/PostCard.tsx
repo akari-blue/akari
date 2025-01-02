@@ -17,6 +17,7 @@ import TimeAgo from 'react-timeago-i18n';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Handle } from './ui/Handle';
+import { FormattedText } from './ui/FormattedText';
 
 type PostCardProps = {
   post: BSkyPost | undefined | null;
@@ -108,7 +109,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
               {post.record.facets ? (
                 <FacetedText text={post.record.text} facets={post.record.facets} key={`faceted-text-${post.uri}`} />
               ) : (
-                post.record.text
+                <FormattedText text={post.record.text} key={`formatted-text-${post.uri}`} />
               )}
             </p>
             <ErrorBoundary>{post.embed && <PostEmbed embed={post.embed} />}</ErrorBoundary>
