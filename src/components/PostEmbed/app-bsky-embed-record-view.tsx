@@ -10,6 +10,8 @@ import { NotImplementedBox } from '@/components/ui/NotImplementedBox';
 import { Image } from '@/components/ui/Image';
 import { Link } from '@/components/ui/Link';
 import { useTranslation } from 'react-i18next';
+import { HeartIcon } from 'lucide-react';
+import { FormattedText } from '../ui/FormattedText';
 
 export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
   const { t } = useTranslation('post');
@@ -59,17 +61,20 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
           </div>
         </div>
       )}
-      {embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic' ? (
+      {embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic' && (
         <div className="text-gray-800 dark:text-gray-200">
           <NotImplementedBox type={embed.$type} data={embed.record} />
         </div>
-      ) : (
-        <p className="text-gray-800 dark:text-gray-200">
-          {embed.record.facets ? (
-            <FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />
-          ) : (
-            embed.record.value.text
-          )}
+      )}
+      {embed.record.$type === 'app.bsky.feed.defs#generatorView' && (
+        <p className="text-gray-800 dark:text-gray-200 flex flex-col gap-2">
+          <div>
+            <Image type="avatar" src={embed.record.avatar} classNames={{ image: 'w-10 h-10 rounded-full' }} />
+          </div>
+          <FormattedText text={embed.record.description} />
+          <div className="flex flex-row gap-2">
+            <HeartIcon /> liked by {embed.record.likeCount} people
+          </div>
         </p>
       )}
     </div>
