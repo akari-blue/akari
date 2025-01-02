@@ -56,17 +56,13 @@ export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
             )}
           />
         </DialogTrigger>
-        <DialogContent className="p-2 border">
+        <DialogContent className="[&>button]:bg-black [&>button]:p-1 p-2 border">
           <img
             loading="lazy"
             src={src}
             alt={alt}
             {...props}
-            className={cn(
-              classNames?.image,
-              experiments.streamerMode && 'filter blur-md',
-              type === 'banner' && 'aspect-video w-full',
-            )}
+            className={cn(experiments.streamerMode && 'filter blur-md', type === 'banner' && 'aspect-video w-full')}
           />
           <span>{alt}</span>
         </DialogContent>
@@ -74,21 +70,3 @@ export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
     </div>
   );
 };
-
-// {/* {isFullscreen && (
-//         <div className="z-50" onClick={imageOnClick}>
-//           <div className="relative">
-//             <div className="fixed top-0 bottom-0 left-0 right-0">
-//               <div className="fixed top-0 bottom-0 left-0 right-0 bg-black bg-opacity-90" />
-//               <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4">
-//                 <img
-//                   src={src}
-//                   alt={alt}
-//                   {...props}
-//                   className={cn(classNames?.image, 'h-full w-full', experiments.streamerMode && 'filter blur-md')}
-//                 />
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       )} */}
