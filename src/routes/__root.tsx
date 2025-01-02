@@ -48,7 +48,7 @@ function Root() {
       dir={dir}
       lang={language}
       className={cn(
-        'text-black dark:text-white min-h-screen',
+        'text-black dark:text-white',
         font.family === 'OpenDyslexic' && 'font-[OpenDyslexic]',
         font.family === 'Atkinson-Hyperlegible' && 'font-[Atkinson-Hyperlegible]',
         font.size === 'extra-small' && 'text-xs',

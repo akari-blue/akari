@@ -56,12 +56,12 @@ export const DialogContent = forwardRef<
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 export const DialogHeader = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)} {...props} />
+  <div className={cn('flex flex-row space-y-1.5 text-center sm:text-left', className)} {...props} />
 );
 DialogHeader.displayName = 'DialogHeader';
 
 export const DialogFooter = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)} {...props} />
+  <div className={cn('flex flex-row sm:space-x-2', className)} {...props} />
 );
 DialogFooter.displayName = 'DialogFooter';
 

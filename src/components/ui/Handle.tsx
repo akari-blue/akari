@@ -8,8 +8,8 @@ export const Handle = ({ handle }: { handle: string }) => {
   const resolvedHandle = profile?.handle || handle;
 
   if (experiments.cleanHandles) {
-    return `@${resolvedHandle.replace('.bsky.social', '')}`;
+    return <span>{`@${resolvedHandle.replace('.bsky.social', '')}`}</span>;
   }
 
-  return `@${resolvedHandle}`;
+  return <span className="text-slate-400">{`@${resolvedHandle}`}</span>;
 };

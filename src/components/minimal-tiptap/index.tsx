@@ -65,13 +65,10 @@ export const MinimalTiptapEditor = forwardRef<HTMLDivElement, MinimalTiptapProps
       as="div"
       name="editor"
       ref={ref}
-      className={cn(
-        'flex h-auto min-h-72 w-full flex-col rounded-md border border-input shadow-sm focus-within:border-primary',
-        className,
-      )}
+      className={cn('flex h-auto min-h-72 w-full flex-col rounded-md border border-input', className)}
     >
-      <Toolbar editor={editor} />
       <EditorContent editor={editor} className={cn('minimal-tiptap-editor flex-1 h-full', editorContentClassName)} />
+      <Toolbar editor={editor} />
       <LinkBubbleMenu editor={editor} />
     </MeasuredContainer>
   );

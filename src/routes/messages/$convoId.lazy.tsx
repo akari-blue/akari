@@ -6,6 +6,7 @@ import { BSkyMessage } from '../../lib/bluesky/types/BSkyMessage';
 import { Virtuoso } from 'react-virtuoso';
 import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { Loading } from '@/components/ui/loading';
+import TimeAgo from 'react-timeago-i18n';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
@@ -16,6 +17,9 @@ function Message({ message }: { message: BSkyMessage }) {
         key={message.id as string}
       >
         {message.text}
+      </div>
+      <div className="dark:text-gray-500 text-xs">
+        <TimeAgo date={message.sentAt} roundStrategy="floor" />
       </div>
     </div>
   );
@@ -34,16 +38,23 @@ function Messages() {
 
   if (isError) {
     return (
-      <div className="w-[550px] h-screen flex items-center justify-center">
+      <div className="h-screen flex items-center justify-center">
         <span>{error.message}</span>
       </div>
     );
   }
 
   return (
-    <div className="w-[550px]">
+    <div className="p-2">
       <Virtuoso
         initialTopMostItemIndex={(messages?.length ?? 0) - 1}
+        useWindowScroll
+        totalCount={messages?.length ?? 0}
+        itemContent={(index: number) => {
+          const message = messages?.[index];
+          if (!message) return null;
+          return <Message key={message.id} message={message} />;
+        }}
         components={{
           List: forwardRef(function List({ children, style }: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
             return (
@@ -52,13 +63,7 @@ function Messages() {
               </div>
             );
           }),
-        }}
-        useWindowScroll
-        totalCount={messages?.length ?? 0}
-        itemContent={(index: number) => {
-          const message = messages?.[index];
-          if (!message) return null;
-          return <Message key={message.id} message={message} />;
+          Footer: () => <div className="h-16 md:h-0" />,
         }}
       />
     </div>

@@ -67,7 +67,9 @@
     "sonner": "^1.7.1",
     "string-byte-slice": "^3.0.0",
     "tailwind-merge": "^2.6.0",
+    "tailwind-scrollbar-hide": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-safe-area": "^0.6.0",
     "zod": "^3.24.1",
     "zustand": "^4.5.1"
   },

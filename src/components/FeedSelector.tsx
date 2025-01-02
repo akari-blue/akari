@@ -3,9 +3,10 @@ import { useFeeds } from '../lib/bluesky/hooks/useFeeds';
 import { usePreferences } from '../lib/bluesky/hooks/usePreferences';
 import { useSettings } from '../hooks/useSetting';
 import * as Ariakit from '@ariakit/react';
-import { cn } from '../lib/utils';
 import { Timeline } from './Timeline';
 import { Loading } from './ui/loading';
+import { TabList } from './ui/tab-list';
+import { Tab } from './ui/tab';
 
 export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
   const { setSettings, columns } = useSettings();
@@ -63,23 +64,11 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
         {feeds.length >= 2 && (
           <>
             <div>
-              <Ariakit.TabList
-                className="flex flex-row gap-4 max-w-full overflow-x-scroll bg-neutral-900 p-2 m-2 mb-0 rounded-md"
-                aria-label="feeds"
-              >
+              <TabList label="feed selector">
                 {data?.map((feed) => (
-                  <Ariakit.Tab
-                    id={feed.uri}
-                    key={feed.uri}
-                    className={cn(
-                      'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                      selectedFeed === feed.uri && 'bg-neutral-700',
-                    )}
-                  >
-                    {feed.displayName}
-                  </Ariakit.Tab>
+                  <Tab id={feed.uri} name={feed.displayName} selectedTab={selectedFeed} key={feed.uri} />
                 ))}
-              </Ariakit.TabList>
+              </TabList>
             </div>
             {data?.map((feed) => (
               <Ariakit.TabPanel key={feed.uri} tabId={feed.uri}>
