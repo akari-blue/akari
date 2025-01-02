@@ -69,7 +69,7 @@ function Messages() {
           List: forwardRef(function List(props: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
             return <div ref={ref} {...props} className="flex flex-col" />;
           }),
-          Footer: () => <div className="h-16" />,
+          Footer: () => <div className="h-96 md:h-0" />,
         }}
       />
     </div>

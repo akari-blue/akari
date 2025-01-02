@@ -51,7 +51,7 @@ function Post() {
         components={{
           Header: () => <PostCard post={postThread?.post as BSkyPost} />,
           List,
-          Footer: () => <div className="h-96" />,
+          Footer: () => <div className="h-96 md:h-0" />,
         }}
       />
     </>

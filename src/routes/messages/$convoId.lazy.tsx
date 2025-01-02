@@ -63,7 +63,7 @@ function Messages() {
               </div>
             );
           }),
-          Footer: () => <div className="h-16" />,
+          Footer: () => <div className="h-16 md:h-0" />,
         }}
       />
     </div>
