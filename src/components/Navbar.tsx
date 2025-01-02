@@ -1,3 +1,4 @@
+import { useLocation } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Link } from './ui/Link';
@@ -72,6 +73,7 @@ const LoginButton = () => {
 
 export const Navbar = () => {
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
 
   return (
     <div
@@ -83,7 +85,7 @@ export const Navbar = () => {
         // tablet
         'md:top-0 md:right-auto md:border-r md:border-gray-200 md:dark:border-gray-800',
         // desktop
-        'lg:bg-inherit lg:relative lg:h-fit',
+        'lg:bg-inherit lg:relative lg:h-screen lg:border-none',
       )}
     >
       <div
@@ -92,6 +94,8 @@ export const Navbar = () => {
           'flex flex-row gap-2 justify-between p-2 pb-4',
           // tablet
           'md:flex-col md:gap-2 md:h-full md:space-y-8 md:justify-normal',
+          // desktop
+          'lg:space-y-0',
         )}
       >
         <HomeLink />
@@ -100,7 +104,7 @@ export const Navbar = () => {
         {isAuthenticated && <ProfileLink />}
         <SettingsLink />
         {!isAuthenticated && <LoginButton />}
-        {isAuthenticated && <CreatePost />}
+        {isAuthenticated && location.pathname === '/' && <CreatePost />}
       </div>
     </div>
   );
