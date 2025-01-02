@@ -9,9 +9,10 @@ type ImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'className'> &
     wrapper?: string;
     image?: string;
   };
+  clickable?: boolean;
 };
 
-export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
+export const Image = ({ src, alt, type, classNames, clickable = true, ...props }: ImageProps) => {
   const { experiments } = useSettings();
   const { t } = useTranslation('image');
 
@@ -28,7 +29,7 @@ export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
     );
   }
 
-  if (type === 'avatar') {
+  if (type === 'avatar' || !clickable) {
     return (
       <img
         loading="lazy"
