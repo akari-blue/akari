@@ -10,7 +10,6 @@ jobs:
 
     environment:
       name: preview
-      url: https://preview.bsky-client.imlunahey.com
 
     steps:
       - uses: actions/checkout@v4
