@@ -71,6 +71,7 @@ function Messages() {
           }),
           Footer: () => <div className="h-96 md:h-0" />,
         }}
+        followOutput
       />
     </div>
   );
