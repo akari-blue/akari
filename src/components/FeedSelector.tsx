@@ -3,18 +3,10 @@ import { useFeeds } from '../lib/bluesky/hooks/useFeeds';
 import { usePreferences } from '../lib/bluesky/hooks/usePreferences';
 import { useSettings } from '../hooks/useSetting';
 import * as Ariakit from '@ariakit/react';
-import { cn } from '../lib/utils';
 import { Timeline } from './Timeline';
 import { Loading } from './ui/loading';
 import { TabList } from './ui/tab-list';
-
-const Tab = ({ name, id, selectedTab }: { name: string; id: string; selectedTab: string | undefined | null }) => {
-  return (
-    <Ariakit.Tab id={id} className={cn('flex h-10 items-center justify-center whitespace-nowrap px-4')}>
-      <span className={cn('p-2', selectedTab === id && 'border-b-4 border-blue-500')}>{name}</span>
-    </Ariakit.Tab>
-  );
-};
+import { Tab } from './ui/tab';
 
 export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
   const { setSettings, columns } = useSettings();
