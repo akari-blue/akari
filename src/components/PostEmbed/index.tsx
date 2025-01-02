@@ -5,7 +5,6 @@ import { NotImplementedBox } from '../ui/NotImplementedBox';
 import { cn } from '../../lib/utils';
 import { useSettings } from '../../hooks/useSetting';
 import { AppBskyEmbedRecordView } from './app-bsky-embed-record-view';
-import { Link } from '../ui/Link';
 
 export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
   const { experiments } = useSettings();
