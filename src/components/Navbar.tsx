@@ -4,6 +4,7 @@ import { Link } from './ui/Link';
 import { useBlueskyStore } from '../lib/bluesky/store';
 import { BellIcon, HomeIcon, MailIcon, SettingsIcon, UserIcon } from 'lucide-react';
 import { CreatePost } from './CreatePost';
+import { cn } from '@/lib/utils';
 
 const HomeLink = () => {
   const { t } = useTranslation('app');
@@ -73,8 +74,26 @@ export const Navbar = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 pb-safe dark:bg-black lg:bg-inherit p-4 z-50 md:top-0 md:right-auto lg:relative lg:h-fit">
-      <div className="flex flex-row gap-2 justify-between md:flex-col p-2 pb-4">
+    <div
+      className={cn(
+        // base
+        'dark:bg-black px-4 pt-1 z-50',
+        // mobile
+        'fixed bottom-0 left-0 right-0 pb-safe border-t border-gray-200 dark:border-gray-800',
+        // tablet
+        'md:top-0 md:right-auto md:border-r md:border-gray-200 md:dark:border-gray-800',
+        // desktop
+        'lg:bg-inherit lg:relative lg:h-fit',
+      )}
+    >
+      <div
+        className={cn(
+          // base
+          'flex flex-row gap-2 justify-between p-2 pb-4',
+          // tablet
+          'md:flex-col md:gap-2 md:h-full md:space-y-8 md:justify-normal',
+        )}
+      >
         <HomeLink />
         {isAuthenticated && <MessagesLink />}
         {isAuthenticated && <NotificationsLink />}

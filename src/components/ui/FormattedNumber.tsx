@@ -17,7 +17,7 @@ export const FormattedNumber = ({
   return (
     <span title={`${prefix}${formattedValue} ${unit}`}>
       {prefix}
-      {compactValue} {unit}
+      {compactValue} <span className="hidden md:block">{unit}</span>
     </span>
   );
 };

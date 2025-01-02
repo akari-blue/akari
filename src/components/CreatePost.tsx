@@ -55,7 +55,7 @@ export function CreatePost() {
           variant="outline"
           className={cn(
             // mobile
-            'fixed bottom-20 right-2 rounded-full aspect-square size-16',
+            'fixed bottom-16 right-2 rounded-full aspect-square size-16',
             // tablet
             'md:bottom-2',
             // desktop

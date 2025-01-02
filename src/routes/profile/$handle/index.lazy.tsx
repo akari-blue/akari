@@ -22,6 +22,7 @@ import { Helmet } from 'react-helmet';
 import { useBlueskyStore } from '@/lib/bluesky/store';
 import { Tab } from '@/components/ui/tab';
 import { TabList } from '@/components/ui/tab-list';
+import { Handle } from '@/components/ui/Handle';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
@@ -199,6 +200,7 @@ function Profile() {
               </Badge>
               {handle !== session?.handle && <FollowButton handle={handle} following={!!profile.viewer?.following} />}
             </div>
+            <Handle handle={profile.handle} />
             {!experiments.zenMode && (
               <div className="flex gap-2">
                 <FormattedNumber value={profile?.followersCount} unit={t('followers')} />
@@ -220,7 +222,7 @@ function Profile() {
           }}
         >
           <div>
-            <TabList>
+            <TabList label="Profile tabs">
               {[
                 {
                   name: t('profile:tabs.all'),
