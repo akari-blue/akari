@@ -8,7 +8,7 @@
     "test": "vitest",
     "lint": "eslint src",
     "preview": "vite preview",
-    "dev": "stmux -M -- [ [ -s 1/4 'npm run dev:dom-preview' .. -s 1/4 'npm run dev:server' ] : -s 1/2 'npm run dev:unit' ]",
+    "dev": "DOM_PREVIEW=true stmux -M -- [ [ -s 1/4 'npm run dev:dom-preview' .. -s 1/4 'npm run dev:server' ] : -s 1/2 'npm run dev:unit' ]",
     "dev:unit": "vitest --ui",
     "dev:server": "vite --port=5173",
     "dev:dom-preview": "dom-preview --proxy-to=http://localhost:5173"

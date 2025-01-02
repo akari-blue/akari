@@ -11,11 +11,12 @@ beforeEach(() => {
 });
 
 const isCI = process.env.CI === 'true';
+const wantsDomPreview = process.env.DOM_PREVIEW === 'true';
 
 afterEach(() => {
   // Run dom-preview's debug if the test fails
   // if (context.task?.result?.state === 'fail') {
-  if (!isCI) {
+  if (!isCI && wantsDomPreview) {
     debug();
   }
   // }
