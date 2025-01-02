@@ -7,6 +7,7 @@ import { Virtuoso } from 'react-virtuoso';
 import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { Loading } from '@/components/ui/loading';
 import TimeAgo from 'react-timeago-i18n';
+import { FormattedText } from '@/components/ui/FormattedText';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
@@ -16,7 +17,7 @@ function Message({ message }: { message: BSkyMessage }) {
         className={cn(message.sender.did === session?.did ? 'bg-blue-600' : 'bg-neutral-800', 'p-2 w-fit rounded-sm')}
         key={message.id as string}
       >
-        {message.text}
+        <FormattedText text={message.text} />
       </div>
       <div className="dark:text-gray-500 text-xs">
         <TimeAgo date={message.sentAt} roundStrategy="floor" />
