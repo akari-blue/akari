@@ -18,7 +18,7 @@ const linkifyText = (line: string) => {
       );
     } else if (part.match(/@[\w.-]+/)) {
       return (
-        <Link key={index} to={`/profile/${part.slice(1)}`} className="text-blue-400">
+        <Link key={index} to={`/profile/$handle`} params={{ handle: part.slice(1) }} className="text-blue-400">
           {part}
         </Link>
       );
