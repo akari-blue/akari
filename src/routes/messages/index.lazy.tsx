@@ -19,7 +19,7 @@ function Conversation({ convo }: { convo: BSkyConvo }) {
 
   return (
     <Link to="/messages/$convoId" params={{ convoId: convo.id }} className="hover:no-underline">
-      <div className="flex gap-2 p-2 hover:bg-neutral-900" key={member.did}>
+      <div className={cn('flex gap-2 p-2 hover:bg-neutral-900', !convo.opened && 'bg-neutral-800')} key={member.did}>
         <Link to="/profile/$handle" params={{ handle: member.handle ?? member.did }} className="hover:no-underline">
           <Image
             type="avatar"
