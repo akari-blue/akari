@@ -82,7 +82,7 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
               </Ariakit.TabList>
             </div>
             {data?.map((feed) => (
-              <Ariakit.TabPanel key={feed.uri} tabId={feed.uri} className="flex-1 overflow-y-scroll min-h-0">
+              <Ariakit.TabPanel key={feed.uri} tabId={feed.uri}>
                 <Timeline columnNumber={columnNumber} />
               </Ariakit.TabPanel>
             ))}
