@@ -11,11 +11,13 @@ import { ur } from './lang/ur';
 import { yue } from './lang/yue';
 import { zh_Hans } from './lang/zh-Hans';
 import { zh_Hant } from './lang/zh-Hant';
+import { de } from './lang/de';
 
 export const defaultNS = 'app';
 
 export const languages = {
   en,
+  de,
   fr,
   fil,
   ja,
