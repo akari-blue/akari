@@ -9,7 +9,7 @@ const HomeLink = () => {
   const { t } = useTranslation('app');
   return (
     <Link to="/">
-      <HomeIcon className="size-10 lg:hidden" />
+      <HomeIcon className="size-7 lg:hidden" />
       <h1 className="text-2xl font-bold hidden lg:block">{t('appName')}</h1>
     </Link>
   );
@@ -19,7 +19,7 @@ const MessagesLink = () => {
   const { t } = useTranslation('messages');
   return (
     <Link to="/messages">
-      <MailIcon className="size-10 lg:hidden" />
+      <MailIcon className="size-7 lg:hidden" />
       <span className="hidden lg:block">{t('messages')}</span>
     </Link>
   );
@@ -29,7 +29,7 @@ const NotificationsLink = () => {
   const { t } = useTranslation('notifications');
   return (
     <Link to="/notifications">
-      <BellIcon className="size-10 lg:hidden" />
+      <BellIcon className="size-7 lg:hidden" />
       <span className="hidden lg:block">{t('notifications')}</span>
     </Link>
   );
@@ -48,7 +48,7 @@ const ProfileLink = () => {
         handle: session?.handle,
       }}
     >
-      <UserIcon className="size-10 lg:hidden" />
+      <UserIcon className="size-7 lg:hidden" />
       <span className="hidden lg:block">{t('profile')}</span>
     </Link>
   );
@@ -58,7 +58,7 @@ const SettingsLink = () => {
   const { t } = useTranslation('app');
   return (
     <Link to="/settings">
-      <SettingsIcon className="size-10 lg:hidden" />
+      <SettingsIcon className="size-7 lg:hidden" />
       <span className="hidden lg:block">{t('settings')}</span>
     </Link>
   );
@@ -73,8 +73,8 @@ export const Navbar = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-neutral-900 lg:bg-inherit p-4 z-50 md:top-0 md:right-auto lg:relative lg:h-fit">
-      <div className="flex flex-row gap-2 justify-between md:flex-col">
+    <div className="fixed bottom-0 left-0 right-0 pb-safe dark:bg-black lg:bg-inherit p-4 z-50 md:top-0 md:right-auto lg:relative lg:h-fit">
+      <div className="flex flex-row gap-2 justify-between md:flex-col p-2 pb-4">
         <HomeLink />
         {isAuthenticated && <MessagesLink />}
         {isAuthenticated && <NotificationsLink />}

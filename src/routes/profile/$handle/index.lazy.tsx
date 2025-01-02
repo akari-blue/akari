@@ -20,6 +20,8 @@ import { Loading } from '@/components/ui/loading';
 import { NotFound } from '@/components/ui/not-found';
 import { Helmet } from 'react-helmet';
 import { useBlueskyStore } from '@/lib/bluesky/store';
+import { Tab } from '@/components/ui/tab';
+import { TabList } from '@/components/ui/tab-list';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
@@ -180,13 +182,13 @@ function Profile() {
       </Helmet>
       <div className="flex flex-col gap-2">
         <Image type="banner" src={profile?.banner} alt="Banner" classNames={{ image: 'w-full h-32 object-cover' }} />
-        <div className="px-2 sm:p-0">
+        <div className="px-4 -mt-12">
           <Image
             type="avatar"
             src={profile?.avatar}
             alt="Avatar"
             classNames={{
-              image: cn('w-24 h-24', profile.associated?.labeler ? 'aspect-square' : 'rounded-full'),
+              image: cn('size-24', profile.associated?.labeler ? 'aspect-square' : 'rounded-full'),
             }}
           />
           <div>
@@ -218,89 +220,24 @@ function Profile() {
           }}
         >
           <div>
-            <Ariakit.TabList className="flex flex-row gap-4 max-w-full overflow-x-scroll bg-neutral-900" aria-label="tabs">
-              <Ariakit.Tab
-                id="all"
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedTab === 'all' && 'bg-neutral-700',
-                )}
-              >
-                {t('profile:tabs.all')}
-              </Ariakit.Tab>
-              <Ariakit.Tab
-                id="posts"
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedTab === 'posts' && 'bg-neutral-700',
-                )}
-              >
-                {t('profile:tabs.posts')}
-              </Ariakit.Tab>
-              <Ariakit.Tab
-                id="reposts"
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedTab === 'reposts' && 'bg-neutral-700',
-                )}
-              >
-                {t('profile:tabs.reposts')}
-              </Ariakit.Tab>
-              <Ariakit.Tab
-                id="replies"
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedTab === 'replies' && 'bg-neutral-700',
-                )}
-              >
-                {t('replies')}
-              </Ariakit.Tab>
-              <Ariakit.Tab
-                id="media"
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedTab === 'media' && 'bg-neutral-700',
-                )}
-              >
-                {t('profile:tabs.media')}
-              </Ariakit.Tab>
-              <Ariakit.Tab
-                id="likes"
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedTab === 'likes' && 'bg-neutral-700',
-                )}
-              >
-                {t('profile:tabs.likes')}
-              </Ariakit.Tab>
-              <Ariakit.Tab
-                id="feeds"
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedTab === 'feeds' && 'bg-neutral-700',
-                )}
-              >
-                {t('profile:tabs.feeds')}
-              </Ariakit.Tab>
-              <Ariakit.Tab
-                id="starter-packs"
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedTab === 'starter-packs' && 'bg-neutral-700',
-                )}
-              >
-                {t('profile:tabs.starterpacks')}
-              </Ariakit.Tab>
-              <Ariakit.Tab
-                id="lists"
-                className={cn(
-                  'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                  selectedTab === 'lists' && 'bg-neutral-700',
-                )}
-              >
-                {t('profile:tabs.lists')}
-              </Ariakit.Tab>
-            </Ariakit.TabList>
+            <TabList>
+              {[
+                {
+                  name: t('profile:tabs.all'),
+                  id: 'all',
+                },
+                { name: t('profile:tabs.posts'), id: 'posts' },
+                { name: t('profile:tabs.reposts'), id: 'reposts' },
+                { name: t('replies'), id: 'replies' },
+                { name: t('profile:tabs.media'), id: 'media' },
+                { name: t('profile:tabs.likes'), id: 'likes' },
+                { name: t('profile:tabs.feeds'), id: 'feeds' },
+                { name: t('profile:tabs.starterpacks'), id: 'starter-packs' },
+                { name: t('profile:tabs.lists'), id: 'lists' },
+              ].map(({ name, id }) => (
+                <Tab name={name} id={id} selectedTab={selectedTab} key={id} />
+              ))}
+            </TabList>
           </div>
           <Ariakit.TabPanel tabId="all">
             <All />
