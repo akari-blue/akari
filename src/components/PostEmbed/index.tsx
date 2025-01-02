@@ -73,20 +73,19 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
         );
       }
       return (
-        <Link href={embed.external.uri} target="_blank" rel="noreferrer">
-          <div className="rounded-lg">
-            {embed.external.thumb && (
-              <Image
-                type="post"
-                src={embed.external.uri.includes('.gif') ? embed.external.uri : embed.external.thumb}
-                alt={embed.external.title}
-                classNames={{
-                  image: 'rounded-lg w-full object-cover aspect-video',
-                }}
-              />
-            )}
-          </div>
-        </Link>
+        <div className="rounded-lg">
+          {embed.external.thumb && (
+            <Image
+              type="post"
+              src={embed.external.uri.includes('.gif') ? embed.external.uri : embed.external.thumb}
+              alt={embed.external.title}
+              classNames={{
+                image: 'rounded-lg w-full object-cover aspect-video',
+              }}
+              clickable={false}
+            />
+          )}
+        </div>
       );
     }
     case 'app.bsky.embed.record#view': {
