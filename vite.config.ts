@@ -18,7 +18,7 @@ export default defineConfig({
       },
       includeAssets: ['src/assets/images/**/*'],
       manifest: {
-        id: 'com.imlunahey.bsky-client',
+        id: 'blue.akari',
         name: 'akari',
         short_name: 'akari' + (process.env.NODE_ENV === 'development' ? ' (Dev)' : ''),
         description: 'akari',
