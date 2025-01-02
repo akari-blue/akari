@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Editor } from '@tiptap/react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -42,7 +41,7 @@ export const ImageEditBlock = ({ editor, close }: ImageEditBlockProps) => {
     [editor, close],
   );
 
-  const handleSubmit = React.useCallback(
+  const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       e.stopPropagation();

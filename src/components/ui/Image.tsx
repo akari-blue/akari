@@ -67,7 +67,11 @@ export const Image = ({ src, alt, type, classNames, ...props }: ImageProps) => {
           alt={alt}
           {...props}
           onClick={imageOnClick}
-          className={cn(classNames?.image, experiments.streamerMode && 'filter blur-md')}
+          className={cn(
+            classNames?.image,
+            experiments.streamerMode && 'filter blur-md',
+            type === 'banner' && 'aspect-video w-full',
+          )}
         />
       </div>
       {isFullscreen && (

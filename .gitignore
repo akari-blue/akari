@@ -28,3 +28,6 @@ html
 dist
 dev-dist
 coverage
+
+.vitest-preview
+.env

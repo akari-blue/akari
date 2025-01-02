@@ -6,14 +6,12 @@ import { BSkyPost } from '../types/BSkyPost';
 const timelineQueryKey = ['timeline', { isAuthenticated: true }];
 
 export function useRepost() {
-  const { agent } = useBlueskyStore();
+  const agent = useBlueskyStore((store) => store.agent);
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['repost'],
     mutationFn: async ({ uri, cid }: { uri: string; cid: string }) => {
-      if (!agent) throw new Error('Not authenticated');
-
       toast.info('Reposting ' + uri);
 
       await agent.repost(uri, cid);
@@ -52,7 +50,7 @@ export function useRepost() {
                   viewer: {
                     ...post.viewer,
                     // TODO: confirm the format of repost string
-                    repost: `at://did:${agent?.session?.did}`,
+                    repost: `at://did:${agent.session?.did}`,
                   },
                 },
               };

@@ -107,7 +107,9 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
           totalCount={posts.length}
           endReached={() => fetchNextPage()}
           components={{
-            List: forwardRef((props, ref) => <div ref={ref} {...props} className="flex flex-col gap-2" />),
+            List: forwardRef(function List(props, ref) {
+              return <div ref={ref} {...props} className="flex flex-col gap-2" />;
+            }),
           }}
           itemContent={(index: number) => <PostCard key={posts[index]?.post.uri} post={posts[index]?.post} />}
         />

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Editor } from '@tiptap/react';
 import type { VariantProps } from 'class-variance-authority';
 import type { toggleVariants } from '@/components/ui/toggle';
@@ -6,18 +5,19 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Link2Icon } from '@radix-ui/react-icons';
 import { ToolbarButton } from '../toolbar-button';
 import { LinkEditBlock } from './link-edit-block';
+import { useState, useCallback } from 'react';
 
 interface LinkEditPopoverProps extends VariantProps<typeof toggleVariants> {
   editor: Editor;
 }
 
-const LinkEditPopover = ({ editor, size, variant }: LinkEditPopoverProps) => {
-  const [open, setOpen] = React.useState(false);
+export const LinkEditPopover = ({ editor, size, variant }: LinkEditPopoverProps) => {
+  const [open, setOpen] = useState(false);
 
   const { from, to } = editor.state.selection;
   const text = editor.state.doc.textBetween(from, to, ' ');
 
-  const onSetLink = React.useCallback(
+  const onSetLink = useCallback(
     (url: string, text?: string, openInNewTab?: boolean) => {
       editor
         .chain()
@@ -62,5 +62,3 @@ const LinkEditPopover = ({ editor, size, variant }: LinkEditPopoverProps) => {
     </Popover>
   );
 };
-
-export { LinkEditPopover };

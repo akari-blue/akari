@@ -32,21 +32,21 @@ class ErrorBoundaryInner extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black">
-            <div className="max-w-md w-full px-6 py-8 bg-zinc-200 dark:bg-zinc-900 shadow-lg rounded-lg">
-              <h1 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">{t('somethingWentWrong')}</h1>
-              <pre className="text-gray-600 dark:text-gray-300 mb-4">
-                {this.state.error
-                  ? JSON.stringify(error2json(this.state.error), null, 2)
-                      .split('\n')
-                      .map((item) => (
-                        <>
-                          {item}
-                          <br />
-                        </>
-                      ))
-                  : 'An unexpected error occurred'}
-              </pre>
+          <div className="flex items-center justify-center bg-white dark:bg-black">
+            <h1 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">{t('somethingWentWrong')}</h1>
+            <pre className="text-gray-600 dark:text-gray-300">
+              {this.state.error
+                ? JSON.stringify(error2json(this.state.error), null, 2)
+                    .split('\n')
+                    .map((item, index) => (
+                      <span key={index}>
+                        {item}
+                        <br />
+                      </span>
+                    ))
+                : 'An unexpected error occurred'}
+            </pre>
+            <div className="flex items-center justify-end w-full">
               <button
                 // reload the component
                 onClick={() => this.setState({ hasError: false })}

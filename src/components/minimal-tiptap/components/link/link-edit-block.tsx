@@ -1,31 +1,30 @@
-import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { useImperativeHandle } from 'react';
+import { FormEvent, forwardRef, HTMLAttributes, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export interface LinkEditorProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface LinkEditorProps extends HTMLAttributes<HTMLDivElement> {
   defaultUrl?: string;
   defaultText?: string;
   defaultIsNewTab?: boolean;
   onSave: (url: string, text?: string, isNewTab?: boolean) => void;
 }
 
-export const LinkEditBlock = React.forwardRef<HTMLDivElement, LinkEditorProps>(function LinkEditBlock(
+export const LinkEditBlock = forwardRef<HTMLDivElement, LinkEditorProps>(function LinkEditBlock(
   { onSave, defaultIsNewTab, defaultUrl, defaultText, className },
   ref,
 ) {
-  const formRef = React.useRef<HTMLDivElement | null>(null);
-  const [url, setUrl] = React.useState(defaultUrl || '');
-  const [text, setText] = React.useState(defaultText || '');
-  const [isNewTab, setIsNewTab] = React.useState(defaultIsNewTab || false);
+  const formRef = useRef<HTMLDivElement | null>(null);
+  const [url, setUrl] = useState(defaultUrl || '');
+  const [text, setText] = useState(defaultText || '');
+  const [isNewTab, setIsNewTab] = useState(defaultIsNewTab || false);
   const { t } = useTranslation(['app', 'editor']);
 
-  const handleSave = React.useCallback(
-    (e: React.FormEvent) => {
+  const handleSave = useCallback(
+    (e: FormEvent) => {
       e.preventDefault();
       if (formRef.current) {
         const isValid = Array.from(formRef.current.querySelectorAll('input')).every((input) => input.checkValidity());

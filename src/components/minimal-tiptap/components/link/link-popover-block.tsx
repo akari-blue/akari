@@ -1,20 +1,20 @@
-import * as React from 'react';
 import { Separator } from '@/components/ui/separator';
 import { ToolbarButton } from '../toolbar-button';
 import { CopyIcon, ExternalLinkIcon, LinkBreak2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
+import { useState, useCallback } from 'react';
 
-interface LinkPopoverBlockProps {
+type LinkPopoverBlockProps = {
   url: string;
   onClear: () => void;
   onEdit: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
+};
 
-export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({ url, onClear, onEdit }) => {
-  const [copyTitle, setCopyTitle] = React.useState<string>('Copy');
+export const LinkPopoverBlock = ({ url, onClear, onEdit }: LinkPopoverBlockProps) => {
+  const [copyTitle, setCopyTitle] = useState<string>('Copy');
   const { t } = useTranslation('editor');
 
-  const handleCopy = React.useCallback(
+  const handleCopy = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       navigator.clipboard
@@ -28,7 +28,7 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({ url, onClear
     [url],
   );
 
-  const handleOpenLink = React.useCallback(() => {
+  const handleOpenLink = useCallback(() => {
     window.open(url, '_blank', 'noopener,noreferrer');
   }, [url]);
 

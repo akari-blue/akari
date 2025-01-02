@@ -23,7 +23,7 @@ const linkifyText = (line: string) => {
         </Link>
       );
     } else {
-      return part;
+      return <span key={index}>{part}</span>;
     }
   });
 };
@@ -38,10 +38,10 @@ export function FormattedText({ text, linkify }: { text: string; linkify?: boole
   return (
     <span>
       {text.split('\n').map((line, index) => (
-        <>
+        <span key={index}>
           {linkify ? linkifyText(line) : line}
           {index < text.split('\n').length - 1 && <br />}
-        </>
+        </span>
       ))}
     </span>
   );

@@ -13,7 +13,7 @@ export function useConversation({ convoId }: { convoId: string }) {
       if (!session) return [];
 
       // @ts-expect-error bsky_chat does in fact work
-      const proxy = agent?.withProxy('bsky_chat', 'did:web:api.bsky.chat');
+      const proxy = agent.withProxy('bsky_chat', 'did:web:api.bsky.chat');
       const response = await proxy?.api.chat.bsky.convo.getMessages({
         convoId,
       });

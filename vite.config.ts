@@ -7,12 +7,14 @@ import { VitePWA } from 'vite-plugin-pwa';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    TanStackRouterVite(),
+    TanStackRouterVite({
+      routeFileIgnorePattern: 'components',
+    }),
     react({}),
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true,
+        enabled: process.env.NODE_ENV !== 'test',
       },
       includeAssets: ['src/assets/images/**/*'],
       manifest: {

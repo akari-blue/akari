@@ -9,7 +9,7 @@ export function usePreferences() {
   return useQuery({
     queryKey: ['preferences'],
     queryFn: async () => {
-      const response = await agent?.api.app.bsky.actor.getPreferences();
+      const response = await agent.api.app.bsky.actor.getPreferences();
       return response?.data.preferences;
     },
     enabled: !!agent && isAuthenticated,

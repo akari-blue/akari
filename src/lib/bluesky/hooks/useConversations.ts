@@ -15,7 +15,7 @@ export function useConversations() {
       if (!pdsUrl) return [];
 
       // @ts-expect-error bsky_chat does in fact work
-      const proxy = agent?.withProxy('bsky_chat', 'did:web:api.bsky.chat');
+      const proxy = agent.withProxy('bsky_chat', 'did:web:api.bsky.chat');
       const response = await proxy?.api.chat.bsky.convo.listConvos();
       return response?.data.convos as BSkyConvo[];
     },

@@ -28,10 +28,13 @@ export const languages = {
   'zh-Hant': zh_Hant,
 };
 
+const isProduction = process.env.NODE_ENV === 'production';
+const isTest = process.env.NODE_ENV === 'test';
+
 i18n
   .use(
     new Pseudo({
-      enabled: process.env.NODE_ENV !== 'production',
+      enabled: !isProduction && !isTest,
       wrapped: true,
     }),
   )

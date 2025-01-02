@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { languages } from '../i18n';
+import { languages } from '@/i18n';
 
 type Settings = {
   experiments: {
