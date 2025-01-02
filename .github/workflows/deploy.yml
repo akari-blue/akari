@@ -10,7 +10,7 @@ env:
 
 jobs:
   test:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [22.x]
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: buildjet/setup-node@v4
+        uses: setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -29,7 +29,7 @@ jobs:
       - run: npm run test
   build-and-push-image:
     needs: test
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [22.x]
@@ -70,7 +70,7 @@ jobs:
 
   deploy:
     needs: build-and-push-image
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [22.x]
@@ -81,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: buildjet/setup-node@v4
+        uses: setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
