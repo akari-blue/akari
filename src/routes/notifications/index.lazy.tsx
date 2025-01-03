@@ -2,12 +2,13 @@ import * as Ariakit from '@ariakit/react';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
 import { useNotifications } from '@/lib/bluesky/hooks/useNotifications';
 import { Loading } from '@/components/ui/loading';
 import { GroupedNotifications } from './components/GroupedNotifications';
 import { Notification } from './components/Notification';
 import { Helmet } from 'react-helmet';
+import { TabList } from '@/components/ui/tab-list';
+import { Tab } from '@/components/ui/tab';
 
 export const Route = createLazyFileRoute('/notifications/')({
   component: RouteComponent,
@@ -30,7 +31,7 @@ function RouteComponent() {
       <Helmet>
         <title>{t('notifications:notifications')}</title>
       </Helmet>
-      <div className="flex flex-col gap-2 rounded-lg">
+      <div className="flex flex-col gap-2 border">
         <Ariakit.TabProvider
           defaultSelectedId={selectedTab}
           setSelectedId={(selectedId) => {
@@ -38,31 +39,15 @@ function RouteComponent() {
             setSelectedTab(selectedId);
           }}
         >
-          <Ariakit.TabList className="grid grid-cols-2 gap-4 max-w-full overflow-x-scroll bg-neutral-900 p-2 m-2 mb-0 rounded-md">
-            <Ariakit.Tab
-              id="all"
-              className={cn(
-                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                selectedTab === 'all' && 'bg-neutral-700',
-              )}
-            >
-              {t('notifications:tabs.all')}
-            </Ariakit.Tab>
-            <Ariakit.Tab
-              id="mentions"
-              className={cn(
-                'flex h-10 items-center justify-center whitespace-nowrap bg-neutral-800 px-4',
-                selectedTab === 'mentions' && 'bg-neutral-700',
-              )}
-            >
-              {t('notifications:tabs.mentions')}
-            </Ariakit.Tab>
-          </Ariakit.TabList>
+          <TabList label="notifications" className="justify-between grid grid-cols-2">
+            <Tab id="all" name={t('notifications:tabs.all')} selectedTab={selectedTab} />
+            <Tab id="mentions" name={t('notifications:tabs.mentions')} selectedTab={selectedTab} />
+          </TabList>
           <div className="p-2">
             <Ariakit.TabPanel tabId="all">{notifications && <GroupedNotifications />}</Ariakit.TabPanel>
             <Ariakit.TabPanel tabId="mentions" className="flex flex-col gap-2">
               {mentions?.map((notification) => (
-                <div className="p-2 bg-neutral-800 rounded-lg" key={notification.uri}>
+                <div key={notification.uri} className="border-b border-neutral-700 hover:bg-neutral-500 hover:bg-opacity-10">
                   <Notification key={notification.uri} notification={notification} />
                 </div>
               ))}

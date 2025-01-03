@@ -1,5 +1,6 @@
 import { Static, Type } from '@sinclair/typebox';
 import { BSkyAuthor } from './BskyAuthor';
+import { BSkyPost } from './BSkyPost';
 
 export const BSkyNotificationFeedLike = Type.Object({
   $type: Type.Literal('app.bsky.feed.like'),
@@ -118,7 +119,7 @@ export const BSkyReplyNotification = Type.Object({
   author: BSkyAuthor,
   reason: Type.Literal('reply'),
   reasonSubject: Type.Optional(Type.String()),
-  record: Type.Any(), // TODO <--
+  record: BSkyPost['record'],
   isRead: Type.Boolean(),
   indexedAt: Type.String(),
   labels: Type.Optional(Type.Array(Type.Any())),

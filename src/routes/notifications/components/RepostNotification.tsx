@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 export function RepostNotification({ notification }: { notification: BSkyRepostNotification }) {
   const { t } = useTranslation('notifications');
   return (
-    <div>
+    <div className="p-2">
       <div className="flex flex-row gap-1 overflow-hidden max-h-16">
         <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8 " />
       </div>

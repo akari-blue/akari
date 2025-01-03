@@ -61,7 +61,7 @@ export function GroupedNotifications() {
       itemContent={(index: number) => {
         if (!list[index]) return null;
         return (
-          <div key={list[index][0]?.uri} className="p-2 bg-neutral-800 rounded-lg">
+          <div key={list[index][0]?.uri} className="border-b border-neutral-700 hover:bg-neutral-500 hover:bg-opacity-10">
             <GroupNotification key={list[index][0]?.uri} notifications={list[index]} />
           </div>
         );

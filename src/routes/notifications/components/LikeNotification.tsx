@@ -17,20 +17,26 @@ export function LikeNotification({ notifications }: { notifications: BSkyLikeNot
   if (!isBSkyLikeNotification(notification)) throw new Error('Notification is not a like notification');
 
   return (
-    <div>
-      <Debug value={notification} />
-      <div className="flex flex-row gap-1 overflow-hidden max-h-16">
-        {notifications.map((notification) => (
-          <Avatar
-            key={notification.author.did}
-            handle={notification.author.handle}
-            avatar={notification.author.avatar}
-            className="size-8"
-          />
-        ))}
-      </div>
-      <div>
-        <Handle handle={notification.author.handle} />
+    <Link
+      to="/profile/$handle/post/$postId"
+      params={{
+        handle: session.did!,
+        postId: notification.record.subject.uri.split('/')[notification.record.subject.uri.split('/').length - 1]!,
+      }}
+      className="hover:no-underline"
+    >
+      <div className="p-2">
+        <Debug value={notification} />
+        <div className="flex flex-row gap-1 overflow-hidden max-h-16">
+          {notifications.map((notification) => (
+            <Avatar
+              key={notification.author.did}
+              handle={notification.author.handle}
+              avatar={notification.author.avatar}
+              className="size-8"
+            />
+          ))}
+        </div>
         {notifications.map((notification) => notification.author.displayName).slice(-1)}
         {notifications.length - 1 >= 1 &&
           `${t('and')} ${othersCount} ${othersCount >= 1 && (othersCount === 1 ? t('other') : t('others'))} `}{' '}
@@ -44,6 +50,6 @@ export function LikeNotification({ notifications }: { notifications: BSkyLikeNot
           {t('likedYourPost')}
         </Link>
       </div>
-    </div>
+    </Link>
   );
 }
