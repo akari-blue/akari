@@ -9,8 +9,6 @@ import { FacetedText } from './FacetedText';
 import { PostEmbed } from './PostEmbed';
 import { Link } from './ui/Link';
 import { ErrorBoundary } from './ErrorBoundary';
-import { Image } from './ui/Image';
-// import { usePostThread } from '../lib/bluesky/hooks/usePostThread';
 import { useSettings } from '../hooks/useSetting';
 import { FormattedNumber } from './ui/FormattedNumber';
 import TimeAgo from 'react-timeago-i18n';
