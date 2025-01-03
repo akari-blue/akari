@@ -111,7 +111,9 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
               return <div ref={ref} {...props} className="flex flex-col gap-2" />;
             }),
           }}
-          itemContent={(index: number) => <PostCard key={posts[index]?.post.uri} post={posts[index]?.post} />}
+          itemContent={(index: number) => (
+            <PostCard key={posts[index]?.post.uri} post={posts[index]?.post} context={posts[index]?.feedContext} />
+          )}
         />
       </div>
     </div>
