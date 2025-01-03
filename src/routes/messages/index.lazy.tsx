@@ -12,7 +12,6 @@ import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { Avatar } from '@/components/ui/avatar';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
-import { appName } from '@/config';
 
 function Conversation({ convo }: { convo: BSkyConvo }) {
   const session = useBlueskyStore((state) => state.session);
