@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vitest } from 'vitest';
 import { ErrorBoundary } from './ErrorBoundary';
 
 describe('ErrorBoundary', () => {
@@ -17,11 +17,13 @@ describe('ErrorBoundary', () => {
       throw new Error('test');
     };
 
+    vitest.spyOn(console, 'error').mockImplementation(() => vitest.fn());
     const { container } = render(
       <ErrorBoundary>
         <ErrorComponent />
       </ErrorBoundary>,
     );
+    vitest.restoreAllMocks();
     expect(container).toHaveTextContent('test');
   });
 });

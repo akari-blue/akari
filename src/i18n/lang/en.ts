@@ -23,6 +23,7 @@ export const en = {
     save: 'save',
     cancel: 'cancel',
     optional: 'optional',
+    debug: 'debug',
   },
   settings: {
     developerMode: {

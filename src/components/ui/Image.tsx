@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '@/hooks/useSetting';
 import { cn } from '@/lib/utils';
-import { Dialog, DialogContent, DialogTrigger } from './dialog';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from './dialog';
+import { VisuallyHidden } from '@ariakit/react';
 
 type ImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'className'> & {
   classNames?: {
@@ -52,6 +53,9 @@ export const Image = ({ src, alt, classNames, clickable = true, ...props }: Imag
             className={cn(classNames?.image, experiments.streamerMode && 'filter blur-md')}
           />
         </DialogTrigger>
+        <VisuallyHidden>
+          <DialogTitle>{alt}</DialogTitle>
+        </VisuallyHidden>
         <DialogContent className="[&>button]:bg-black [&>button]:p-1 p-2 border">
           <img loading="lazy" src={src} alt={alt} {...props} className={cn(experiments.streamerMode && 'filter blur-md')} />
           <span>{alt}</span>

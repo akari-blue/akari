@@ -39,15 +39,7 @@ export function LikeNotification({ notifications }: { notifications: BSkyLikeNot
         {notifications.map((notification) => notification.author.displayName).slice(-1)}
         {notifications.length - 1 >= 1 &&
           `${t('and')} ${othersCount} ${othersCount >= 1 && (othersCount === 1 ? t('other') : t('others'))} `}{' '}
-        <Link
-          to="/profile/$handle/post/$postId"
-          params={{
-            handle: session.did!,
-            postId: notification.record.subject.uri.split('/')[notification.record.subject.uri.split('/').length - 1]!,
-          }}
-        >
-          {t('likedYourPost')}
-        </Link>
+        {t('likedYourPost')}
       </div>
     </Link>
   );
