@@ -6,7 +6,6 @@ import { PostCard } from '@/components/PostCard';
 import { BSkyPost } from '@/lib/bluesky/types/BSkyPost';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '@/hooks/useSetting';
-import { Image } from '@/components/ui/Image';
 import { Badge } from '@/components/ui/Badge';
 import { FollowButton } from '@/components/ui/FollowButton';
 import { FormattedNumber } from '@/components/ui/FormattedNumber';
