@@ -42,7 +42,6 @@ function Messages() {
   const messages = data?.messages;
   const convo = data?.convo;
   const otherMember = convo?.members[1];
-  if (!otherMember) throw new Error('No other member found in conversation');
 
   if (isLoading) return <Loading />;
 
@@ -61,6 +60,8 @@ function Messages() {
       </div>
     );
   }
+
+  if (!otherMember) throw new Error('No other member found in conversation');
 
   return (
     <>
