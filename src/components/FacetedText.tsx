@@ -2,6 +2,7 @@ import stringByteSlice from 'string-byte-slice';
 import { Link } from './ui/Link';
 import { FormattedText } from './ui/FormattedText';
 import { BSkyFacet } from '../lib/bluesky/types/BSkyFacet';
+import { Fragment } from 'react/jsx-runtime';
 
 export const FacetedText = ({ text, facets }: FacetedTextProps) => {
   // Sort facets by start index to process them in order
@@ -28,28 +29,28 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
     switch (firstFeature?.$type) {
       case 'app.bsky.richtext.facet#link':
         parts.push(
-          <>
-            <FormattedText text={' '} key={`text-${i}`} />
-            <ExternalLink key={`facet-${i}`} href={firstFeature.uri}>
+          <Fragment key={`facet-${i}-link`}>
+            <FormattedText text={' '} key={`text-${i}-link`} />
+            <ExternalLink key={`facet-${i}-link`} href={firstFeature.uri}>
               {facetText}
             </ExternalLink>
-          </>,
+          </Fragment>,
         );
         break;
       case 'app.bsky.richtext.facet#mention':
         parts.push(
-          <>
-            <FormattedText text={' '} key={`text-${i}`} />
-            <Mention key={`facet-${i}`} handle={facetText.slice(1)} />
-          </>,
+          <Fragment key={`facet-${i}-mention`}>
+            <FormattedText text={' '} key={`text-${i}-mention`} />
+            <Mention key={`facet-${i}-mention`} handle={facetText.slice(1)} />
+          </Fragment>,
         );
         break;
       case 'app.bsky.richtext.facet#tag':
         parts.push(
-          <>
-            <FormattedText text={' '} key={`text-${i}`} />
-            <HashTag key={`facet-${i}`} tag={facetText.slice(1)} />
-          </>,
+          <Fragment key={`facet-${i}-tag`}>
+            <FormattedText text={' '} key={`text-${i}-tag`} />
+            <HashTag key={`facet-${i}-tag`} tag={facetText.slice(1)} />
+          </Fragment>,
         );
         break;
     }

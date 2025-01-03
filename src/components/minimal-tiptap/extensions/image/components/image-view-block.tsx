@@ -10,7 +10,7 @@ import { blobUrlToBase64, randomId } from '../../../utils';
 import { InfoCircledIcon, TrashIcon } from '@radix-ui/react-icons';
 import { ImageOverlay } from './image-overlay';
 import { Spinner } from '../../../components/spinner';
-import type { UploadReturnType } from '../image';
+import type { UploadReturnType } from '..';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
