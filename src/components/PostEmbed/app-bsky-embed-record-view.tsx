@@ -33,7 +33,7 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
     <div className="p-4 rounded-lg shadow border border-neutral-200 dark:border-neutral-800">
       {embed.record.$type === 'app.bsky.embed.record#viewRecord' && (
         <div className="flex items-center space-x-3 mb-2">
-          {author.avatar && <Avatar handle={author.handle} avatar={author.avatar} />}
+          <Avatar handle={author.handle} avatar={author.avatar} />
           <div>
             <div className="font-medium text-gray-900 dark:text-gray-100">
               <Link to="/profile/$handle" params={{ handle: author.handle }}>

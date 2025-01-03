@@ -66,7 +66,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
     <div className="flex flex-col border-b border-gray-200 dark:border-gray-800">
       <div className={cn('p-3 w-full max-w-[550px] gap-2 flex flex-row', className)} onClick={onClick} id={post.uri}>
         <div className="flex-shrink-0">
-          {post.author.avatar && <Avatar handle={post.author.handle} avatar={post.author.avatar} />}
+          <Avatar handle={post.author.handle} avatar={post.author.avatar} />
         </div>
         <div>
           <div>
