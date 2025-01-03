@@ -49,24 +49,11 @@ export const Image = ({ src, alt, classNames, clickable = true, ...props }: Imag
             src={src}
             alt={alt}
             {...props}
-            className={cn(
-              classNames?.image,
-              experiments.streamerMode && 'filter blur-md',
-              // type === 'banner' && 'aspect-video w-full',
-            )}
+            className={cn(classNames?.image, experiments.streamerMode && 'filter blur-md')}
           />
         </DialogTrigger>
         <DialogContent className="[&>button]:bg-black [&>button]:p-1 p-2 border">
-          <img
-            loading="lazy"
-            src={src}
-            alt={alt}
-            {...props}
-            className={cn(
-              experiments.streamerMode && 'filter blur-md',
-              // type === 'banner' && 'aspect-video w-full'
-            )}
-          />
+          <img loading="lazy" src={src} alt={alt} {...props} className={cn(experiments.streamerMode && 'filter blur-md')} />
           <span>{alt}</span>
         </DialogContent>
       </Dialog>
