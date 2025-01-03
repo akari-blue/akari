@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogTrigger } from './dialog';
 
 type ImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'className'> & {
-  type: 'avatar' | 'post' | 'banner';
   classNames?: {
     wrapper?: string;
     image?: string;
@@ -12,7 +11,7 @@ type ImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'className'> &
   clickable?: boolean;
 };
 
-export const Image = ({ src, alt, type, classNames, clickable = true, ...props }: ImageProps) => {
+export const Image = ({ src, alt, classNames, clickable = true, ...props }: ImageProps) => {
   const { experiments } = useSettings();
   const { t } = useTranslation('image');
 
@@ -29,7 +28,7 @@ export const Image = ({ src, alt, type, classNames, clickable = true, ...props }
     );
   }
 
-  if (type === 'avatar' || !clickable) {
+  if (!clickable) {
     return (
       <img
         loading="lazy"
@@ -53,7 +52,7 @@ export const Image = ({ src, alt, type, classNames, clickable = true, ...props }
             className={cn(
               classNames?.image,
               experiments.streamerMode && 'filter blur-md',
-              type === 'banner' && 'aspect-video w-full',
+              // type === 'banner' && 'aspect-video w-full',
             )}
           />
         </DialogTrigger>
@@ -63,7 +62,10 @@ export const Image = ({ src, alt, type, classNames, clickable = true, ...props }
             src={src}
             alt={alt}
             {...props}
-            className={cn(experiments.streamerMode && 'filter blur-md', type === 'banner' && 'aspect-video w-full')}
+            className={cn(
+              experiments.streamerMode && 'filter blur-md',
+              // type === 'banner' && 'aspect-video w-full'
+            )}
           />
           <span>{alt}</span>
         </DialogContent>

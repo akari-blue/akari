@@ -1,6 +1,6 @@
+import { Avatar } from '@/components/ui/avatar';
 import { Debug } from '@/components/ui/Debug';
 import { Handle } from '@/components/ui/Handle';
-import { Image } from '@/components/ui/Image';
 import { Link } from '@/components/ui/Link';
 import { useBlueskyStore } from '@/lib/bluesky/store';
 import { BSkyLikeNotification, isBSkyLikeNotification } from '@/lib/bluesky/types/BSkyNotification';
@@ -21,11 +21,11 @@ export function LikeNotification({ notifications }: { notifications: BSkyLikeNot
       <Debug value={notification} />
       <div className="flex flex-row gap-1 overflow-hidden max-h-16">
         {notifications.map((notification) => (
-          <Image
+          <Avatar
             key={notification.author.did}
-            type="avatar"
-            classNames={{ wrapper: 'aspect-square size-8' }}
-            src={notification.author.avatar}
+            handle={notification.author.handle}
+            avatar={notification.author.avatar}
+            className="size-8"
           />
         ))}
       </div>

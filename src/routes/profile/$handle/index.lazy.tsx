@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { useSettings } from '@/hooks/useSetting';
 import { Image } from '@/components/ui/Image';
 import { Badge } from '@/components/ui/Badge';
-import { cn } from '@/lib/utils';
 import { FollowButton } from '@/components/ui/FollowButton';
 import { FormattedNumber } from '@/components/ui/FormattedNumber';
 import { FormattedText } from '@/components/ui/FormattedText';
@@ -23,6 +22,7 @@ import { useBlueskyStore } from '@/lib/bluesky/store';
 import { Tab } from '@/components/ui/tab';
 import { TabList } from '@/components/ui/tab-list';
 import { Handle } from '@/components/ui/Handle';
+import { Avatar } from '@/components/ui/avatar';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
@@ -184,14 +184,7 @@ function Profile() {
       <div className="flex flex-col gap-2">
         <Image type="banner" src={profile?.banner} alt="Banner" classNames={{ image: 'w-full h-32 object-cover' }} />
         <div className="px-4 -mt-12">
-          <Image
-            type="avatar"
-            src={profile?.avatar}
-            alt="Avatar"
-            classNames={{
-              image: cn('size-24', profile.associated?.labeler ? 'aspect-square' : 'rounded-full'),
-            }}
-          />
+          <Avatar avatar={profile?.avatar} handle={profile.handle} className="size-24" />
           <div>
             <div className="flex gap-2">
               <h2 className="text-xl font-bold">{profile?.displayName || profile.handle}</h2>

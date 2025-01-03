@@ -1,4 +1,4 @@
-import { Image } from '@/components/ui/Image';
+import { Avatar } from '@/components/ui/avatar';
 import { BSkyQuoteNotification } from '@/lib/bluesky/types/BSkyNotification';
 import { useTranslation } from 'react-i18next';
 
@@ -7,7 +7,7 @@ export function QuoteNotification({ notification }: { notification: BSkyQuoteNot
   return (
     <div>
       <div className="flex flex-row gap-1 overflow-hidden max-h-16">
-        <Image type="avatar" classNames={{ wrapper: 'aspect-square size-8' }} src={notification.author.avatar} />
+        <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8 " />
       </div>
       <div>
         {notification.author.displayName} {t('quotedYourPost')}
