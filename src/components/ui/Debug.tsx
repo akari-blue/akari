@@ -17,13 +17,8 @@ export const Debug = ({ value, isOpen = false, className }: { value: unknown; is
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="p-0 size-[75%] min-size-[500px]">
-        <pre
-          className={cn(
-            'border border-gray-200 dark:border-neutral-800 text-xs text-gray-500 dark:text-gray-400 p-2 rounded-lg overflow-auto text-left',
-            className,
-          )}
-        >
+      <DialogContent className="max-w-2xl p-2">
+        <pre className={cn('text-xs text-gray-500 dark:text-gray-400 p-2 rounded-lg text-left overflow-scroll', className)}>
           {JSON.stringify(value, null, 2)}
         </pre>
       </DialogContent>
