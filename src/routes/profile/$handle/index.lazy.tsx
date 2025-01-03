@@ -23,6 +23,7 @@ import { Tab } from '@/components/ui/tab';
 import { TabList } from '@/components/ui/tab-list';
 import { Handle } from '@/components/ui/Handle';
 import { Avatar } from '@/components/ui/avatar';
+import { Banner } from '@/components/ui/banner';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
@@ -182,7 +183,7 @@ function Profile() {
         <link rel="canonical" href={`https://bsky.app/profile/${handle}`} />
       </Helmet>
       <div className="flex flex-col gap-2">
-        <Image type="banner" src={profile?.banner} alt="Banner" classNames={{ image: 'w-full h-32 object-cover' }} />
+        <Banner banner={profile?.banner} />
         <div className="px-4 -mt-12">
           <Avatar avatar={profile?.avatar} handle={profile.handle} className="size-24" />
           <div>
