@@ -10,6 +10,9 @@ import TimeAgo from 'react-timeago-i18n';
 import { FormattedText } from '@/components/ui/FormattedText';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
+// import { MinimalTiptapEditor } from '@/components/minimal-tiptap';
+import { Avatar } from '@/components/ui/avatar';
+import { Handle } from '@/components/ui/Handle';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
@@ -35,8 +38,11 @@ export const Route = createLazyFileRoute('/messages/$convoId')({
 function Messages() {
   const { t } = useTranslation('messages');
   const { convoId } = Route.useParams();
-
-  const { data: messages, isLoading, isError, error } = useConversation({ convoId });
+  const { data, isLoading, isError, error } = useConversation({ convoId });
+  const messages = data?.messages;
+  const convo = data?.convo;
+  const otherMember = convo?.members[1];
+  if (!otherMember) throw new Error('No other member found in conversation');
 
   if (isLoading) return <Loading />;
 
@@ -48,35 +54,50 @@ function Messages() {
     );
   }
 
+  if (messages?.length === 0) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span>{t('noMessages')}</span>
+      </div>
+    );
+  }
+
   return (
     <>
       <Helmet>
         <title>{t('chat')}</title>
       </Helmet>
-      <div className="p-2">
-        <Virtuoso
-          initialTopMostItemIndex={(messages?.length ?? 0) - 1}
-          useWindowScroll
-          totalCount={messages?.length ?? 0}
-          itemContent={(index: number) => {
-            const message = messages?.[index];
-            if (!message) return null;
-            return <Message key={message.id} message={message} />;
-          }}
-          components={{
-            List: forwardRef(function List(
-              { children, style }: HtmlHTMLAttributes<HTMLDivElement>,
-              ref: Ref<HTMLDivElement>,
-            ) {
-              return (
-                <div className="flex flex-col gap-2" ref={ref} style={style}>
-                  {children}
-                </div>
-              );
-            }),
-            Footer: () => <div className="h-16 md:h-0" />,
-          }}
-        />
+      <div className="flex flex-col h-screen">
+        <div className="w-full p-2 bg-black border-b border-b-neutral-700 flex flex-row gap-2">
+          <Avatar avatar={otherMember.avatar} handle={otherMember.handle} />
+          <Handle handle={otherMember.handle} />
+        </div>
+        <div className="flex-grow overflow-y-auto p-2 border-b border-neutral-700">
+          <Virtuoso
+            initialTopMostItemIndex={(messages?.length ?? 0) - 1}
+            totalCount={messages?.length ?? 0}
+            itemContent={(index: number) => {
+              const message = messages?.[index];
+              if (!message) return null;
+              return <Message key={message.id} message={message} />;
+            }}
+            components={{
+              List: forwardRef(function List(
+                { children, style }: HtmlHTMLAttributes<HTMLDivElement>,
+                ref: Ref<HTMLDivElement>,
+              ) {
+                return (
+                  <div className="flex flex-col gap-2" ref={ref} style={style}>
+                    {children}
+                  </div>
+                );
+              }),
+              Footer: () => <div className="h-16 md:h-0" />,
+            }}
+          />
+        </div>
+        {/* Soon */}
+        {/* <MinimalTiptapEditor className="mb-14 min-h-16 border-none" /> */}
       </div>
     </>
   );
