@@ -8,7 +8,7 @@ export function useProfile({ handle }: { handle?: string }) {
     queryKey: ['profile', handle],
     queryFn: async () => {
       if (!handle) throw new Error('No handle provided');
-      const response = await agent.api.app.bsky.actor.getProfile({ actor: handle });
+      const response = await agent.api.app.bsky.actor.getProfile({ actor: handle.toLowerCase() });
       return response.data;
     },
     enabled: !!agent && !!handle,
