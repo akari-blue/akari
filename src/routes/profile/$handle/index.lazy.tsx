@@ -180,6 +180,9 @@ function Profile() {
     <>
       <Helmet>
         <link rel="canonical" href={`https://bsky.app/profile/${handle}`} />
+        <title>
+          {profile.displayName} (@{handle})
+        </title>
       </Helmet>
       <div className="flex flex-col gap-2">
         <Banner banner={profile?.banner} />

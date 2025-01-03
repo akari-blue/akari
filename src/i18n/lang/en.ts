@@ -116,6 +116,7 @@ export const en = {
   messages: {
     messages: 'messages',
     noMessages: 'no messages',
+    chat: 'chat',
   },
   dialog: {
     close: 'close',

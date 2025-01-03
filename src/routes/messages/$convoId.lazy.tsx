@@ -8,6 +8,8 @@ import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { Loading } from '@/components/ui/loading';
 import TimeAgo from 'react-timeago-i18n';
 import { FormattedText } from '@/components/ui/FormattedText';
+import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
@@ -31,6 +33,7 @@ export const Route = createLazyFileRoute('/messages/$convoId')({
 });
 
 function Messages() {
+  const { t } = useTranslation('messages');
   const { convoId } = Route.useParams();
 
   const { data: messages, isLoading, isError, error } = useConversation({ convoId });
@@ -46,27 +49,35 @@ function Messages() {
   }
 
   return (
-    <div className="p-2">
-      <Virtuoso
-        initialTopMostItemIndex={(messages?.length ?? 0) - 1}
-        useWindowScroll
-        totalCount={messages?.length ?? 0}
-        itemContent={(index: number) => {
-          const message = messages?.[index];
-          if (!message) return null;
-          return <Message key={message.id} message={message} />;
-        }}
-        components={{
-          List: forwardRef(function List({ children, style }: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
-            return (
-              <div className="flex flex-col gap-2" ref={ref} style={style}>
-                {children}
-              </div>
-            );
-          }),
-          Footer: () => <div className="h-16 md:h-0" />,
-        }}
-      />
-    </div>
+    <>
+      <Helmet>
+        <title>{t('chat')}</title>
+      </Helmet>
+      <div className="p-2">
+        <Virtuoso
+          initialTopMostItemIndex={(messages?.length ?? 0) - 1}
+          useWindowScroll
+          totalCount={messages?.length ?? 0}
+          itemContent={(index: number) => {
+            const message = messages?.[index];
+            if (!message) return null;
+            return <Message key={message.id} message={message} />;
+          }}
+          components={{
+            List: forwardRef(function List(
+              { children, style }: HtmlHTMLAttributes<HTMLDivElement>,
+              ref: Ref<HTMLDivElement>,
+            ) {
+              return (
+                <div className="flex flex-col gap-2" ref={ref} style={style}>
+                  {children}
+                </div>
+              );
+            }),
+            Footer: () => <div className="h-16 md:h-0" />,
+          }}
+        />
+      </div>
+    </>
   );
 }

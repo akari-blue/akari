@@ -9,6 +9,8 @@ import { cn } from '../lib/utils';
 import { Navbar } from '../components/Navbar';
 import i18n from '../i18n';
 import { Toaster } from '@/components/ui/sonner';
+import { Helmet } from 'react-helmet';
+import { appName } from '@/config';
 
 export const Route = createRootRoute({
   component: Root,
@@ -44,50 +46,53 @@ function Root() {
   const pathname = router.location.pathname;
 
   return (
-    <main
-      dir={dir}
-      lang={language}
-      className={cn(
-        'text-black dark:text-white',
-        font.family === 'OpenDyslexic' && 'font-[OpenDyslexic]',
-        font.family === 'Atkinson-Hyperlegible' && 'font-[Atkinson-Hyperlegible]',
-        font.size === 'extra-small' && 'text-xs',
-        font.size === 'small' && 'text-sm',
-        font.size === 'medium' && 'text-base',
-        font.size === 'large' && 'text-lg',
-        font.size === 'extra-large' && 'text-xl',
-      )}
-    >
-      <ErrorBoundary>
-        <div className="flex mx-auto lg:flex-row lg:w-fit lg:gap-2">
-          <Navbar />
-          <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center mx-auto">
-            <ErrorBoundary>
-              <div className={cn('flex flex-col gap-2', pathname !== '/' && 'w-screen sm:w-[550px]')}>
-                <Outlet key="app" />
-              </div>
-            </ErrorBoundary>
-          </div>
-        </div>
-        {experiments.devMode && (
-          <div className="fixed bottom-12 right-2">
-            <ReactQueryDevtools buttonPosition="relative" />
-          </div>
+    <>
+      <Helmet titleTemplate={`%s - ${appName}`} defaultTitle={appName} />
+      <main
+        dir={dir}
+        lang={language}
+        className={cn(
+          'text-black dark:text-white',
+          font.family === 'OpenDyslexic' && 'font-[OpenDyslexic]',
+          font.family === 'Atkinson-Hyperlegible' && 'font-[Atkinson-Hyperlegible]',
+          font.size === 'extra-small' && 'text-xs',
+          font.size === 'small' && 'text-sm',
+          font.size === 'medium' && 'text-base',
+          font.size === 'large' && 'text-lg',
+          font.size === 'extra-large' && 'text-xl',
         )}
+      >
+        <ErrorBoundary>
+          <div className="flex mx-auto lg:flex-row lg:w-fit lg:gap-2">
+            <Navbar />
+            <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center mx-auto">
+              <ErrorBoundary>
+                <div className={cn('flex flex-col gap-2', pathname !== '/' && 'w-screen sm:w-[550px]')}>
+                  <Outlet key="app" />
+                </div>
+              </ErrorBoundary>
+            </div>
+          </div>
+          {experiments.devMode && (
+            <div className="fixed bottom-12 right-2">
+              <ReactQueryDevtools buttonPosition="relative" />
+            </div>
+          )}
 
-        {experiments.devMode && (
-          <TanStackRouterDevtools
-            toggleButtonProps={{
-              style: {
-                position: 'fixed',
-                bottom: '4rem',
-                left: '1em',
-              },
-            }}
-          />
-        )}
-        <Toaster position="bottom-right" />
-      </ErrorBoundary>
-    </main>
+          {experiments.devMode && (
+            <TanStackRouterDevtools
+              toggleButtonProps={{
+                style: {
+                  position: 'fixed',
+                  bottom: '4rem',
+                  left: '1em',
+                },
+              }}
+            />
+          )}
+          <Toaster position="bottom-right" />
+        </ErrorBoundary>
+      </main>
+    </>
   );
 }

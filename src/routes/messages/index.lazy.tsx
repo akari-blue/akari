@@ -10,6 +10,9 @@ import { Virtuoso } from 'react-virtuoso';
 import { Loading } from '@/components/ui/loading';
 import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { Avatar } from '@/components/ui/avatar';
+import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
+import { appName } from '@/config';
 
 function Conversation({ convo }: { convo: BSkyConvo }) {
   const session = useBlueskyStore((state) => state.session);
@@ -44,28 +47,34 @@ export const Route = createLazyFileRoute('/messages/')({
 });
 
 function Messages() {
+  const { t } = useTranslation('messages');
   const { data: convos, isLoading } = useConversations();
 
   if (isLoading) return <Loading />;
 
   return (
-    <div className="w-full border-x border-gray-200 dark:border-gray-800">
-      <Virtuoso
-        useWindowScroll
-        totalCount={convos?.length ?? 0}
-        itemContent={(index: number) => {
-          const convo = convos?.[index];
-          if (!convo) return null;
-          return <Conversation key={convo.id} convo={convo} />;
-        }}
-        components={{
-          List: forwardRef(function List(props: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
-            return <div ref={ref} {...props} className="flex flex-col" />;
-          }),
-          Footer: () => <div className="h-96 md:h-0" />,
-        }}
-        followOutput
-      />
-    </div>
+    <>
+      <Helmet>
+        <title>{t('messages')}</title>
+      </Helmet>
+      <div className="w-full border-x border-gray-200 dark:border-gray-800">
+        <Virtuoso
+          useWindowScroll
+          totalCount={convos?.length ?? 0}
+          itemContent={(index: number) => {
+            const convo = convos?.[index];
+            if (!convo) return null;
+            return <Conversation key={convo.id} convo={convo} />;
+          }}
+          components={{
+            List: forwardRef(function List(props: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
+              return <div ref={ref} {...props} className="flex flex-col" />;
+            }),
+            Footer: () => <div className="h-96 md:h-0" />,
+          }}
+          followOutput
+        />
+      </div>
+    </>
   );
 }
