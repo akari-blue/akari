@@ -1,6 +1,5 @@
 import { Avatar } from '@/components/ui/avatar';
 import { Debug } from '@/components/ui/Debug';
-import { Handle } from '@/components/ui/Handle';
 import { Link } from '@/components/ui/Link';
 import { useBlueskyStore } from '@/lib/bluesky/store';
 import { BSkyLikeNotification, isBSkyLikeNotification } from '@/lib/bluesky/types/BSkyNotification';
