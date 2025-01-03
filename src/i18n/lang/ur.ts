@@ -8,7 +8,6 @@ export const ur = {
     password: 'پاس ورڈ',
   },
   app: {
-    appName: '[عارضی نام]',
     loading: '...لوڈ ہو رہا ہے',
     blueskyHandle: '@alice.bsky.social بلیو اسکائی ہینڈل مثلاً',
     following: 'فالو کر رہے ہیں',

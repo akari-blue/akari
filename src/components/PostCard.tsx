@@ -9,14 +9,14 @@ import { FacetedText } from './FacetedText';
 import { PostEmbed } from './PostEmbed';
 import { Link } from './ui/Link';
 import { ErrorBoundary } from './ErrorBoundary';
-import { Image } from './ui/Image';
-// import { usePostThread } from '../lib/bluesky/hooks/usePostThread';
 import { useSettings } from '../hooks/useSetting';
 import { FormattedNumber } from './ui/FormattedNumber';
 import TimeAgo from 'react-timeago-i18n';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Handle } from './ui/Handle';
+import { FormattedText } from './ui/FormattedText';
+import { Avatar } from './ui/avatar';
 
 type PostCardProps = {
   post: BSkyPost | undefined | null;
@@ -66,14 +66,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
     <div className="flex flex-col border-b border-gray-200 dark:border-gray-800">
       <div className={cn('p-3 w-full max-w-[550px] gap-2 flex flex-row', className)} onClick={onClick} id={post.uri}>
         <div className="flex-shrink-0">
-          {post.author.avatar && (
-            <Image
-              type="avatar"
-              src={post.author.avatar}
-              alt={post.author.handle}
-              classNames={{ image: 'size-10 rounded-full aspect-square' }}
-            />
-          )}
+          {post.author.avatar && <Avatar handle={post.author.handle} avatar={post.author.avatar} />}
         </div>
         <div>
           <div>
@@ -108,7 +101,7 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
               {post.record.facets ? (
                 <FacetedText text={post.record.text} facets={post.record.facets} key={`faceted-text-${post.uri}`} />
               ) : (
-                post.record.text
+                <FormattedText text={post.record.text} key={`formatted-text-${post.uri}`} />
               )}
             </p>
             <ErrorBoundary>{post.embed && <PostEmbed embed={post.embed} />}</ErrorBoundary>

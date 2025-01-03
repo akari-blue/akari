@@ -10,7 +10,6 @@ export const ja = {
     authFactorToken: '二要素トークン',
   },
   app: {
-    appName: '[placeholder name]',
     loading: 'ロード中...',
     loadMore: 'さらにロードする',
     blueskyHandle: 'blueskyハンドル　例：@alice.bsky.social',

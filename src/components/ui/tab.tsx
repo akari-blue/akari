@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import * as Ariakit from '@ariakit/react';
 
-export const Tab = ({ name, id, selectedTab }: { name: string; id: string; selectedTab: string | null }) => {
+export const Tab = ({ name, id, selectedTab }: { name: string; id: string; selectedTab: string | undefined | null }) => {
   return (
     <Ariakit.Tab id={id} className={cn('flex h-10 items-center justify-center whitespace-nowrap px-4')}>
       <span

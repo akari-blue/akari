@@ -9,7 +9,6 @@ export const zh_Hant = {
     password: '密碼',
   },
   app: {
-    appName: '[placeholder name]',
     loading: '載入中...',
     blueskyHandle: 'bluesky帳號代碼 例如：@alice.bsky.social',
     following: '跟隨中',

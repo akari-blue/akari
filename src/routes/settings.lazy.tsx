@@ -17,7 +17,7 @@ function RouteComponent() {
   const { t } = useTranslation(['settings', 'auth']);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-2 pb-safe-or-16 md:pb-safe-or-2">
       <div className="border p-2">
         <ToggleSwitch
           on={experiments.devMode}

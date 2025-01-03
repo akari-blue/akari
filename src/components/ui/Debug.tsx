@@ -1,37 +1,27 @@
-import { useState } from 'react';
 import { useSettings } from '@/hooks/useSetting';
 import { cn } from '@/lib/utils';
 import { Button } from './button';
+import { Dialog, DialogContent, DialogTrigger } from './dialog';
 
 export const Debug = ({ value, isOpen = false, className }: { value: unknown; isOpen?: boolean; className?: string }) => {
   const { experiments } = useSettings();
-  const [open, setOpen] = useState(isOpen);
-  const onClick = () => {
-    setOpen((prev) => !prev);
-  };
 
   if (!experiments.devMode) return null;
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="w-full flex flex-row justify-end">
-        <Button onClick={onClick} className="h-5" variant="ghost">
-          👀
-        </Button>
-      </div>
-      <div>
-        {open && (
-          <pre
-            className={cn(
-              'border border-gray-200 dark:border-neutral-800 ',
-              'text-sm text-gray-500 dark:text-gray-400 p-2 rounded-lg overflow-auto h-64 text-left',
-              className,
-            )}
-          >
-            {JSON.stringify(value, null, 2)}
-          </pre>
-        )}
-      </div>
-    </div>
+    <Dialog defaultOpen={isOpen}>
+      <DialogTrigger asChild>
+        <div className="w-full relative h-5">
+          <Button variant="ghost" className="absolute top-0 right-0">
+            👀
+          </Button>
+        </div>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl p-2">
+        <pre className={cn('text-xs text-gray-500 dark:text-gray-400 p-2 rounded-lg text-left overflow-scroll', className)}>
+          {JSON.stringify(value, null, 2)}
+        </pre>
+      </DialogContent>
+    </Dialog>
   );
 };

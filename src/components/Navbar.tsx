@@ -3,16 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Link } from './ui/Link';
 import { useBlueskyStore } from '../lib/bluesky/store';
-import { BellIcon, HomeIcon, MailIcon, SettingsIcon, UserIcon } from 'lucide-react';
+import { BellIcon, HomeIcon, LogInIcon, MailIcon, SettingsIcon, UserIcon } from 'lucide-react';
 import { CreatePost } from './CreatePost';
 import { cn } from '@/lib/utils';
+import { appName } from '@/config';
 
 const HomeLink = () => {
-  const { t } = useTranslation('app');
   return (
     <Link to="/">
-      <HomeIcon className="size-7 lg:hidden" />
-      <h1 className="text-2xl font-bold hidden lg:block">{t('appName')}</h1>
+      <HomeIcon className="size-7 xl:hidden" />
+      <h1 className="text-2xl font-bold hidden xl:block">{appName}</h1>
     </Link>
   );
 };
@@ -21,8 +21,8 @@ const MessagesLink = () => {
   const { t } = useTranslation('messages');
   return (
     <Link to="/messages">
-      <MailIcon className="size-7 lg:hidden" />
-      <span className="hidden lg:block">{t('messages')}</span>
+      <MailIcon className="size-7 xl:hidden" />
+      <span className="hidden xl:block">{t('messages')}</span>
     </Link>
   );
 };
@@ -31,8 +31,8 @@ const NotificationsLink = () => {
   const { t } = useTranslation('notifications');
   return (
     <Link to="/notifications">
-      <BellIcon className="size-7 lg:hidden" />
-      <span className="hidden lg:block">{t('notifications')}</span>
+      <BellIcon className="size-7 xl:hidden" />
+      <span className="hidden xl:block">{t('notifications')}</span>
     </Link>
   );
 };
@@ -50,8 +50,8 @@ const ProfileLink = () => {
         handle: session?.handle,
       }}
     >
-      <UserIcon className="size-7 lg:hidden" />
-      <span className="hidden lg:block">{t('profile')}</span>
+      <UserIcon className="size-7 xl:hidden" />
+      <span className="hidden xl:block">{t('profile')}</span>
     </Link>
   );
 };
@@ -60,15 +60,20 @@ const SettingsLink = () => {
   const { t } = useTranslation('app');
   return (
     <Link to="/settings">
-      <SettingsIcon className="size-7 lg:hidden" />
-      <span className="hidden lg:block">{t('settings')}</span>
+      <SettingsIcon className="size-7 xl:hidden" />
+      <span className="hidden xl:block">{t('settings')}</span>
     </Link>
   );
 };
 
 const LoginButton = () => {
   const { t } = useTranslation('auth');
-  return <Link to="/login">{t('login.default')}</Link>;
+  return (
+    <Link to="/login">
+      <LogInIcon className="size-7 xl:hidden" />
+      <span className="hidden xl:block">{t('login.default')}</span>
+    </Link>
+  );
 };
 
 export const Navbar = () => {
@@ -85,7 +90,7 @@ export const Navbar = () => {
         // tablet
         'md:top-0 md:right-auto md:border-r md:border-gray-200 md:dark:border-gray-800',
         // desktop
-        'lg:bg-inherit lg:relative lg:h-screen lg:border-none',
+        'xl:bg-inherit xl:relative xl:h-screen xl:border-none',
       )}
     >
       <div
@@ -95,7 +100,7 @@ export const Navbar = () => {
           // tablet
           'md:flex-col md:gap-2 md:h-full md:space-y-8 md:justify-normal',
           // desktop
-          'lg:space-y-0',
+          'xl:space-y-0',
         )}
       >
         <HomeLink />

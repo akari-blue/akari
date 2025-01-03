@@ -1,6 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useConversations } from '../../lib/bluesky/hooks/useConversations';
-import { Image } from '../../components/ui/Image';
 import { cn } from '../../lib/utils';
 import { useBlueskyStore } from '../../lib/bluesky/store';
 import { Link } from '../../components/ui/Link';
@@ -10,6 +9,7 @@ import { Handle } from '../../components/ui/Handle';
 import { Virtuoso } from 'react-virtuoso';
 import { Loading } from '@/components/ui/loading';
 import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
+import { Avatar } from '@/components/ui/avatar';
 
 function Conversation({ convo }: { convo: BSkyConvo }) {
   const session = useBlueskyStore((state) => state.session);
@@ -21,14 +21,7 @@ function Conversation({ convo }: { convo: BSkyConvo }) {
     <Link to="/messages/$convoId" params={{ convoId: convo.id }} className="hover:no-underline">
       <div className={cn('flex gap-2 p-2 hover:bg-neutral-900', !convo.opened && 'bg-neutral-800')} key={member.did}>
         <Link to="/profile/$handle" params={{ handle: member.handle ?? member.did }} className="hover:no-underline">
-          <Image
-            type="avatar"
-            src={member.avatar}
-            classNames={{
-              image: cn(!member.associated?.labeler && 'rounded-full'),
-              wrapper: 'size-16 aspect-square',
-            }}
-          />
+          <Avatar handle={member.handle} avatar={member.avatar} className="size-16" />
         </Link>
         <div className="flex flex-col">
           <div className="flex flex-row gap-2">

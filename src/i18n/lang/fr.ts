@@ -9,7 +9,6 @@ export const fr = {
     password: 'mot de passe',
   },
   app: {
-    appName: '[pantonymie]',
     loading: 'chargement...',
     blueskyHandle: 'pseudo bluesky e.g. @alice.bsky.social',
     following: 'abonnements',

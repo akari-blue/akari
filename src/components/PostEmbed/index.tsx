@@ -5,7 +5,6 @@ import { NotImplementedBox } from '../ui/NotImplementedBox';
 import { cn } from '../../lib/utils';
 import { useSettings } from '../../hooks/useSetting';
 import { AppBskyEmbedRecordView } from './app-bsky-embed-record-view';
-import { Link } from '../ui/Link';
 
 export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
   const { experiments } = useSettings();
@@ -73,21 +72,19 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
         );
       }
       return (
-        <Link href={embed.external.uri} target="_blank" rel="noreferrer">
-          <div className="bg-neutral-800 rounded p-2">
-            {embed.external.title}
-            {embed.external.thumb && (
-              <Image
-                type="post"
-                src={embed.external.thumb}
-                alt={embed.external.title}
-                classNames={{
-                  image: 'rounded-lg w-full object-cover aspect-video',
-                }}
-              />
-            )}
-          </div>
-        </Link>
+        <div className="rounded-lg">
+          {embed.external.thumb && (
+            <Image
+              type="post"
+              src={embed.external.uri.includes('.gif') ? embed.external.uri : embed.external.thumb}
+              alt={embed.external.title}
+              classNames={{
+                image: 'rounded-lg w-full object-cover',
+              }}
+              clickable={false}
+            />
+          )}
+        </div>
       );
     }
     case 'app.bsky.embed.record#view': {

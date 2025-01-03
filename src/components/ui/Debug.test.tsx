@@ -28,7 +28,7 @@ describe('Debug', () => {
     const { container, getByRole } = render(<Debug value={{ test: 'test' }} isOpen={false} />);
     expect(container).not.toHaveTextContent('test');
     await userEvent.click(getByRole('button'));
-    expect(container).toHaveTextContent('test');
+    expect(container.parentElement).toHaveTextContent('test');
     await userEvent.click(getByRole('button'));
     expect(container).not.toHaveTextContent('test');
   });
