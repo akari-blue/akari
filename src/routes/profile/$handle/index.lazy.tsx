@@ -169,7 +169,6 @@ function Profile() {
   const { experiments } = useSettings();
   const { session } = useBlueskyStore();
   const { t } = useTranslation(['app', 'profile']);
-
   const [selectedTab, setSelectedTab] = useState<string | null>('posts');
 
   if (isLoading) return <Loading />;
@@ -204,67 +203,70 @@ function Profile() {
                 <FormattedNumber value={profile?.postsCount} unit={t('posts')} />
               </div>
             )}
-            <p>
-              <FormattedText text={profile?.description ?? ''} linkify key="profile-description" />
-            </p>
+            <FormattedText text={profile?.description ?? ''} linkify key="profile-description" />
+            <div className="p-2 border mt-2">
+              {profile.viewer?.blockingByList && <span>blocked by: {profile.viewer.blockingByList.name}</span>}
+            </div>
             <Debug value={profile} />
           </div>
         </div>
-        <Ariakit.TabProvider
-          defaultSelectedId={selectedTab}
-          setSelectedId={(selectedId) => {
-            if (!selectedId) return;
-            setSelectedTab(selectedId);
-          }}
-        >
-          <div>
-            <TabList label="Profile tabs">
-              {[
-                {
-                  name: t('profile:tabs.all'),
-                  id: 'all',
-                },
-                { name: t('profile:tabs.posts'), id: 'posts' },
-                { name: t('profile:tabs.reposts'), id: 'reposts' },
-                { name: t('replies'), id: 'replies' },
-                { name: t('profile:tabs.media'), id: 'media' },
-                { name: t('profile:tabs.likes'), id: 'likes' },
-                { name: t('profile:tabs.feeds'), id: 'feeds' },
-                { name: t('profile:tabs.starterpacks'), id: 'starter-packs' },
-                { name: t('profile:tabs.lists'), id: 'lists' },
-              ].map(({ name, id }) => (
-                <Tab name={name} id={id} selectedTab={selectedTab} key={id} />
-              ))}
-            </TabList>
-          </div>
-          <Ariakit.TabPanel tabId="all">
-            <All />
-          </Ariakit.TabPanel>
-          <Ariakit.TabPanel tabId="posts">
-            <Posts />
-          </Ariakit.TabPanel>
-          <Ariakit.TabPanel tabId="reposts">
-            <Reposts />
-          </Ariakit.TabPanel>
-          <Ariakit.TabPanel tabId="replies">
-            <Replies />
-          </Ariakit.TabPanel>
-          <Ariakit.TabPanel tabId="media">
-            <Media />
-          </Ariakit.TabPanel>
-          <Ariakit.TabPanel tabId="likes">
-            <NotImplementedBox type="likes" />
-          </Ariakit.TabPanel>
-          <Ariakit.TabPanel tabId="feeds">
-            <NotImplementedBox type="feeds" />
-          </Ariakit.TabPanel>
-          <Ariakit.TabPanel tabId="starter-packs">
-            <NotImplementedBox type="starter-packs" />
-          </Ariakit.TabPanel>
-          <Ariakit.TabPanel tabId="lists">
-            <NotImplementedBox type="lists" />
-          </Ariakit.TabPanel>
-        </Ariakit.TabProvider>
+        {!profile.viewer?.blockingByList && (
+          <Ariakit.TabProvider
+            defaultSelectedId={selectedTab}
+            setSelectedId={(selectedId) => {
+              if (!selectedId) return;
+              setSelectedTab(selectedId);
+            }}
+          >
+            <div>
+              <TabList label="Profile tabs">
+                {[
+                  {
+                    name: t('profile:tabs.all'),
+                    id: 'all',
+                  },
+                  { name: t('profile:tabs.posts'), id: 'posts' },
+                  { name: t('profile:tabs.reposts'), id: 'reposts' },
+                  { name: t('replies'), id: 'replies' },
+                  { name: t('profile:tabs.media'), id: 'media' },
+                  { name: t('profile:tabs.likes'), id: 'likes' },
+                  { name: t('profile:tabs.feeds'), id: 'feeds' },
+                  { name: t('profile:tabs.starterpacks'), id: 'starter-packs' },
+                  { name: t('profile:tabs.lists'), id: 'lists' },
+                ].map(({ name, id }) => (
+                  <Tab name={name} id={id} selectedTab={selectedTab} key={id} />
+                ))}
+              </TabList>
+            </div>
+            <Ariakit.TabPanel tabId="all">
+              <All />
+            </Ariakit.TabPanel>
+            <Ariakit.TabPanel tabId="posts">
+              <Posts />
+            </Ariakit.TabPanel>
+            <Ariakit.TabPanel tabId="reposts">
+              <Reposts />
+            </Ariakit.TabPanel>
+            <Ariakit.TabPanel tabId="replies">
+              <Replies />
+            </Ariakit.TabPanel>
+            <Ariakit.TabPanel tabId="media">
+              <Media />
+            </Ariakit.TabPanel>
+            <Ariakit.TabPanel tabId="likes">
+              <NotImplementedBox type="likes" />
+            </Ariakit.TabPanel>
+            <Ariakit.TabPanel tabId="feeds">
+              <NotImplementedBox type="feeds" />
+            </Ariakit.TabPanel>
+            <Ariakit.TabPanel tabId="starter-packs">
+              <NotImplementedBox type="starter-packs" />
+            </Ariakit.TabPanel>
+            <Ariakit.TabPanel tabId="lists">
+              <NotImplementedBox type="lists" />
+            </Ariakit.TabPanel>
+          </Ariakit.TabProvider>
+        )}
       </div>
     </>
   );
