@@ -10,6 +10,7 @@ import { NotImplementedBox } from '@/components/ui/NotImplementedBox';
 import { Link } from '@/components/ui/Link';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '../ui/avatar';
+import { FormattedText } from '../ui/FormattedText';
 
 export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
   const { t } = useTranslation('post');
@@ -29,7 +30,7 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-900 p-4 rounded-lg shadow border border-neutral-200 dark:border-neutral-800">
+    <div className="p-4 rounded-lg shadow border border-neutral-200 dark:border-neutral-800">
       {embed.record.$type === 'app.bsky.embed.record#viewRecord' && (
         <div className="flex items-center space-x-3 mb-2">
           {author.avatar && <Avatar handle={author.handle} avatar={author.avatar} />}
@@ -66,7 +67,7 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
           {embed.record.facets ? (
             <FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />
           ) : (
-            embed.record.value.text
+            <FormattedText text={embed.record.value.text} key={embed.record.uri} />
           )}
         </p>
       )}
