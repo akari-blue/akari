@@ -204,9 +204,13 @@ function Profile() {
               </div>
             )}
             <FormattedText text={profile?.description ?? ''} linkify key="profile-description" />
-            <div className="p-2 border mt-2">
-              {profile.viewer?.blockingByList && <span>blocked by: {profile.viewer.blockingByList.name}</span>}
-            </div>
+
+            {profile.viewer?.blockingByList && (
+              <div className="p-2 border mt-2">
+                <span>{t('profile:blockedBy', { name: profile.viewer.blockingByList.name })}</span>
+              </div>
+            )}
+
             <Debug value={profile} />
           </div>
         </div>

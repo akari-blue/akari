@@ -80,6 +80,7 @@ export const en = {
       lists: 'lists',
       starterpacks: 'starterpacks',
     },
+    blockedBy: 'blocked by: {{name}}',
   },
   post: {
     notFound: 'post not found',
