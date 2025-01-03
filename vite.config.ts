@@ -18,6 +18,26 @@ export default defineConfig({
       devOptions: {
         enabled: process.env.NODE_ENV !== 'test',
       },
+      workbox: {
+        runtimeCaching: [
+          {
+            // do not cache any requests
+            urlPattern: () => true,
+            handler: 'NetworkFirst',
+          },
+          {
+            // cache images
+            urlPattern: ({ request }) => request.destination === 'image',
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'images-cache',
+              expiration: {
+                maxEntries: 100, // limit the number of cached images
+              },
+            },
+          },
+        ],
+      },
       includeAssets: ['src/assets/images/**/*'],
       manifest: {
         id: 'blue.akari',
