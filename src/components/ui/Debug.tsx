@@ -23,7 +23,7 @@ export const Debug = ({ value, isOpen = false, className }: { value: unknown; is
       <VisuallyHidden>
         <DialogTitle>{t('debug')}</DialogTitle>
       </VisuallyHidden>
-      <DialogContent className="max-w-2xl p-2">
+      <DialogContent className="max-w-2xl p-2" aria-describedby={undefined}>
         <pre className={cn('text-xs text-gray-500 dark:text-gray-400 p-2 rounded-lg text-left overflow-scroll', className)}>
           {JSON.stringify(value, null, 2)}
         </pre>
