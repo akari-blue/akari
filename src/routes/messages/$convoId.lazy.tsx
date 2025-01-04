@@ -52,6 +52,7 @@ function ReplyBox() {
   const ref = useRef<TiptapMethods | null>(null);
 
   const sendMessage = async () => {
+    if (isPending) return;
     if (!message.trim()) return;
     await mutateAsync(
       { message: message.trim().replace(/\n{3,}/g, '\n\n') },
