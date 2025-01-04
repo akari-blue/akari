@@ -12,6 +12,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { Helmet } from 'react-helmet';
 import { appName } from '@/config';
 import { useUnreadCount } from '@/lib/bluesky/hooks/useUnreadCount';
+import { OfflineBanner } from '@/components/ui/offline-banner';
 
 export const Route = createRootRoute({
   component: Root,
@@ -50,6 +51,7 @@ function Root() {
   return (
     <>
       <Helmet titleTemplate={`${unreadCount ? `(${unreadCount})` : ''} %s - ${appName}`} defaultTitle={appName} />
+      <OfflineBanner />
       <main
         dir={dir}
         lang={language}

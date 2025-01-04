@@ -8,8 +8,11 @@ import { Loading } from './ui/loading';
 import { TabList } from './ui/tab-list';
 import { Tab } from './ui/tab';
 import { useQueryClient } from '@tanstack/react-query';
+import { useOfflineStatus } from '@/hooks/useOfflineStatus';
+import { cn } from '@/lib/utils';
 
 export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
+  const isOffline = useOfflineStatus();
   const queryClient = useQueryClient();
   const { setSettings, columns } = useSettings();
   const { isAuthenticated } = useAuth();
@@ -66,7 +69,7 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
         {/* if there are less than 2 feeds, don't show the selector */}
         {feeds.length >= 2 && (
           <>
-            <TabList label="feed selector" className="sticky top-0 bg-background z-50">
+            <TabList label="feed selector" className={cn('sticky bg-background z-50', isOffline ? 'top-[46px]' : 'top-0')}>
               {data?.map((feed) => {
                 return (
                   <Tab
