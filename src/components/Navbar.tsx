@@ -132,7 +132,7 @@ export const Navbar = () => {
           // base
           'flex flex-row gap-2 justify-between p-2 pb-4 px-8',
           // tablet
-          'md:flex-col md:gap-2 md:h-full md:space-y-8 md:justify-normal',
+          'md:px-0  md:flex-col md:gap-2 md:h-full md:space-y-8 md:justify-normal',
           // desktop
           'xl:space-y-0',
         )}
