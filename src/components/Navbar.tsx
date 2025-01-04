@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { appName } from '@/config';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUnreadCount } from '@/lib/bluesky/hooks/useUnreadCount';
+import { useConversations } from '@/lib/bluesky/hooks/useConversations';
 
 const HomeLink = () => {
   const location = useLocation();
@@ -34,9 +35,18 @@ const HomeLink = () => {
 
 const MessagesLink = () => {
   const { t } = useTranslation('messages');
+  const { data: convos } = useConversations();
+  const unreadCount = convos?.map((convo) => convo.unreadCount).reduce((a, b) => a + b, 0) ?? 0;
   return (
     <Link to="/messages">
-      <MailIcon className="size-7 xl:hidden" />
+      <div className="relative">
+        <MailIcon className="size-7 xl:hidden" />
+        {unreadCount > 0 && (
+          <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-blue-500 rounded-full transform translate-x-1/2 -translate-y-1/2">
+            {unreadCount}
+          </span>
+        )}
+      </div>
       <span className="hidden xl:block">{t('messages')}</span>
     </Link>
   );
@@ -46,13 +56,15 @@ const NotificationsLink = () => {
   const { t } = useTranslation('notifications');
   const { data: unreadCount } = useUnreadCount();
   return (
-    <Link to="/notifications" className="relative">
-      <BellIcon className="size-7 xl:hidden" />
-      {unreadCount > 0 && (
-        <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-blue-500 rounded-full transform translate-x-1/2 -translate-y-1/2">
-          {unreadCount}
-        </span>
-      )}
+    <Link to="/notifications">
+      <div className="relative">
+        <BellIcon className="size-7 xl:hidden" />
+        {unreadCount > 0 && (
+          <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-blue-500 rounded-full transform translate-x-1/2 -translate-y-1/2">
+            {unreadCount}
+          </span>
+        )}
+      </div>
       <span className="hidden xl:block">{t('notifications')}</span>
     </Link>
   );
