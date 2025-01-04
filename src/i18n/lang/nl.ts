@@ -1,3 +1,4 @@
+// Dutch
 export const nl = {
   auth: {
     login: {

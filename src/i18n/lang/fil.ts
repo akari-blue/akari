@@ -1,3 +1,4 @@
+// Filipino
 export const fil = {
   auth: {
     login: {

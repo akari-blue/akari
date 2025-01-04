@@ -1,4 +1,5 @@
-export const en = {
+// Spanish
+export const es = {
   auth: {
     login: {
       default: 'iniciar sesión',

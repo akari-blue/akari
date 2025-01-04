@@ -1,3 +1,4 @@
+// Urdu
 export const ur = {
   auth: {
     login: {

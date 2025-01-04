@@ -1,3 +1,4 @@
+// English (british/aussie)
 export const en = {
   auth: {
     login: {
