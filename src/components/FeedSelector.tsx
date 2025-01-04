@@ -51,7 +51,7 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
   }
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg sm:w-[550px]">
+    <div className="flex flex-col rounded-lg sm:w-[550px] border-x">
       <Ariakit.TabProvider
         defaultSelectedId={selectedFeed}
         setSelectedId={(selectedId) => {
