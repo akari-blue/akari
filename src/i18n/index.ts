@@ -16,18 +16,33 @@ import { de } from './lang/de';
 
 export const defaultNS = 'app';
 
+export const languageNames = {
+  system: 'system',
+  en: en.name,
+  es: es.name,
+  de: de.name,
+  fr: fr.name,
+  fil: fil.name,
+  ja: ja.name,
+  nl: nl.name,
+  ur: ur.name,
+  yue: yue.name,
+  'zh-Hans': zh_Hans.name,
+  'zh-Hant': zh_Hant.name,
+};
+
 export const languages = {
-  en,
-  es,
-  de,
-  fr,
-  fil,
-  ja,
-  nl,
-  ur,
-  yue,
-  'zh-Hans': zh_Hans,
-  'zh-Hant': zh_Hant,
+  en: en.translations,
+  es: es.translations,
+  de: de.translations,
+  fr: fr.translations,
+  fil: fil.translations,
+  ja: ja.translations,
+  nl: nl.translations,
+  ur: ur.translations,
+  yue: yue.translations,
+  'zh-Hans': zh_Hans.translations,
+  'zh-Hant': zh_Hant.translations,
 };
 
 const isProduction = process.env.NODE_ENV === 'production';

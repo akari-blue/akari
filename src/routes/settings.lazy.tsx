@@ -3,7 +3,7 @@ import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { useSettings } from '../hooks/useSetting';
 import { Input } from '../components/ui/input';
 import { useTranslation } from 'react-i18next';
-import i18n, { languages } from '@/i18n';
+import i18n, { languageNames, languages } from '@/i18n';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/bluesky/hooks/useAuth';
 import { Helmet } from 'react-helmet';
@@ -29,7 +29,7 @@ function RouteComponent() {
         <div className="border p-2">
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <span className="text-white">{'theme'}</span>
+            <span>{'theme'}</span>
           </div>
         </div>
         <div className="border p-2">
@@ -99,7 +99,9 @@ function RouteComponent() {
             >
               <>
                 {['system', ...Object.keys(languages)].map((lang) => (
-                  <option key={lang}>{lang}</option>
+                  <option key={lang} value={lang}>
+                    {languageNames[lang as keyof typeof languageNames]}
+                  </option>
                 ))}
               </>
             </select>
