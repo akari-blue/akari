@@ -14,10 +14,9 @@ import { Avatar } from '@/components/ui/avatar';
 import { Handle } from '@/components/ui/Handle';
 import { MinimalTiptapEditor } from '@/components/minimal-tiptap';
 import { Button } from '@/components/ui/button';
-import { SendIcon, Trash2 } from 'lucide-react';
+import { SendIcon } from 'lucide-react';
 import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
 import { useQueryClient } from '@tanstack/react-query';
-import { TiptapEditorHTMLElement } from '@tiptap/react';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
