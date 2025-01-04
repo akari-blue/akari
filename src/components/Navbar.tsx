@@ -83,8 +83,9 @@ export const Navbar = () => {
   return (
     <div
       className={cn(
+        'bg-background text-foreground',
         // base
-        'dark:bg-black px-4 pt-1 z-50',
+        'px-4 pt-1 z-50',
         // mobile
         'fixed bottom-0 left-0 right-0 pb-safe border-t border-gray-200 dark:border-gray-800',
         // tablet
@@ -96,7 +97,7 @@ export const Navbar = () => {
       <div
         className={cn(
           // base
-          'flex flex-row gap-2 justify-between p-2 pb-4',
+          'flex flex-row gap-2 justify-between p-2 pb-4 px-8',
           // tablet
           'md:flex-col md:gap-2 md:h-full md:space-y-8 md:justify-normal',
           // desktop

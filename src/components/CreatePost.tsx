@@ -72,7 +72,6 @@ export function CreatePost() {
           <PencilIcon className="block lg:hidden size-10" />
         </Button>
       </DialogTrigger>
-
       <DialogContent className="[&>button]:hidden p-0 border">
         <DialogHeader className="justify-between w-full p-2">
           <Button type="button" variant="ghost" onClick={onClickCancel} disabled={isPending} className="text-gray-500">

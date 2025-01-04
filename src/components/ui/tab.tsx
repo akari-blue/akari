@@ -7,7 +7,7 @@ export const Tab = ({ name, id, selectedTab }: { name: string; id: string; selec
       <span
         className={cn(
           'p-2 border-b-4 border-b-transparent text-neutral-500 hover:text-white hover:border-blue-500',
-          selectedTab === id && 'border-blue-500 text-white',
+          selectedTab === id && 'border-blue-500 text-black dark:text-white',
         )}
       >
         {name}

@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  background-color: black;
-  color: white;
-}
-
 @font-face {
   font-family: 'Atkinson-Hyperlegible';
   src: url('./assets/fonts/Atkinson-Hyperlegible-Regular-102.ttf') format('truetype');
@@ -81,6 +75,6 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
   }
 }

@@ -52,7 +52,7 @@ function Root() {
         dir={dir}
         lang={language}
         className={cn(
-          'text-black dark:text-white',
+          'bg-background text-foreground',
           font.family === 'OpenDyslexic' && 'font-[OpenDyslexic]',
           font.family === 'Atkinson-Hyperlegible' && 'font-[Atkinson-Hyperlegible]',
           font.size === 'extra-small' && 'text-xs',
@@ -65,7 +65,7 @@ function Root() {
         <ErrorBoundary>
           <div className="flex mx-auto lg:flex-row lg:w-fit lg:gap-2">
             <Navbar />
-            <div className="bg-white dark:bg-black text-gray-900 dark:text-gray-100 flex justify-center mx-auto">
+            <div className="flex justify-center mx-auto">
               <ErrorBoundary>
                 <div className={cn('flex flex-col gap-2', pathname !== '/' && 'w-screen sm:w-[550px]')}>
                   <Outlet key="app" />

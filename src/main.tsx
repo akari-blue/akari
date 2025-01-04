@@ -40,7 +40,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <ThemeProvider defaultTheme="dark" storageKey="theme">
+      <ThemeProvider storageKey="theme">
         <TooltipProvider>
           <QueryClientProvider client={queryClient}>
             <RouterProvider router={router} />
