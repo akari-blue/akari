@@ -113,7 +113,8 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
                   className="flex items-center space-x-2 hover:text-blue-500 transition-colors"
                 >
                   <MessageCircle size={20} />
-                  {!experiments.zenMode && <FormattedNumber value={post.replyCount} unit={t('replies')} />}
+                  {!experiments.zenMode && <FormattedNumber value={post.replyCount} />}
+                  <span className="hidden xl:block">{t('replies')}</span>
                 </Link>
                 {!(experiments.zenMode && !isAuthenticated) && (
                   <>
@@ -130,7 +131,8 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
                       )}
                     >
                       <Repeat size={20} className={cn(post.viewer?.repost ? 'stroke-current' : '')} />
-                      {!experiments.zenMode && <FormattedNumber value={post.repostCount} unit={t('reposts')} />}
+                      {!experiments.zenMode && <FormattedNumber value={post.repostCount} />}
+                      <span className="hidden xl:block">{t('reposts')}</span>
                     </button>
                     <button
                       onClick={() => handleLike(post.uri, post.cid, post.viewer?.like)}
@@ -141,7 +143,8 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
                       )}
                     >
                       <Heart size={20} className={cn(post.viewer?.like ? 'fill-current' : '')} />
-                      {!experiments.zenMode && <FormattedNumber value={post.likeCount} unit={t('likes')} />}
+                      {!experiments.zenMode && <FormattedNumber value={post.likeCount} />}
+                      <span className="hidden xl:block">{t('likes')}</span>
                     </button>
                   </>
                 )}
