@@ -42,7 +42,7 @@ const createExtensions = (placeholder: string) => [
     blockquote: { HTMLAttributes: { class: 'block-node' } },
     bulletList: { HTMLAttributes: { class: 'list-node' } },
     orderedList: { HTMLAttributes: { class: 'list-node' } },
-    code: { HTMLAttributes: { class: 'inline', spellcheck: 'false' } },
+    code: { HTMLAttributes: { class: 'inline', spellcheck: 'true' } },
     dropcursor: { width: 2, class: 'ProseMirror-dropcursor border' },
   }),
   Link,
