@@ -92,7 +92,7 @@ function ReplyBox() {
           }}
           placeholder="write a message"
         />
-        <div className="flex justify-end p-2">
+        <div className="flex justify-end p-2 items-end">
           <Button variant="outline" onClick={onClick} disabled={isPending}>
             <SendIcon />
           </Button>
