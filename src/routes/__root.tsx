@@ -11,6 +11,7 @@ import i18n from '../i18n';
 import { Toaster } from '@/components/ui/sonner';
 import { Helmet } from 'react-helmet';
 import { appName } from '@/config';
+import { useUnreadCount } from '@/lib/bluesky/hooks/useUnreadCount';
 
 export const Route = createRootRoute({
   component: Root,
@@ -44,10 +45,11 @@ function Root() {
   const dir = i18n.dir(language);
   const router = useRouterState();
   const pathname = router.location.pathname;
+  const { data: unreadCount } = useUnreadCount();
 
   return (
     <>
-      <Helmet titleTemplate={`%s - ${appName}`} defaultTitle={appName} />
+      <Helmet titleTemplate={`${unreadCount && `(${unreadCount})`} %s - ${appName}`} defaultTitle={appName} />
       <main
         dir={dir}
         lang={language}

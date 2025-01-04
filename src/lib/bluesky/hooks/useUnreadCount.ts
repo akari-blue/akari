@@ -13,5 +13,6 @@ export function useUnreadCount() {
     enabled: !!agent,
     // refetch every 10 seconds since we don't have a websocket connection
     refetchInterval: 10_000,
+    initialData: 0,
   });
 }

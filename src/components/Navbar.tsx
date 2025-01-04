@@ -44,7 +44,7 @@ const MessagesLink = () => {
 
 const NotificationsLink = () => {
   const { t } = useTranslation('notifications');
-  const { data: unreadCount = 0 } = useUnreadCount();
+  const { data: unreadCount } = useUnreadCount();
   return (
     <Link to="/notifications" className="relative">
       <BellIcon className="size-7 xl:hidden" />
