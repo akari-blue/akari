@@ -7,8 +7,10 @@ import { Timeline } from './Timeline';
 import { Loading } from './ui/loading';
 import { TabList } from './ui/tab-list';
 import { Tab } from './ui/tab';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
+  const queryClient = useQueryClient();
   const { setSettings, columns } = useSettings();
   const { isAuthenticated } = useAuth();
   const { data: preferences } = usePreferences();
@@ -65,7 +67,24 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
         {feeds.length >= 2 && (
           <>
             <TabList label="feed selector" className="sticky top-0 bg-background z-50">
-              {data?.map((feed) => <Tab id={feed.uri} name={feed.displayName} selectedTab={selectedFeed} key={feed.uri} />)}
+              {data?.map((feed) => {
+                return (
+                  <Tab
+                    id={feed.uri}
+                    name={feed.displayName}
+                    selectedTab={selectedFeed}
+                    key={feed.uri}
+                    onClick={() => {
+                      // if this tab is already selected we need to invalidate the associated query
+                      if (selectedFeed === feed.uri) {
+                        queryClient.invalidateQueries({
+                          queryKey: ['feed', { feed: selectedFeed }],
+                        });
+                      }
+                    }}
+                  />
+                );
+              })}
             </TabList>
             {data?.map((feed) => (
               <Ariakit.TabPanel key={feed.uri} tabId={feed.uri}>

@@ -3,7 +3,7 @@ import { useBlueskyStore } from '../store';
 import { usePreferences } from './usePreferences';
 import { BSkyPost } from '../types/BSkyPost';
 
-type Timeline = {
+type Feed = {
   feed: {
     post: BSkyPost;
     feedContext: string;
@@ -11,7 +11,7 @@ type Timeline = {
   cursor: string;
 };
 
-export function useTimeline(selectedFeed: string | undefined) {
+export function useFeed(selectedFeed: string | undefined) {
   const agent = useBlueskyStore((store) => store.agent);
   const isAuthenticated = useBlueskyStore((store) => store.isAuthenticated);
   const preferences = usePreferences();
@@ -40,30 +40,23 @@ export function useTimeline(selectedFeed: string | undefined) {
     ?.map((item) => item.value) ?? ['at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'];
   const feed = feeds.find((feed) => feed === selectedFeed) ?? feeds[0];
 
-  return useInfiniteQuery<Timeline>({
-    queryKey: ['timeline', { feed, isAuthenticated }],
+  return useInfiniteQuery<Feed>({
+    queryKey: ['feed', { feed }],
     queryFn: async ({ pageParam }) => {
       if (!feed) throw new Error('Feed not found');
 
-      // // guest
-      // if (!isAuthenticated) {
-      //   return agent.api.app.bsky.feed.getFeed({
-      //     feed: "discover",
-      //   });
-      // }
-
-      // authenticated
       const cursor = pageParam as string | undefined;
       const response = await agent.api.app.bsky.feed.getFeed({
         feed,
         cursor,
       });
 
-      return response.data as Timeline;
+      return response.data as Feed;
     },
     getNextPageParam: (lastPage) => lastPage.cursor,
     initialPageParam: undefined,
     enabled: !!agent && feed !== undefined,
     retry: 1,
+    staleTime: Infinity,
   });
 }

@@ -7,10 +7,24 @@ import { BellIcon, HomeIcon, LogInIcon, MailIcon, SettingsIcon, UserIcon } from 
 import { CreatePost } from './CreatePost';
 import { cn } from '@/lib/utils';
 import { appName } from '@/config';
+import { useQueryClient } from '@tanstack/react-query';
 
 const HomeLink = () => {
+  const location = useLocation();
+  const queryClient = useQueryClient();
   return (
-    <Link to="/">
+    <Link
+      to="/"
+      onClick={() => {
+        // if we're on the homepage already we need to invalidate the associated query
+        if (location.pathname === '/') {
+          // @TODO: we should really be invalidating the query for the current feed not all feeds
+          queryClient.invalidateQueries({
+            queryKey: ['feed'],
+          });
+        }
+      }}
+    >
       <HomeIcon className="size-7 xl:hidden" />
       <h1 className="text-2xl font-bold hidden xl:block">{appName}</h1>
     </Link>

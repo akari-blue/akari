@@ -3,8 +3,6 @@ import { useBlueskyStore } from '../store';
 import { toast } from 'sonner';
 import { BSkyPost } from '../types/BSkyPost';
 
-const timelineQueryKey = ['timeline', { isAuthenticated: true }];
-
 export function useRepost() {
   const agent = useBlueskyStore((store) => store.agent);
   const queryClient = useQueryClient();
@@ -17,9 +15,9 @@ export function useRepost() {
       await agent.repost(uri, cid);
     },
     onMutate: async ({ uri }) => {
-      await queryClient.cancelQueries({ queryKey: timelineQueryKey });
+      await queryClient.cancelQueries({ queryKey: ['feed'] });
 
-      const previousData = queryClient.getQueryData(timelineQueryKey);
+      const previousData = queryClient.getQueryData(['feed']);
 
       queryClient.setQueryData<{
         pages: {
@@ -30,7 +28,7 @@ export function useRepost() {
           cursor: string;
         }[];
         pageParams: unknown;
-      }>(timelineQueryKey, (old) => ({
+      }>(['feed'], (old) => ({
         pages:
           old?.pages.map((page) => ({
             ...page,
@@ -62,7 +60,7 @@ export function useRepost() {
       return { previousData };
     },
     onError: (error, __, context) => {
-      queryClient.setQueryData(timelineQueryKey, context?.previousData);
+      queryClient.setQueryData(['feed'], context?.previousData);
       toast.error('Failed to repost ' + (error as Error).message);
     },
     onSuccess: () => {

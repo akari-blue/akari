@@ -21,7 +21,7 @@ export function useLike() {
     onMutate: async ({ uri, like }) => {
       const cache = queryClient.getQueryCache();
       const timelineQueries = cache.findAll({
-        queryKey: ['timeline'],
+        queryKey: ['feed'],
       });
       const authorFeedQueries = cache.findAll({
         queryKey: ['author-feed'],
@@ -126,7 +126,7 @@ export function useLike() {
 
       const cache = queryClient.getQueryCache();
       const timelineQueries = cache.findAll({
-        queryKey: ['timeline'],
+        queryKey: ['feed'],
       });
       const authorFeedQueries = cache.findAll({
         queryKey: ['author-feed'],

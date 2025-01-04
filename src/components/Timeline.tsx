@@ -1,5 +1,5 @@
 import { forwardRef, useState } from 'react';
-import { useTimeline } from '../lib/bluesky/hooks/useTimeline';
+import { useFeed } from '../lib/bluesky/hooks/useFeed';
 import { PostCard } from './PostCard';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useLike } from '../lib/bluesky/hooks/useLike';
@@ -11,7 +11,7 @@ import { Loading } from './ui/loading';
 export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   const { columns } = useSettings();
   const selectedFeed = columns[columnNumber];
-  const { data, isLoading, error, fetchNextPage } = useTimeline(selectedFeed);
+  const { data, isLoading, error, fetchNextPage } = useFeed(selectedFeed);
   const like = useLike();
   const repost = useRepost();
   const posts = data?.pages.map((page) => page.feed).flat() ?? [];
