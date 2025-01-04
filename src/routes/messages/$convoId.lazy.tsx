@@ -54,7 +54,7 @@ function ReplyBox() {
   const sendMessage = async () => {
     if (!message.trim()) return;
     await mutateAsync(
-      { message: message },
+      { message: message.trim().replace(/\n{3,}/g, '\n\n') },
       {
         onSuccess: () => {
           queryClient.refetchQueries({
