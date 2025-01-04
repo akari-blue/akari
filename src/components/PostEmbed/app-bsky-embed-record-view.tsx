@@ -70,11 +70,16 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
             <div className="flex flex-col">
               <div>{embed.record.displayName}</div>
               <div>
-                feed by <Handle handle={embed.record.creator.handle} />
+                {'feed by '}
+                <Handle handle={embed.record.creator.handle} />
               </div>
             </div>
           </div>
-          <div>liked by {embed.record.likeCount} people</div>
+          <div>
+            {'liked by '}
+            {embed.record.likeCount}
+            {' people'}
+          </div>
         </Link>
       )}
       {embed.record.$type !== 'app.bsky.graph.defs#starterPackViewBasic' &&
