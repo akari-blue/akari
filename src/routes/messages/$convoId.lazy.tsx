@@ -67,10 +67,6 @@ function ReplyBox() {
     );
   };
 
-  const onClick = async () => {
-    await sendMessage();
-  };
-
   return (
     <form
       onSubmit={(event) => {
@@ -93,7 +89,7 @@ function ReplyBox() {
           placeholder="write a message"
         />
         <div className="flex justify-end p-2 items-end">
-          <Button variant="outline" onClick={onClick} disabled={isPending}>
+          <Button variant="outline" disabled={isPending} type="submit">
             <SendIcon />
           </Button>
         </div>
