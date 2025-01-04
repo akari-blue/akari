@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { SendIcon } from 'lucide-react';
 import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
 import { useQueryClient } from '@tanstack/react-query';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
@@ -47,11 +48,11 @@ function ReplyBox() {
   const queryClient = useQueryClient();
   const { convoId } = Route.useParams();
   const { mutateAsync, isPending } = useSendMessage({ convoId });
-  const [value, setValue] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
   const ref = useRef<TiptapMethods | null>(null);
-  const onClick = async () => {
-    const message = value.trim();
-    if (!message) return;
+
+  const sendMessage = async () => {
+    if (!message.trim()) return;
     await mutateAsync(
       { message: message },
       {
@@ -60,16 +61,35 @@ function ReplyBox() {
             queryKey: ['conversation', { convoId }],
           });
           ref.current?.clearContent();
+          setMessage('');
         },
       },
     );
   };
+
+  // @TODO: we should check that the editor is in focus
+  useHotkeys(
+    ['ctrl+enter'],
+    async () => {
+      await sendMessage();
+    },
+    {
+      enableOnFormTags: true,
+      enableOnContentEditable: true,
+    },
+    [message],
+  );
+
+  const onClick = async () => {
+    await sendMessage();
+  };
+
   return (
     <div className="flex flex-row mb-14 md:mb-0">
       <MinimalTiptapEditor
         ref={ref}
-        value={value}
-        onChange={(value) => setValue(value as string)}
+        value={message}
+        onChange={(value) => setMessage(value as string)}
         output="text"
         classNames={{
           wrapper: 'min-h-16 border-none',
