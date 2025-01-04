@@ -65,11 +65,11 @@ export function CreatePost() {
             // tablet
             'md:bottom-2',
             // desktop
-            'lg:relative lg:right-0 lg:rounded-none lg:aspect-auto lg:size-auto lg:w-fit',
+            'xl:static xl:aspect-auto xl:size-auto',
           )}
         >
-          <span className="hidden lg:block">{t('post:createPost')}</span>
-          <PencilIcon className="block lg:hidden size-10" />
+          <span className="hidden xl:block">{t('post:createPost')}</span>
+          <PencilIcon className="block xl:hidden size-10" />
         </Button>
       </DialogTrigger>
       <DialogContent className="[&>button]:hidden p-0 border">
