@@ -8,6 +8,7 @@ import { CreatePost } from './CreatePost';
 import { cn } from '@/lib/utils';
 import { appName } from '@/config';
 import { useQueryClient } from '@tanstack/react-query';
+import { useUnreadCount } from '@/lib/bluesky/hooks/useUnreadCount';
 
 const HomeLink = () => {
   const location = useLocation();
@@ -43,9 +44,15 @@ const MessagesLink = () => {
 
 const NotificationsLink = () => {
   const { t } = useTranslation('notifications');
+  const { data: unreadCount = 0 } = useUnreadCount();
   return (
-    <Link to="/notifications">
+    <Link to="/notifications" className="relative">
       <BellIcon className="size-7 xl:hidden" />
+      {unreadCount > 0 && (
+        <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-blue-500 rounded-full transform translate-x-1/2 -translate-y-1/2">
+          {unreadCount}
+        </span>
+      )}
       <span className="hidden xl:block">{t('notifications')}</span>
     </Link>
   );
