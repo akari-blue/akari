@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/react';
 import type { Content, UseEditorOptions } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
-import { useEditor } from '@tiptap/react';
+import { Extension, useEditor } from '@tiptap/react';
 import { Typography } from '@tiptap/extension-typography';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Underline } from '@tiptap/extension-underline';
@@ -158,6 +158,21 @@ const createExtensions = (placeholder: string) => [
   ResetMarksOnEnter,
   CodeBlockLowlight,
   Placeholder.configure({ placeholder: () => placeholder }),
+  Extension.create({
+    name: 'keyboard-shortcuts',
+    addKeyboardShortcuts(this) {
+      return {
+        'Mod-Enter'({ editor }) {
+          const submitEvent = new Event('submit', {
+            bubbles: true,
+            cancelable: true,
+          });
+          editor.$doc.element.closest('form')?.dispatchEvent(submitEvent);
+          return true;
+        },
+      };
+    },
+  }),
 ];
 
 export const useMinimalTiptapEditor = ({
@@ -192,8 +207,8 @@ export const useMinimalTiptapEditor = ({
     extensions: createExtensions(placeholder),
     editorProps: {
       attributes: {
-        autocomplete: 'off',
-        autocorrect: 'off',
+        autocomplete: 'on',
+        autocorrect: 'on',
         autocapitalize: 'off',
         class: cn('focus:outline-none flex-1 h-full p-5', editorClassName),
       },

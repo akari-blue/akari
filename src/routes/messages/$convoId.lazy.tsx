@@ -17,7 +17,6 @@ import { Button } from '@/components/ui/button';
 import { SendIcon } from 'lucide-react';
 import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
 import { useQueryClient } from '@tanstack/react-query';
-import { useHotkeys } from 'react-hotkeys-hook';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
@@ -68,44 +67,38 @@ function ReplyBox() {
     );
   };
 
-  // @TODO: we should check that the editor is in focus
-  useHotkeys(
-    ['ctrl+enter'],
-    async () => {
-      await sendMessage();
-    },
-    {
-      enableOnFormTags: true,
-      enableOnContentEditable: true,
-    },
-    [message],
-  );
-
   const onClick = async () => {
     await sendMessage();
   };
 
   return (
-    <div className="flex flex-row mb-14 md:mb-0">
-      <MinimalTiptapEditor
-        ref={ref}
-        value={message}
-        onChange={(value) => setMessage(value as string)}
-        output="text"
-        classNames={{
-          wrapper: 'min-h-16 border-none',
-          // for now let's hide the toolbar
-          // @TODO: enable this once we workout rich text DMs
-          toolbar: 'border-none hidden',
-        }}
-        placeholder="write a message"
-      />
-      <div className="flex justify-end p-2">
-        <Button variant="outline" onClick={onClick} disabled={isPending}>
-          <SendIcon />
-        </Button>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        sendMessage();
+      }}
+    >
+      <div className="flex flex-row mb-14 md:mb-0">
+        <MinimalTiptapEditor
+          ref={ref}
+          value={message}
+          onChange={(value) => setMessage(value as string)}
+          output="text"
+          classNames={{
+            wrapper: 'min-h-16 border-none',
+            // for now let's hide the toolbar
+            // @TODO: enable this once we workout rich text DMs
+            toolbar: 'border-none hidden',
+          }}
+          placeholder="write a message"
+        />
+        <div className="flex justify-end p-2">
+          <Button variant="outline" onClick={onClick} disabled={isPending}>
+            <SendIcon />
+          </Button>
+        </div>
       </div>
-    </div>
+    </form>
   );
 }
 
