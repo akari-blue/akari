@@ -63,13 +63,9 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
         {/* if there are less than 2 feeds, don't show the selector */}
         {feeds.length >= 2 && (
           <>
-            <div>
-              <TabList label="feed selector">
-                {data?.map((feed) => (
-                  <Tab id={feed.uri} name={feed.displayName} selectedTab={selectedFeed} key={feed.uri} />
-                ))}
-              </TabList>
-            </div>
+            <TabList label="feed selector" className="sticky top-0 bg-background z-50">
+              {data?.map((feed) => <Tab id={feed.uri} name={feed.displayName} selectedTab={selectedFeed} key={feed.uri} />)}
+            </TabList>
             {data?.map((feed) => (
               <Ariakit.TabPanel key={feed.uri} tabId={feed.uri}>
                 <Timeline columnNumber={columnNumber} />
