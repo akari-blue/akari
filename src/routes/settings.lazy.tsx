@@ -10,6 +10,7 @@ import { Helmet } from 'react-helmet';
 import { Moon, Sun } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/components/theme-provider/use-theme';
+import { Link } from '@/components/ui/Link';
 
 export const Route = createLazyFileRoute('/settings')({
   component: RouteComponent,
@@ -158,6 +159,23 @@ function RouteComponent() {
           <p>{t('cleanHandles.description')}</p>
         </div>
         {isAuthenticated && <Button onClick={logout}>{t('auth:logout')}</Button>}
+
+        <div>
+          <div>
+            <Link href={`https://github.com/akari-blue/akari/commit/${__COMMIT_HASH__}`}>
+              {'commit: '}
+              {__COMMIT_HASH__}
+            </Link>
+          </div>
+          <div>
+            {'build date: '}
+            {__BUILD_DATE__}
+          </div>
+          <div>
+            {'version: '}
+            {__APP_VERSION__}
+          </div>
+        </div>
       </div>
     </>
   );
