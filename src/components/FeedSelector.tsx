@@ -34,6 +34,7 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
       | undefined
   )
     ?.filter((item) => item.type === 'feed')
+    .filter((item) => item.pinned)
     ?.map((item) => item.value) ?? ['at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'];
   const { isLoading, error, data } = useFeeds({ feeds });
   const selectedFeed = columns[columnNumber] ?? feeds[0];
