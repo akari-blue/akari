@@ -4,7 +4,7 @@ import { cn } from '../../lib/utils';
 import { useBlueskyStore } from '../../lib/bluesky/store';
 import { BSkyMessage } from '../../lib/bluesky/types/BSkyMessage';
 import { Virtuoso } from 'react-virtuoso';
-import { forwardRef, HtmlHTMLAttributes, Ref, useState } from 'react';
+import { forwardRef, HtmlHTMLAttributes, Ref, useRef, useState } from 'react';
 import { Loading } from '@/components/ui/loading';
 import TimeAgo from 'react-timeago-i18n';
 import { FormattedText } from '@/components/ui/FormattedText';
@@ -14,9 +14,10 @@ import { Avatar } from '@/components/ui/avatar';
 import { Handle } from '@/components/ui/Handle';
 import { MinimalTiptapEditor } from '@/components/minimal-tiptap';
 import { Button } from '@/components/ui/button';
-import { SendIcon } from 'lucide-react';
+import { SendIcon, Trash2 } from 'lucide-react';
 import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
 import { useQueryClient } from '@tanstack/react-query';
+import { TiptapEditorHTMLElement } from '@tiptap/react';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
@@ -39,20 +40,27 @@ export const Route = createLazyFileRoute('/messages/$convoId')({
   component: Messages,
 });
 
+type TiptapMethods = {
+  clearContent: () => void;
+};
+
 function ReplyBox() {
   const queryClient = useQueryClient();
   const { convoId } = Route.useParams();
   const { mutate, isPending } = useSendMessage({ convoId });
   const [value, setValue] = useState<string>('');
+  const ref = useRef<TiptapMethods | null>(null);
   const onClick = async () => {
+    const message = value.trim();
+    if (!message) return;
     mutate(
-      { message: value },
+      { message: message },
       {
         onSuccess: () => {
           queryClient.refetchQueries({
             queryKey: ['conversation', { convoId }],
           });
-          setValue('');
+          ref.current?.clearContent();
         },
       },
     );
@@ -60,6 +68,7 @@ function ReplyBox() {
   return (
     <div className="flex flex-row mb-14 md:mb-0">
       <MinimalTiptapEditor
+        ref={ref}
         value={value}
         onChange={(value) => setValue(value as string)}
         output="text"

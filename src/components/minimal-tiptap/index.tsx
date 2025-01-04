@@ -13,7 +13,7 @@ import { SectionFive } from './components/section/five';
 import { LinkBubbleMenu } from './components/bubble-menu/link-bubble-menu';
 import { useMinimalTiptapEditor } from './hooks/use-minimal-tiptap';
 import { MeasuredContainer } from './components/measured-container';
-import { forwardRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 
 const Toolbar = ({ editor, className }: { editor: Editor; className?: string }) => (
   <div className={cn('shrink-0 overflow-x-auto border-b border-border p-2', className)}>
@@ -39,6 +39,10 @@ const Toolbar = ({ editor, className }: { editor: Editor; className?: string }) 
   </div>
 );
 
+type TiptapMethods = {
+  clearContent: () => void;
+};
+
 export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'onUpdate' | 'editorClassName'> {
   value?: Content;
   onChange?: (value: Content) => void;
@@ -49,25 +53,29 @@ export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'o
   };
 }
 
-export const MinimalTiptapEditor = forwardRef<HTMLDivElement, MinimalTiptapProps>(function MinimalTiptapEditor(
-  { value, onChange, classNames, ...props },
-  ref,
+export const MinimalTiptapEditor = forwardRef(function MinimalTiptapEditor(
+  { value, onChange, classNames, ...props }: MinimalTiptapProps,
+  ref: React.ForwardedRef<TiptapMethods>,
 ) {
   const editor = useMinimalTiptapEditor({
     value,
     onUpdate: onChange,
     ...props,
   });
+  const editorRef = useRef(editor);
+  useImperativeHandle(ref, () => ({
+    clearContent: () => {
+      editorRef.current?.commands.clearContent();
+    },
+  }));
 
-  if (!editor) {
-    return null;
-  }
+  if (!editor) return null;
+  editorRef.current = editor;
 
   return (
     <MeasuredContainer
       as="div"
       name="editor"
-      ref={ref}
       className={cn('flex h-auto min-h-72 w-full flex-col rounded-md border border-input', classNames?.wrapper)}
     >
       <EditorContent editor={editor} className={cn('minimal-tiptap-editor flex-1 h-full', classNames?.editor)} />
