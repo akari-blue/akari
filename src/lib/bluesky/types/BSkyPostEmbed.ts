@@ -130,6 +130,22 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
           viewer: Type.Object({}),
           indexedAt: Type.String(),
         }),
+        Type.Object({
+          $type: Type.Literal('app.bsky.graph.defs#listView'),
+          uri: Type.String(),
+          cid: Type.String(),
+          name: Type.String(),
+          purpose: Type.Union([Type.Literal('app.bsky.graph.defs#curatelist'), Type.Literal('app.bsky.graph.defs#modlist')]),
+          listItemCount: Type.Number(),
+          indexedAt: Type.String(),
+          labels: Type.Array(BSkyPostLabel),
+          viewer: Type.Object({
+            muted: Type.Boolean(),
+          }),
+          creator: Author,
+          description: Type.String(),
+          avatar: Type.Optional(Type.String()),
+        }),
       ]),
     }),
     Type.Object({

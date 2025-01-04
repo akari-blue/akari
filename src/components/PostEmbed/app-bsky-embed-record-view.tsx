@@ -11,6 +11,7 @@ import { Link } from '@/components/ui/Link';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '../ui/avatar';
 import { FormattedText } from '../ui/FormattedText';
+import { SatelliteDish } from 'lucide-react';
 
 export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
   const { t } = useTranslation('post');
@@ -82,8 +83,32 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
           </div>
         </Link>
       )}
+      {embed.record.$type === 'app.bsky.graph.defs#listView' && (
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-row gap-3">
+            {embed.record.avatar ? (
+              <Avatar avatar={embed.record.avatar} handle={author.handle} list={true} />
+            ) : (
+              <div className="bg-blue-500 p-2 aspect-square rounded-sm items-center justify-center">
+                <SatelliteDish className="size-7" />
+              </div>
+            )}
+            <div className="flex flex-col">
+              <div>{embed.record.name}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {embed.record.purpose === 'app.bsky.graph.defs#modlist' && 'mod'}
+                {'list by'} <Handle handle={author.handle} />
+              </div>
+            </div>
+          </div>
+          <div className="text-sm">
+            <FormattedText text={embed.record.description} />
+          </div>
+        </div>
+      )}
       {embed.record.$type !== 'app.bsky.graph.defs#starterPackViewBasic' &&
-        embed.record.$type !== 'app.bsky.feed.defs#generatorView' && (
+        embed.record.$type !== 'app.bsky.feed.defs#generatorView' &&
+        embed.record.$type !== 'app.bsky.graph.defs#listView' && (
           <p className="text-gray-800 dark:text-gray-200">
             {embed.record.facets ? (
               <FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />

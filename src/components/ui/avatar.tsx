@@ -39,15 +39,17 @@ export const Avatar = ({
   handle,
   avatar,
   labeler,
+  list,
   className,
 }: {
   handle: string;
   avatar: string | undefined;
   labeler?: boolean;
+  list?: boolean;
   className?: string;
 }) => {
   return (
-    <AvatarWrapper className={cn(labeler && 'aspect-square', className)}>
+    <AvatarWrapper className={cn((labeler || list) && 'aspect-square rounded-sm', className)}>
       <AvatarImage src={avatar} />
       <AvatarFallback>{handle}</AvatarFallback>
     </AvatarWrapper>
