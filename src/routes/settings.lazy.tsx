@@ -11,6 +11,7 @@ import { Moon, Sun } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/components/theme-provider/use-theme';
 import { Link } from '@/components/ui/Link';
+import TimeAgo from 'react-timeago-i18n';
 
 export const Route = createLazyFileRoute('/settings')({
   component: RouteComponent,
@@ -169,7 +170,7 @@ function RouteComponent() {
           </div>
           <div>
             {'build date: '}
-            {__BUILD_DATE__}
+            <TimeAgo date={__BUILD_DATE__} />
           </div>
           <div>
             {'version: '}
