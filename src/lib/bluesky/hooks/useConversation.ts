@@ -38,5 +38,7 @@ export function useConversation({ convoId }: { convoId: string }) {
       };
     },
     enabled: !!agent && isAuthenticated,
+    // 30s
+    staleTime: 30 * 1000,
   });
 }
