@@ -49,7 +49,7 @@ function Root() {
 
   return (
     <>
-      <Helmet titleTemplate={`${unreadCount && `(${unreadCount})`} %s - ${appName}`} defaultTitle={appName} />
+      <Helmet titleTemplate={`${unreadCount ? `(${unreadCount})` : ''} %s - ${appName}`} defaultTitle={appName} />
       <main
         dir={dir}
         lang={language}
