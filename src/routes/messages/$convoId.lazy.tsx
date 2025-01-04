@@ -142,7 +142,7 @@ function Messages() {
       <Helmet>
         <title>{t('chat')}</title>
       </Helmet>
-      <div className="flex flex-col h-screen-safe border-x">
+      <div className="flex flex-col h-screen-safe border-x pb-safe">
         <div className="w-full p-2 bg-black border-b border-b-neutral-700 flex flex-row gap-2">
           <Avatar avatar={otherMember.avatar} handle={otherMember.handle} />
           <Handle handle={otherMember.handle} />
