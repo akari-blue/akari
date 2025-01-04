@@ -46,13 +46,13 @@ type TiptapMethods = {
 function ReplyBox() {
   const queryClient = useQueryClient();
   const { convoId } = Route.useParams();
-  const { mutate, isPending } = useSendMessage({ convoId });
+  const { mutateAsync, isPending } = useSendMessage({ convoId });
   const [value, setValue] = useState<string>('');
   const ref = useRef<TiptapMethods | null>(null);
   const onClick = async () => {
     const message = value.trim();
     if (!message) return;
-    mutate(
+    await mutateAsync(
       { message: message },
       {
         onSuccess: () => {
