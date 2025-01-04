@@ -7,7 +7,7 @@ export function MentionNotification({ notification }: { notification: BSkyMentio
   return (
     <div className="p-2">
       <div className="flex flex-row gap-1 overflow-hidden max-h-16">
-        <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8 " />
+        <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8" />
       </div>
       <div>
         {notification.author.displayName} {t('mentionedYou')}

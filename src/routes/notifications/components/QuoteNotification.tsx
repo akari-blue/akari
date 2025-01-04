@@ -6,11 +6,18 @@ export function QuoteNotification({ notification }: { notification: BSkyQuoteNot
   const { t } = useTranslation('notifications');
   return (
     <div className="p-2">
-      <div className="flex flex-row gap-1 overflow-hidden max-h-16">
-        <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8 " />
-      </div>
-      <div>
-        {notification.author.displayName} {t('quotedYourPost')}
+      <div className="flex flex-row gap-2 p-2">
+        <div className="flex flex-shrink-0 w-12 justify-end aspect-square">
+          <Avatar handle={notification.author.handle} avatar={notification.author.avatar} />
+        </div>
+        <div>
+          <div className="flex flex-row gap-1 overflow-hidden max-h-16">
+            <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8" />
+          </div>
+          <div>
+            {notification.author.displayName} {t('quotedYourPost')}
+          </div>
+        </div>
       </div>
     </div>
   );

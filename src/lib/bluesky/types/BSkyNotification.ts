@@ -119,7 +119,7 @@ export const BSkyReplyNotification = Type.Object({
   author: BSkyAuthor,
   reason: Type.Literal('reply'),
   reasonSubject: Type.Optional(Type.String()),
-  record: BSkyPost['record'],
+  record: BSkyPost.properties.record,
   isRead: Type.Boolean(),
   indexedAt: Type.String(),
   labels: Type.Optional(Type.Array(Type.Any())),

@@ -6,6 +6,7 @@ import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Virtuoso } from 'react-virtuoso';
 import { GroupNotification } from './GroupNotification';
+import { HeartIcon } from 'lucide-react';
 
 // group notifications by uri
 export function GroupedNotifications() {

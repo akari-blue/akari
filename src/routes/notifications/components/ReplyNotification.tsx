@@ -1,19 +1,22 @@
+import { PostEmbed } from '@/components/PostEmbed';
 import { Avatar } from '@/components/ui/avatar';
 import { FormattedText } from '@/components/ui/FormattedText';
+import { Handle } from '@/components/ui/Handle';
 import { BSkyReplyNotification } from '@/lib/bluesky/types/BSkyNotification';
-import { useTranslation } from 'react-i18next';
 
 export function ReplyNotification({ notification }: { notification: BSkyReplyNotification }) {
-  const { t } = useTranslation('notifications');
   return (
-    <div className="p-2">
-      <div className="flex flex-row gap-1 overflow-hidden max-h-16">
-        <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8 " />
+    <div className="flex flex-row gap-2 p-2">
+      <div className="flex flex-shrink-0 w-12 justify-end aspect-square">
+        <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8" />
       </div>
-      <div>
-        {notification.author.displayName} {t('repliedToYourPost')}
+      <div className="flex-grow">
+        <div>
+          {notification.author.displayName} <Handle handle={notification.author.handle} />
+        </div>
+        <FormattedText text={notification.record.text} />
+        <PostEmbed embed={notification.record.embed} />
       </div>
-      <FormattedText text={notification.record.text} />
     </div>
   );
 }
