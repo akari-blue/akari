@@ -84,7 +84,9 @@ export function CreatePost() {
         <MinimalTiptapEditor
           value={value}
           onChange={(value) => setValue(value as JSONContent)}
-          className="w-full border-none"
+          classNames={{
+            wrapper: 'w-full border-none',
+          }}
           output="json"
           placeholder="Type something..."
           autofocus={true}

@@ -15,15 +15,8 @@ import { useMinimalTiptapEditor } from './hooks/use-minimal-tiptap';
 import { MeasuredContainer } from './components/measured-container';
 import { forwardRef } from 'react';
 
-export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'onUpdate'> {
-  value?: Content;
-  onChange?: (value: Content) => void;
-  className?: string;
-  editorContentClassName?: string;
-}
-
-const Toolbar = ({ editor }: { editor: Editor }) => (
-  <div className="shrink-0 overflow-x-auto border-b border-border p-2">
+const Toolbar = ({ editor, className }: { editor: Editor; className?: string }) => (
+  <div className={cn('shrink-0 overflow-x-auto border-b border-border p-2', className)}>
     <div className="flex w-max items-center gap-px">
       {/* <SectionOne editor={editor} activeLevels={[1, 2, 3, 4, 5, 6]} /> */}
 
@@ -46,8 +39,18 @@ const Toolbar = ({ editor }: { editor: Editor }) => (
   </div>
 );
 
+export interface MinimalTiptapProps extends Omit<UseMinimalTiptapEditorProps, 'onUpdate' | 'editorClassName'> {
+  value?: Content;
+  onChange?: (value: Content) => void;
+  classNames?: {
+    wrapper?: string;
+    editor?: string;
+    toolbar?: string;
+  };
+}
+
 export const MinimalTiptapEditor = forwardRef<HTMLDivElement, MinimalTiptapProps>(function MinimalTiptapEditor(
-  { value, onChange, className, editorContentClassName, ...props },
+  { value, onChange, classNames, ...props },
   ref,
 ) {
   const editor = useMinimalTiptapEditor({
@@ -65,10 +68,10 @@ export const MinimalTiptapEditor = forwardRef<HTMLDivElement, MinimalTiptapProps
       as="div"
       name="editor"
       ref={ref}
-      className={cn('flex h-auto min-h-72 w-full flex-col rounded-md border border-input', className)}
+      className={cn('flex h-auto min-h-72 w-full flex-col rounded-md border border-input', classNames?.wrapper)}
     >
-      <EditorContent editor={editor} className={cn('minimal-tiptap-editor flex-1 h-full', editorContentClassName)} />
-      <Toolbar editor={editor} />
+      <EditorContent editor={editor} className={cn('minimal-tiptap-editor flex-1 h-full', classNames?.editor)} />
+      <Toolbar editor={editor} className={classNames?.toolbar} />
       <LinkBubbleMenu editor={editor} />
     </MeasuredContainer>
   );

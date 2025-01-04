@@ -24,7 +24,7 @@ export function useConversation({ convoId }: { convoId: string }) {
   const { isAuthenticated } = useAuth();
 
   return useQuery({
-    queryKey: ['conversations', { convoId }],
+    queryKey: ['conversation', { convoId }],
     queryFn: async () => {
       // @ts-expect-error bsky_chat does in fact work
       const proxy = agent.withProxy('bsky_chat', 'did:web:api.bsky.chat');

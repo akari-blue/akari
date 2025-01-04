@@ -4,22 +4,26 @@ import { cn } from '../../lib/utils';
 import { useBlueskyStore } from '../../lib/bluesky/store';
 import { BSkyMessage } from '../../lib/bluesky/types/BSkyMessage';
 import { Virtuoso } from 'react-virtuoso';
-import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
+import { forwardRef, HtmlHTMLAttributes, Ref, useState } from 'react';
 import { Loading } from '@/components/ui/loading';
 import TimeAgo from 'react-timeago-i18n';
 import { FormattedText } from '@/components/ui/FormattedText';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
-// import { MinimalTiptapEditor } from '@/components/minimal-tiptap';
 import { Avatar } from '@/components/ui/avatar';
 import { Handle } from '@/components/ui/Handle';
+import { MinimalTiptapEditor } from '@/components/minimal-tiptap';
+import { Button } from '@/components/ui/button';
+import { SendIcon } from 'lucide-react';
+import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
+import { useQueryClient } from '@tanstack/react-query';
 
 function Message({ message }: { message: BSkyMessage }) {
   const session = useBlueskyStore((state) => state.session);
   return (
     <div className={cn('flex flex-col', message.sender.did === session?.did ? 'items-end' : 'items-start')}>
       <div
-        className={cn(message.sender.did === session?.did ? 'bg-blue-600' : 'bg-neutral-800', 'p-2 w-fit rounded-sm')}
+        className={cn('p-2 w-fit rounded-sm', message.sender.did === session?.did ? 'bg-blue-600' : 'bg-gray-800')}
         key={message.id as string}
       >
         <FormattedText text={message.text} />
@@ -35,13 +39,55 @@ export const Route = createLazyFileRoute('/messages/$convoId')({
   component: Messages,
 });
 
+function ReplyBox() {
+  const queryClient = useQueryClient();
+  const { convoId } = Route.useParams();
+  const { mutate, isPending } = useSendMessage({ convoId });
+  const [value, setValue] = useState<string>('');
+  const onClick = async () => {
+    mutate(
+      { message: value },
+      {
+        onSuccess: () => {
+          queryClient.refetchQueries({
+            queryKey: ['conversation', { convoId }],
+          });
+          setValue('');
+        },
+      },
+    );
+  };
+  return (
+    <div className="flex flex-row mb-14 md:mb-0">
+      <MinimalTiptapEditor
+        value={value}
+        onChange={(value) => setValue(value as string)}
+        output="text"
+        classNames={{
+          wrapper: 'min-h-16 border-none',
+          // for now let's hide the toolbar
+          // @TODO: enable this once we workout rich text DMs
+          toolbar: 'border-none hidden',
+        }}
+        placeholder="write a message"
+      />
+      <div className="flex justify-end p-2">
+        <Button variant="outline" onClick={onClick} disabled={isPending}>
+          <SendIcon />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function Messages() {
   const { t } = useTranslation('messages');
   const { convoId } = Route.useParams();
+  const session = useBlueskyStore((state) => state.session);
   const { data, isLoading, isError, error } = useConversation({ convoId });
   const messages = data?.messages;
   const convo = data?.convo;
-  const otherMember = convo?.members[1];
+  const otherMember = convo?.members.find((member) => member.did !== session?.did);
 
   if (isLoading) return <Loading />;
 
@@ -68,7 +114,7 @@ function Messages() {
       <Helmet>
         <title>{t('chat')}</title>
       </Helmet>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen border-x">
         <div className="w-full p-2 bg-black border-b border-b-neutral-700 flex flex-row gap-2">
           <Avatar avatar={otherMember.avatar} handle={otherMember.handle} />
           <Handle handle={otherMember.handle} />
@@ -93,12 +139,10 @@ function Messages() {
                   </div>
                 );
               }),
-              Footer: () => <div className="h-16 md:h-0" />,
             }}
           />
         </div>
-        {/* Soon */}
-        {/* <MinimalTiptapEditor className="mb-14 min-h-16 border-none" /> */}
+        <ReplyBox />
       </div>
     </>
   );
