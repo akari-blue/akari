@@ -27,6 +27,9 @@ const ProfileHandleIndexLazyImport = createFileRoute('/profile/$handle/')()
 const ProfileHandlePostPostIdLazyImport = createFileRoute(
   '/profile/$handle/post/$postId',
 )()
+const ProfileHandleFeedFeedLazyImport = createFileRoute(
+  '/profile/$handle/feed/$feed',
+)()
 
 // Create/Update Routes
 
@@ -95,6 +98,14 @@ const ProfileHandlePostPostIdLazyRoute =
     import('./routes/profile/$handle/post.$postId.lazy').then((d) => d.Route),
   )
 
+const ProfileHandleFeedFeedLazyRoute = ProfileHandleFeedFeedLazyImport.update({
+  id: '/profile/$handle/feed/$feed',
+  path: '/profile/$handle/feed/$feed',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/profile/$handle/feed.$feed.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -155,6 +166,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileHandleIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/profile/$handle/feed/$feed': {
+      id: '/profile/$handle/feed/$feed'
+      path: '/profile/$handle/feed/$feed'
+      fullPath: '/profile/$handle/feed/$feed'
+      preLoaderRoute: typeof ProfileHandleFeedFeedLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/$handle/post/$postId': {
       id: '/profile/$handle/post/$postId'
       path: '/profile/$handle/post/$postId'
@@ -176,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/messages': typeof MessagesIndexLazyRoute
   '/notifications': typeof NotificationsIndexLazyRoute
   '/profile/$handle': typeof ProfileHandleIndexLazyRoute
+  '/profile/$handle/feed/$feed': typeof ProfileHandleFeedFeedLazyRoute
   '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdLazyRoute
 }
 
@@ -188,6 +207,7 @@ export interface FileRoutesByTo {
   '/messages': typeof MessagesIndexLazyRoute
   '/notifications': typeof NotificationsIndexLazyRoute
   '/profile/$handle': typeof ProfileHandleIndexLazyRoute
+  '/profile/$handle/feed/$feed': typeof ProfileHandleFeedFeedLazyRoute
   '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdLazyRoute
 }
 
@@ -201,6 +221,7 @@ export interface FileRoutesById {
   '/messages/': typeof MessagesIndexLazyRoute
   '/notifications/': typeof NotificationsIndexLazyRoute
   '/profile/$handle/': typeof ProfileHandleIndexLazyRoute
+  '/profile/$handle/feed/$feed': typeof ProfileHandleFeedFeedLazyRoute
   '/profile/$handle/post/$postId': typeof ProfileHandlePostPostIdLazyRoute
 }
 
@@ -215,6 +236,7 @@ export interface FileRouteTypes {
     | '/messages'
     | '/notifications'
     | '/profile/$handle'
+    | '/profile/$handle/feed/$feed'
     | '/profile/$handle/post/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -226,6 +248,7 @@ export interface FileRouteTypes {
     | '/messages'
     | '/notifications'
     | '/profile/$handle'
+    | '/profile/$handle/feed/$feed'
     | '/profile/$handle/post/$postId'
   id:
     | '__root__'
@@ -237,6 +260,7 @@ export interface FileRouteTypes {
     | '/messages/'
     | '/notifications/'
     | '/profile/$handle/'
+    | '/profile/$handle/feed/$feed'
     | '/profile/$handle/post/$postId'
   fileRoutesById: FileRoutesById
 }
@@ -250,6 +274,7 @@ export interface RootRouteChildren {
   MessagesIndexLazyRoute: typeof MessagesIndexLazyRoute
   NotificationsIndexLazyRoute: typeof NotificationsIndexLazyRoute
   ProfileHandleIndexLazyRoute: typeof ProfileHandleIndexLazyRoute
+  ProfileHandleFeedFeedLazyRoute: typeof ProfileHandleFeedFeedLazyRoute
   ProfileHandlePostPostIdLazyRoute: typeof ProfileHandlePostPostIdLazyRoute
 }
 
@@ -262,6 +287,7 @@ const rootRouteChildren: RootRouteChildren = {
   MessagesIndexLazyRoute: MessagesIndexLazyRoute,
   NotificationsIndexLazyRoute: NotificationsIndexLazyRoute,
   ProfileHandleIndexLazyRoute: ProfileHandleIndexLazyRoute,
+  ProfileHandleFeedFeedLazyRoute: ProfileHandleFeedFeedLazyRoute,
   ProfileHandlePostPostIdLazyRoute: ProfileHandlePostPostIdLazyRoute,
 }
 
@@ -283,6 +309,7 @@ export const routeTree = rootRoute
         "/messages/",
         "/notifications/",
         "/profile/$handle/",
+        "/profile/$handle/feed/$feed",
         "/profile/$handle/post/$postId"
       ]
     },
@@ -309,6 +336,9 @@ export const routeTree = rootRoute
     },
     "/profile/$handle/": {
       "filePath": "profile/$handle/index.lazy.tsx"
+    },
+    "/profile/$handle/feed/$feed": {
+      "filePath": "profile/$handle/feed.$feed.lazy.tsx"
     },
     "/profile/$handle/post/$postId": {
       "filePath": "profile/$handle/post.$postId.lazy.tsx"

@@ -1,3 +1,4 @@
+import { Author } from './Author';
 import { BSkyFacet } from './BSkyFacet';
 import { BSkyPostLabel } from './BSkyPostLabel';
 import { BSkyAuthor } from './BskyAuthor';
@@ -114,6 +115,20 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
           labels: Type.Array(BSkyPostLabel),
           indexedAt: Type.String(),
           $type: Type.Literal('app.bsky.graph.defs#starterPackViewBasic'),
+        }),
+        Type.Object({
+          $type: Type.Literal('app.bsky.feed.defs#generatorView'),
+          uri: Type.String(),
+          cid: Type.String(),
+          did: Type.String(),
+          creator: Author,
+          displayName: Type.String(),
+          description: Type.String(),
+          avatar: Type.String(),
+          likeCount: Type.Number(),
+          labels: Type.Array(BSkyPostLabel),
+          viewer: Type.Object({}),
+          indexedAt: Type.String(),
         }),
       ]),
     }),

@@ -20,6 +20,7 @@ export const ThreadGate = Type.Object({
         }),
       ]),
     ),
+    hiddenReplies: Type.Optional(Type.Array(Type.Unknown())),
     createdAt: Type.String(),
     post: Type.String(),
   }),

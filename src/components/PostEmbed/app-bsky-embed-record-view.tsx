@@ -58,19 +58,35 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
           </div>
         </div>
       )}
-      {embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic' ? (
+      {embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic' && (
         <div className="text-gray-800 dark:text-gray-200">
-          <NotImplementedBox type={embed.$type} data={embed.record} />
+          <NotImplementedBox type={embed.record.$type} data={embed.record} />
         </div>
-      ) : (
-        <p className="text-gray-800 dark:text-gray-200">
-          {embed.record.facets ? (
-            <FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />
-          ) : (
-            <FormattedText text={embed.record.value.text} key={embed.record.uri} />
-          )}
-        </p>
       )}
+      {embed.record.$type === 'app.bsky.feed.defs#generatorView' && (
+        <Link to="/profile/$handle/feed/$feed" params={{ handle: embed.record.creator.handle, feed: embed.record.cid }}>
+          <div className="flex flex-row gap-2">
+            <Avatar avatar={embed.record.avatar} handle={embed.record.displayName} />
+            <div className="flex flex-col">
+              <div>{embed.record.displayName}</div>
+              <div>
+                feed by <Handle handle={embed.record.creator.handle} />
+              </div>
+            </div>
+          </div>
+          <div>liked by {embed.record.likeCount} people</div>
+        </Link>
+      )}
+      {embed.record.$type !== 'app.bsky.graph.defs#starterPackViewBasic' &&
+        embed.record.$type !== 'app.bsky.feed.defs#generatorView' && (
+          <p className="text-gray-800 dark:text-gray-200">
+            {embed.record.facets ? (
+              <FacetedText text={embed.record.value.text} facets={embed.record.facets} key={embed.record.uri} />
+            ) : (
+              <FormattedText text={embed.record.value.text} key={embed.record.uri} />
+            )}
+          </p>
+        )}
     </div>
   );
 };
