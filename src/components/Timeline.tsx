@@ -7,12 +7,14 @@ import { useRepost } from '../lib/bluesky/hooks/useRepost';
 import { useSettings } from '../hooks/useSetting';
 import { Virtuoso } from 'react-virtuoso';
 import { Loading } from './ui/loading';
+import { useUnlike } from '@/lib/bluesky/hooks/useUnlike';
 
 export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   const { columns } = useSettings();
   const selectedFeed = columns[columnNumber];
   const { data, isLoading, error, fetchNextPage } = useFeed(selectedFeed);
   const like = useLike();
+  const unlike = useUnlike();
   const repost = useRepost();
   const posts = data?.pages.map((page) => page.feed).flat() ?? [];
   const [selectedPost, setSelectedPost] = useState<string | null>(posts?.[0]?.post.uri ?? null);
@@ -33,7 +35,14 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
       const post = getPost(selectedPost);
       if (!post?.viewer) return;
 
-      like.mutate({ uri: post.uri, cid: post.cid, like: !post.viewer.like });
+      // unlike
+      if (post.viewer.like) {
+        unlike.mutate({ uri: post.viewer.like });
+        return;
+      }
+
+      // like
+      like.mutate({ uri: post.uri, cid: post.cid });
     },
     [selectedPost],
   );

@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
-import { toast } from 'sonner';
 import { BSkyPost } from '../types/BSkyPost';
+import { toast } from 'sonner';
 
-export function useLike() {
+export function useUnlike() {
   const { agent } = useBlueskyStore();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['like'],
-    mutationFn: async ({ uri, cid }: { uri: string; cid: string }) => {
-      return await agent.like(uri, cid);
+    mutationKey: ['unlike'],
+    mutationFn: async ({ uri }: { uri: string }) => {
+      await agent.deleteLike(uri);
     },
     onMutate: async ({ uri }) => {
       const cache = queryClient.getQueryCache();
@@ -20,16 +20,16 @@ export function useLike() {
       const authorFeedQueries = cache.findAll({
         queryKey: ['author-feed'],
       });
+      const previousData = [...timelineQueries, ...authorFeedQueries];
 
-      const queries = [...timelineQueries, ...authorFeedQueries];
-
-      for (const query of queries) {
+      for (const query of previousData) {
         await queryClient.cancelQueries({ queryKey: query.queryKey });
 
         queryClient.setQueryData<{
           pages: {
             feed: {
               post: BSkyPost;
+              feedContext: string;
             }[];
             cursor: string;
           }[];
@@ -38,20 +38,22 @@ export function useLike() {
           pages:
             old?.pages.map((page) => ({
               ...page,
-              feed: page.feed.map(({ post }) => {
-                if (post.uri !== uri) {
+              feed: page.feed.map(({ post, feedContext }) => {
+                if (post.viewer.like !== uri) {
                   return {
+                    feedContext,
                     post,
                   };
                 }
 
                 return {
+                  feedContext,
                   post: {
                     ...post,
-                    likeCount: post.likeCount + 1,
+                    likeCount: post.likeCount - 1,
                     viewer: {
                       ...post.viewer,
-                      like: `at://imlunahey.com/app.bsky.feed.like/pending`,
+                      like: undefined,
                     },
                   },
                 };
@@ -62,13 +64,13 @@ export function useLike() {
       }
 
       return {
-        previousData: queries.map((query) => ({
+        previousData: previousData.map((query) => ({
           queryKey: query.queryKey,
           state: query.state,
         })),
       };
     },
-    onSuccess: async (data, { uri }) => {
+    onSuccess: async (_, { uri }) => {
       const cache = queryClient.getQueryCache();
       const timelineQueries = cache.findAll({
         queryKey: ['feed'],
@@ -96,7 +98,7 @@ export function useLike() {
             old?.pages.map((page) => ({
               ...page,
               feed: page.feed.map(({ post, feedContext }) => {
-                if (post.uri !== uri) {
+                if (post.viewer.like !== uri) {
                   return {
                     feedContext,
                     post,
@@ -109,7 +111,7 @@ export function useLike() {
                     ...post,
                     viewer: {
                       ...post.viewer,
-                      like: data?.uri,
+                      like: undefined,
                     },
                   },
                 };

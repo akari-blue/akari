@@ -17,13 +17,7 @@ import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Handle } from './ui/Handle';
 import { FormattedText } from './ui/FormattedText';
 import { Avatar } from './ui/avatar';
-
-type PostCardProps = {
-  post: BSkyPost | undefined | null;
-  context?: string;
-  className?: string;
-  onClick?: () => void;
-};
+import { useUnlike } from '@/lib/bluesky/hooks/useUnlike';
 
 const contextToText = (context: string) => {
   if (context === 'following') return 'following';
@@ -45,15 +39,32 @@ const BetterContext = ({ context }: { context?: string }) => {
   );
 };
 
+type PostCardProps = {
+  post: BSkyPost | undefined | null;
+  context?: string;
+  className?: string;
+  onClick?: () => void;
+};
+
 export function PostCard({ post, context, className, onClick }: PostCardProps) {
   const { t } = useTranslation(['app', 'post']);
   const like = useLike();
+  const unlike = useUnlike();
   const repost = useRepost();
   const { isAuthenticated } = useAuth();
   const { experiments } = useSettings();
 
-  const handleLike = (uri: string, cid: string, currentLike?: string) => {
-    like.mutate({ uri, cid, like: !currentLike });
+  const handleLike = () => {
+    if (!post) return;
+
+    // unlike
+    if (post.viewer.like) {
+      unlike.mutate({ uri: post.viewer.like });
+      return;
+    }
+
+    // like
+    like.mutate({ uri: post.uri, cid: post.cid });
   };
 
   const handleRepost = (uri: string, cid: string) => {
@@ -135,8 +146,8 @@ export function PostCard({ post, context, className, onClick }: PostCardProps) {
                       <span className="hidden xl:block">{t('reposts')}</span>
                     </button>
                     <button
-                      onClick={() => handleLike(post.uri, post.cid, post.viewer?.like)}
-                      disabled={like.isPending || !isAuthenticated}
+                      onClick={handleLike}
+                      disabled={like.isPending || unlike.isPaused || !isAuthenticated}
                       className={cn(
                         'flex items-center space-x-2 transition-colors',
                         post.viewer?.like ? 'text-pink-500' : 'hover:text-pink-500',
