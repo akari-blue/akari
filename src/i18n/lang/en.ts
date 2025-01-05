@@ -141,5 +141,10 @@ export const en = {
         },
       },
     },
+    search: {
+      search: 'search',
+      searching: 'searching...',
+      noResults: 'no results',
+    },
   },
 } as const;

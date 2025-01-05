@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../lib/bluesky/hooks/useAuth';
 import { Link } from './ui/Link';
 import { useBlueskyStore } from '../lib/bluesky/store';
-import { BellIcon, HomeIcon, LogInIcon, MailIcon, SettingsIcon, UserIcon } from 'lucide-react';
+import { BellIcon, HomeIcon, LogInIcon, MailIcon, SearchIcon, SettingsIcon, UserIcon } from 'lucide-react';
 import { CreatePost } from './CreatePost';
 import { cn } from '@/lib/utils';
 import { appName } from '@/config';
@@ -29,6 +29,16 @@ const HomeLink = () => {
     >
       <HomeIcon className="size-7 xl:hidden" />
       <h1 className="text-2xl font-bold hidden xl:block">{appName}</h1>
+    </Link>
+  );
+};
+
+const SearchLink = () => {
+  const { t } = useTranslation('search');
+  return (
+    <Link to="/search">
+      <SearchIcon className="size-7 xl:hidden" />
+      <span className="hidden xl:block">{t('search')}</span>
     </Link>
   );
 };
@@ -138,6 +148,7 @@ export const Navbar = () => {
         )}
       >
         <HomeLink />
+        <SearchLink />
         {isAuthenticated && <MessagesLink />}
         {isAuthenticated && <NotificationsLink />}
         {isAuthenticated && <ProfileLink />}
