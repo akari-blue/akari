@@ -134,7 +134,7 @@ export const Navbar = () => {
         // tablet
         'md:top-0 md:right-auto md:border-r md:border-gray-200 md:dark:border-gray-800',
         // desktop
-        'xl:bg-inherit xl:relative xl:h-screen xl:border-none',
+        'xl:bg-inherit xl:sticky xl:h-screen xl:border-none xl:top-0',
       )}
     >
       <div
