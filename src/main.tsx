@@ -8,6 +8,15 @@ import './i18n';
 import { routeTree } from './routeTree.gen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './components/theme-provider';
+import { registerSW } from 'virtual:pwa-register';
+import { toast } from 'sonner';
+
+registerSW({
+  immediate: true,
+  onOfflineReady() {
+    toast.success('akari is installed!');
+  },
+});
 
 // Create a new router instance
 const router = createRouter({ routeTree });
