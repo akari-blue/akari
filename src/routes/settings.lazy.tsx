@@ -1,4 +1,4 @@
-import { createLazyFileRoute, useNavigate, useRouter } from '@tanstack/react-router';
+import { createLazyFileRoute, useRouter } from '@tanstack/react-router';
 import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { useSettings } from '../hooks/useSetting';
 import { Input } from '../components/ui/input';
