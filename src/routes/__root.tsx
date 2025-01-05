@@ -48,20 +48,24 @@ function Root() {
   const pathname = router.location.pathname;
   const { data: unreadCount } = useUnreadCount();
 
-  useRegisterSW({
+  const { updateServiceWorker } = useRegisterSW({
     onRegisteredSW(swUrl, registration) {
-      if (experiments.devMode) toast.info(`Service Worker at: ${swUrl}`);
+      console.info(`Service Worker at: ${swUrl}`);
       if (registration) {
         setInterval(() => {
-          if (experiments.devMode) toast.info('Checking for sw update');
           registration.update();
-        }, 20000 /* 20s for testing purposes */);
-      } else {
-        if (experiments.devMode) toast.info('SW Registered: ' + registration);
+        }, 5_000);
       }
     },
     onNeedRefresh() {
-      toast.info('The app has been updated. Please refresh');
+      toast.info('A new version of the app is available.', {
+        action: {
+          label: 'Update',
+          onClick() {
+            updateServiceWorker(true);
+          },
+        },
+      });
     },
     onRegisterError(error) {
       if (experiments.devMode) toast.info('SW registration error', error);
