@@ -11,5 +11,5 @@ export const Handle = ({ handle }: { handle: string }) => {
     return <span>{`@${resolvedHandle.replace('.bsky.social', '')}`}</span>;
   }
 
-  return <span className="text-slate-400">{`@${resolvedHandle}`}</span>;
+  return <span className="text-neutral-600 dark:text-neutral-400">{`@${resolvedHandle}`}</span>;
 };

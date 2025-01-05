@@ -23,7 +23,12 @@ function Message({ message }: { message: BSkyMessageWithReactions }) {
   return (
     <div className={cn('flex flex-col', message.sender.did === session?.did ? 'items-end' : 'items-start')}>
       <div
-        className={cn('p-2 w-fit rounded-sm', message.sender.did === session?.did ? 'bg-blue-600' : 'bg-gray-800')}
+        className={cn(
+          'p-2 w-fit rounded-sm text-white',
+          message.sender.did === session?.did
+            ? 'bg-blue-500 dark:bg-blue-600'
+            : 'text-black dark:text-white bg-gray-300 dark:bg-gray-800',
+        )}
         key={message.id as string}
       >
         <FormattedText text={message.text} />
@@ -133,12 +138,12 @@ function Messages() {
       <Helmet>
         <title>{t('chat')}</title>
       </Helmet>
-      <div className="flex flex-col h-screen border-x pb-safe">
-        <div className="w-full p-2 bg-black border-b border-b-neutral-700 flex flex-row gap-2">
+      <div className="flex flex-col h-screen pb-safe divide-y">
+        <div className="w-full p-2 bg-background flex flex-row gap-2">
           <Avatar avatar={otherMember.avatar} handle={otherMember.handle} />
           <Handle handle={otherMember.handle} />
         </div>
-        <div className="flex-grow overflow-y-auto p-2 border-b border-neutral-700">
+        <div className="flex-grow overflow-y-auto px-2">
           <Virtuoso
             initialTopMostItemIndex={(messages?.length ?? 0) - 1}
             totalCount={messages?.length ?? 0}
@@ -154,7 +159,7 @@ function Messages() {
                 ref: Ref<HTMLDivElement>,
               ) {
                 return (
-                  <div className="flex flex-col gap-2" ref={ref} style={style}>
+                  <div className="flex flex-col gap-2 mr-4" ref={ref} style={style}>
                     {children}
                   </div>
                 );

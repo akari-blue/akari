@@ -44,60 +44,62 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
   const { isLoading, error, data } = useFeeds({ feeds });
   const selectedFeed = columns[columnNumber] ?? feeds[0];
 
-  if (isLoading) return <Loading />;
-
   if (error) {
     return <div className="text-red-500">{error.message}</div>;
   }
 
   return (
-    <div className="flex flex-col rounded-lg sm:w-[550px] sm:border-x">
-      <Ariakit.TabProvider
-        defaultSelectedId={selectedFeed}
-        setSelectedId={(selectedId) => {
-          if (!selectedId) return;
-          setSettings((state) => {
-            const columns = [...state.columns];
-            columns[columnNumber] = selectedId;
-            return {
-              ...state,
-              columns: columns,
-            };
-          });
-        }}
-      >
-        {/* if there are less than 2 feeds, don't show the selector */}
-        {feeds.length >= 2 && (
-          <>
-            <TabList label="feed selector" className={cn('sticky bg-background z-50', isOffline ? 'top-[46px]' : 'top-0')}>
-              {data?.map((feed) => {
-                return (
-                  <Tab
-                    id={feed.uri}
-                    name={feed.displayName}
-                    selectedTab={selectedFeed}
-                    key={feed.uri}
-                    onClick={() => {
-                      // if this tab is already selected we need to invalidate the associated query
-                      if (selectedFeed === feed.uri) {
-                        queryClient.invalidateQueries({
-                          queryKey: ['feed', { feed: selectedFeed }],
-                        });
-                      }
-                    }}
-                  />
-                );
-              })}
-            </TabList>
-            {data?.map((feed) => (
-              <Ariakit.TabPanel key={feed.uri} tabId={feed.uri}>
-                <Timeline columnNumber={columnNumber} />
-              </Ariakit.TabPanel>
-            ))}
-          </>
-        )}
-        {feeds.length === 1 && <Timeline columnNumber={columnNumber} />}
-      </Ariakit.TabProvider>
+    <div className="flex flex-col rounded-lg sm:w-[550px]">
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Ariakit.TabProvider
+          defaultSelectedId={selectedFeed}
+          setSelectedId={(selectedId) => {
+            if (!selectedId) return;
+            setSettings((state) => {
+              const columns = [...state.columns];
+              columns[columnNumber] = selectedId;
+              return {
+                ...state,
+                columns: columns,
+              };
+            });
+          }}
+        >
+          {/* if there are less than 2 feeds, don't show the selector */}
+          {feeds.length >= 2 && (
+            <>
+              <TabList label="feed selector" className={cn('sticky bg-background z-50', isOffline ? 'top-[46px]' : 'top-0')}>
+                {data?.map((feed) => {
+                  return (
+                    <Tab
+                      id={feed.uri}
+                      name={feed.displayName}
+                      selectedTab={selectedFeed}
+                      key={feed.uri}
+                      onClick={() => {
+                        // if this tab is already selected we need to invalidate the associated query
+                        if (selectedFeed === feed.uri) {
+                          queryClient.invalidateQueries({
+                            queryKey: ['feed', { feed: selectedFeed }],
+                          });
+                        }
+                      }}
+                    />
+                  );
+                })}
+              </TabList>
+              {data?.map((feed) => (
+                <Ariakit.TabPanel key={feed.uri} tabId={feed.uri}>
+                  <Timeline columnNumber={columnNumber} />
+                </Ariakit.TabPanel>
+              ))}
+            </>
+          )}
+          {feeds.length === 1 && <Timeline columnNumber={columnNumber} />}
+        </Ariakit.TabProvider>
+      )}
     </div>
   );
 };
