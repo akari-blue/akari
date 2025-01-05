@@ -37,23 +37,24 @@ function Post() {
       <Helmet>
         <link rel="canonical" href={`https://bsky.app/profile/${handle}/post/${params.postId}`} />
       </Helmet>
-      <Virtuoso
-        useWindowScroll
-        // we need the [&>*]: since we're targeting the window scroll div
-        // and the div is inside of the Virtuoso component
-        className="[&>*]:flex [&>*]:flex-col [&>*]:gap-2"
-        totalCount={replies.length}
-        itemContent={(index) => {
-          const reply = replies?.[index];
-          if (!reply) return null;
-          return reply.post && <PostCard post={reply.post} key={reply.post.uri} />;
-        }}
-        components={{
-          Header: () => <PostCard post={postThread?.post as BSkyPost} />,
-          List,
-          Footer: () => <div className="h-96 md:h-0" />,
-        }}
-      />
+      <div className="border-x h-screen">
+        <Virtuoso
+          useWindowScroll
+          // we need the [&>*]: since we're targeting the window scroll div
+          // and the div is inside of the Virtuoso component
+          className="[&>*]:flex [&>*]:flex-col [&>*]:gap-2"
+          totalCount={replies.length}
+          itemContent={(index) => {
+            const reply = replies?.[index];
+            if (!reply) return null;
+            return reply.post && <PostCard post={reply.post} key={reply.post.uri} />;
+          }}
+          components={{
+            Header: () => <PostCard post={postThread?.post as BSkyPost} />,
+            List,
+          }}
+        />
+      </div>
     </>
   );
 }
