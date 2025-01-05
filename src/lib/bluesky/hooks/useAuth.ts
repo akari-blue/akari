@@ -1,11 +1,13 @@
 import { BlueskyCredentials, useBlueskyStore } from '../store';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
 export function useAuth() {
   const { login, logout, isAuthenticated } = useBlueskyStore();
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: BlueskyCredentials) => {
@@ -30,7 +32,7 @@ export function useAuth() {
     logout: () => {
       logout();
       toast.success('Successfully logged out');
-      navigate({ to: '/' });
+      navigate({ to: searchParams.get('redirect') || '/' });
     },
     isAuthenticated,
     isLoading: loginMutation.isPending,

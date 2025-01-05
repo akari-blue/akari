@@ -53,5 +53,10 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('tailwindcss-safe-area'), require('tailwind-scrollbar-hide')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('tailwindcss-safe-area'),
+    require('tailwind-scrollbar-hide'),
+    require('tailwind-scrollbar-utilities').scrollbarGutter(),
+  ],
 };

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useBlueskyStore } from '../store';
 import { useAuth } from './useAuth';
-import { BSkyMessage } from '../types/BSkyMessage';
+import { BSkyMessage, BSkyMessageWithReactions } from '../types/BSkyMessage';
 import AtpAgent from '@atproto/api';
 
 const getMessages = async (agent: AtpAgent, convoId: string) => {
@@ -19,6 +19,37 @@ const getConvo = async (agent: AtpAgent, convoId: string) => {
   return convo.data.convo;
 };
 
+const isEmojiOnly = (text: string): boolean => {
+  const emojiRegex = /^[\p{Emoji}\p{Emoji_Presentation}\p{Emoji_Modifier_Base}\p{Emoji_Modifier}\p{Emoji_Component}]+$/u;
+  return emojiRegex.test(text);
+};
+
+const processMessageReactions = (messages: BSkyMessage[] | undefined): BSkyMessageWithReactions[] => {
+  const processed: BSkyMessageWithReactions[] = [];
+  let currentMessageIndex = -1;
+
+  for (const message of messages ?? []) {
+    if (isEmojiOnly(message.text)) {
+      // Add emoji as reaction to previous message if it exists
+      if (currentMessageIndex >= 0) {
+        processed[currentMessageIndex]?.reactions.push({
+          emoji: message.text,
+          sender: message.sender,
+        });
+      }
+    } else {
+      // This is a new message
+      processed.push({
+        ...message,
+        reactions: [],
+      });
+      currentMessageIndex++;
+    }
+  }
+
+  return processed;
+};
+
 export function useConversation({ convoId }: { convoId: string }) {
   const { agent } = useBlueskyStore();
   const { isAuthenticated } = useAuth();
@@ -30,10 +61,11 @@ export function useConversation({ convoId }: { convoId: string }) {
       const proxy = agent.withProxy('bsky_chat', 'did:web:api.bsky.chat');
 
       const messages = await getMessages(proxy, convoId);
+      const messagesWithReactions = processMessageReactions(messages);
       const convo = await getConvo(proxy, convoId);
 
       return {
-        messages,
+        messages: messagesWithReactions,
         convo,
       };
     },

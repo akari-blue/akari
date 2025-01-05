@@ -11,3 +11,19 @@ export const BSkyMessage = Type.Object({
 });
 
 export type BSkyMessage = Static<typeof BSkyMessage>;
+
+const BSkyMessageWithReactions = Type.Intersect([
+  BSkyMessage,
+  Type.Object({
+    reactions: Type.Array(
+      Type.Object({
+        emoji: Type.String(),
+        sender: Type.Object({
+          did: Type.String(),
+        }),
+      }),
+    ),
+  }),
+]);
+
+export type BSkyMessageWithReactions = Static<typeof BSkyMessageWithReactions>;

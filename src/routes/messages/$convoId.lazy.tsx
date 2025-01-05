@@ -1,8 +1,8 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { useConversation } from '../../lib/bluesky/hooks/useConversation';
-import { cn } from '../../lib/utils';
-import { useBlueskyStore } from '../../lib/bluesky/store';
-import { BSkyMessage } from '../../lib/bluesky/types/BSkyMessage';
+import { useConversation } from '@/lib/bluesky/hooks/useConversation';
+import { cn } from '@/lib/utils';
+import { useBlueskyStore } from '@/lib/bluesky/store';
+import { BSkyMessageWithReactions } from '@/lib/bluesky/types/BSkyMessage';
 import { Virtuoso } from 'react-virtuoso';
 import { forwardRef, HtmlHTMLAttributes, Ref, useRef, useState } from 'react';
 import { Loading } from '@/components/ui/loading';
@@ -18,7 +18,7 @@ import { SendIcon } from 'lucide-react';
 import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
 import { useQueryClient } from '@tanstack/react-query';
 
-function Message({ message }: { message: BSkyMessage }) {
+function Message({ message }: { message: BSkyMessageWithReactions }) {
   const session = useBlueskyStore((state) => state.session);
   return (
     <div className={cn('flex flex-col', message.sender.did === session?.did ? 'items-end' : 'items-start')}>
@@ -28,6 +28,7 @@ function Message({ message }: { message: BSkyMessage }) {
       >
         <FormattedText text={message.text} />
       </div>
+      {message.reactions.length >= 1 && <div>{message.reactions.map((reaction) => reaction.emoji).join(' ')}</div>}
       <div className="dark:text-gray-500 text-xs">
         <TimeAgo date={message.sentAt} roundStrategy="floor" />
       </div>
@@ -141,6 +142,7 @@ function Messages() {
           <Virtuoso
             initialTopMostItemIndex={(messages?.length ?? 0) - 1}
             totalCount={messages?.length ?? 0}
+            className="scrollbar-gutter-stable overflow-auto"
             itemContent={(index: number) => {
               const message = messages?.[index];
               if (!message) return null;

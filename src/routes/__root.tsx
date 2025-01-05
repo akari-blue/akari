@@ -23,9 +23,7 @@ export const Route = createRootRoute({
     if (location.pathname.startsWith('/login')) {
       // if already authenticated, redirect to root
       const { isAuthenticated } = useBlueskyStore.getState();
-      if (isAuthenticated) {
-        throw redirect({ to: '/' });
-      }
+      if (isAuthenticated) throw redirect({ to: '/' });
 
       // if not authenticated, proceed to login
       return;
