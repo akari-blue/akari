@@ -39,7 +39,7 @@ function RouteComponent() {
             setSelectedTab(selectedId);
           }}
         >
-          <TabList label="notifications" className="justify-between grid grid-cols-2">
+          <TabList label="notifications" className="justify-between grid grid-cols-2 sticky top-0 bg-background z-50">
             <Tab id="all" name={t('notifications:tabs.all')} selectedTab={selectedTab} />
             <Tab id="mentions" name={t('notifications:tabs.mentions')} selectedTab={selectedTab} />
           </TabList>
