@@ -13,7 +13,11 @@ export function useAuthorFeed({ handle }: { handle: string }) {
   return useInfiniteQuery<AuthorFeed>({
     queryKey: ['author-feed', handle],
     queryFn: async ({ pageParam: cursor }) => {
-      const response = await agent.api.app.bsky.feed.getAuthorFeed({ actor: handle, cursor: cursor as string });
+      const response = await agent.getAuthorFeed({
+        actor: handle,
+        cursor: cursor as string,
+        includePins: true,
+      });
       return response.data as AuthorFeed;
     },
     getNextPageParam: (lastPage) => lastPage.cursor,
