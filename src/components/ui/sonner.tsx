@@ -1,5 +1,5 @@
-import { useTheme } from 'next-themes';
 import { Toaster as Sonner } from 'sonner';
+import { useTheme } from '../theme-provider/use-theme';
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
@@ -10,6 +10,7 @@ export const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme={theme as ToasterProps['theme']}
       className="toaster group"
+      position="top-right"
       toastOptions={{
         classNames: {
           toast:

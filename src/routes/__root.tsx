@@ -13,6 +13,8 @@ import { Helmet } from 'react-helmet';
 import { appName } from '@/config';
 import { useUnreadCount } from '@/lib/bluesky/hooks/useUnreadCount';
 import { OfflineBanner } from '@/components/ui/offline-banner';
+import { useRegisterSW } from 'virtual:pwa-register/react';
+import { toast } from 'sonner';
 
 export const Route = createRootRoute({
   component: Root,
@@ -45,6 +47,26 @@ function Root() {
   const router = useRouterState();
   const pathname = router.location.pathname;
   const { data: unreadCount } = useUnreadCount();
+
+  useRegisterSW({
+    onRegisteredSW(swUrl, registration) {
+      if (experiments.devMode) toast.info(`Service Worker at: ${swUrl}`);
+      if (registration) {
+        setInterval(() => {
+          if (experiments.devMode) toast.info('Checking for sw update');
+          registration.update();
+        }, 20000 /* 20s for testing purposes */);
+      } else {
+        if (experiments.devMode) toast.info('SW Registered: ' + registration);
+      }
+    },
+    onNeedRefresh() {
+      toast.info('The app has been updated. Please refresh');
+    },
+    onRegisterError(error) {
+      if (experiments.devMode) toast.info('SW registration error', error);
+    },
+  });
 
   return (
     <>
@@ -92,7 +114,7 @@ function Root() {
               }}
             />
           )}
-          <Toaster position="bottom-right" />
+          <Toaster />
         </ErrorBoundary>
       </main>
     </>

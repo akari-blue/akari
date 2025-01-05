@@ -6,8 +6,8 @@ import { ToolbarButton } from '../toolbar-button';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useTheme } from '../../hooks/use-theme';
 import { memo, FC, useState, useCallback, useEffect } from 'react';
+import { useTheme } from '@/components/theme-provider/use-theme';
 
 type ColorItem = {
   cssVar: string;
@@ -75,7 +75,8 @@ const MemoizedColorButton = memo(
     inverse: string;
     onClick: (value: string) => void;
   }) => {
-    const isDarkMode = useTheme();
+    const { theme } = useTheme();
+    const isDarkMode = theme === 'dark';
     const label = isDarkMode && color.darkLabel ? color.darkLabel : color.label;
 
     return (

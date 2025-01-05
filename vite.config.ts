@@ -10,25 +10,21 @@ import { execSync } from 'child_process';
 const commitHash = execSync('git rev-parse --short HEAD').toString().trim();
 const buildDate = new Date().toISOString();
 
-const define = JSON.parse(
-  JSON.stringify({
-    __APP_NAME__: `"${name}"`,
-    __APP_VERSION__: `"${version}"`,
-    __COMMIT_HASH__: `"${commitHash}"`,
-    __BUILD_DATE__: `"${buildDate}"`,
-  }),
-);
-
 // https://vitejs.dev/config/
 export default defineConfig({
-  define,
+  define: {
+    __APP_NAME__: JSON.stringify(name),
+    __APP_VERSION__: JSON.stringify(version),
+    __COMMIT_HASH__: JSON.stringify(commitHash),
+    __BUILD_DATE__: JSON.stringify(buildDate),
+  },
   plugins: [
     TanStackRouterVite({
       routeFileIgnorePattern: 'components',
     }),
     react({}),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       devOptions: {
         enabled: process.env.NODE_ENV !== 'test',
       },
