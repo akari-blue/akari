@@ -31,7 +31,7 @@ function RouteComponent() {
       <Helmet>
         <title>{t('notifications:notifications')}</title>
       </Helmet>
-      <div className="flex flex-col gap-2 border">
+      <div className="flex flex-col gap-2">
         <Ariakit.TabProvider
           defaultSelectedId={selectedTab}
           setSelectedId={(selectedId) => {
@@ -43,16 +43,14 @@ function RouteComponent() {
             <Tab id="all" name={t('notifications:tabs.all')} selectedTab={selectedTab} />
             <Tab id="mentions" name={t('notifications:tabs.mentions')} selectedTab={selectedTab} />
           </TabList>
-          <div className="p-2">
-            <Ariakit.TabPanel tabId="all">{notifications && <GroupedNotifications />}</Ariakit.TabPanel>
-            <Ariakit.TabPanel tabId="mentions" className="flex flex-col gap-2">
-              {mentions?.map((notification) => (
-                <div key={notification.uri} className="border-b border-neutral-700 hover:bg-neutral-500 hover:bg-opacity-10">
-                  <Notification key={notification.uri} notification={notification} />
-                </div>
-              ))}
-            </Ariakit.TabPanel>
-          </div>
+          <Ariakit.TabPanel tabId="all">{notifications && <GroupedNotifications />}</Ariakit.TabPanel>
+          <Ariakit.TabPanel tabId="mentions" className="flex flex-col gap-2">
+            {mentions?.map((notification) => (
+              <div key={notification.uri} className="border-b border-neutral-700 hover:bg-neutral-500 hover:bg-opacity-10">
+                <Notification key={notification.uri} notification={notification} />
+              </div>
+            ))}
+          </Ariakit.TabPanel>
         </Ariakit.TabProvider>
       </div>
     </>
