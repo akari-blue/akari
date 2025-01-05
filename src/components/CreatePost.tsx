@@ -86,12 +86,12 @@ export function CreatePost() {
           onChange={(value) => setValue(value as JSONContent)}
           classNames={{
             wrapper: 'w-full border-none',
+            editor: 'border-none pt-0',
           }}
           output="json"
           placeholder="Type something..."
           autofocus={true}
           editable={!isPending}
-          editorClassName="border-none pt-0"
         />
       </DialogContent>
     </Dialog>
