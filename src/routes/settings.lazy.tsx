@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute, useNavigate, useRouter } from '@tanstack/react-router';
 import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { useSettings } from '../hooks/useSetting';
 import { Input } from '../components/ui/input';
@@ -7,7 +7,7 @@ import i18n, { languageNames, languages } from '@/i18n';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/bluesky/hooks/useAuth';
 import { Helmet } from 'react-helmet';
-import { Moon, Sun } from 'lucide-react';
+import { ArrowLeftIcon, Moon, Sun } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/components/theme-provider/use-theme';
 import { Link } from '@/components/ui/Link';
@@ -21,20 +21,27 @@ function RouteComponent() {
   const { setSettings, experiments, font, language } = useSettings();
   const { logout, isAuthenticated } = useAuth();
   const { t } = useTranslation(['settings', 'auth', 'app']);
+  const { history } = useRouter();
 
   return (
     <>
       <Helmet>
         <title>{t('app:settings')}</title>
       </Helmet>
-      <div className="flex flex-col gap-4 p-2 pb-safe-or-16 md:pb-safe-or-2">
-        <div className="border p-2">
+      <div className="p-2 sticky top-0 bg-background z-50 border-b flex flex-row gap-2 items-center">
+        <Button variant="outline" onClick={() => history.go(-1)}>
+          <ArrowLeftIcon className="size-6" />
+        </Button>
+        <h1 className="text-xl font-bold">{t('app:settings')}</h1>
+      </div>
+      <div className="flex flex-col gap-4 pb-safe-or-16 md:pb-safe-or-2 divide-y">
+        <div className="p-2 pt-0 border-none">
           <div className="flex items-center space-x-4">
             <ThemeToggle />
             <span>{'theme'}</span>
           </div>
         </div>
-        <div className="border p-2">
+        <div className="p-2">
           <ToggleSwitch
             on={experiments.devMode}
             setOn={(on) => {
@@ -44,7 +51,7 @@ function RouteComponent() {
           />
           <p>{t('developerMode.description')}</p>
         </div>
-        <div className="border p-2">
+        <div className="p-2">
           <ToggleSwitch
             on={experiments.streamerMode}
             setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, streamerMode: on } }))}
@@ -52,7 +59,7 @@ function RouteComponent() {
           />
           <p>{t('streamerMode.description')}</p>
         </div>
-        <div className="border p-2">
+        <div className="p-2">
           <ToggleSwitch
             on={experiments.zenMode}
             setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, zenMode: on } }))}
@@ -60,7 +67,7 @@ function RouteComponent() {
           />
           <p>{t('zenMode.description')}</p>
         </div>
-        <div className="border p-2">
+        <div className="p-2">
           <div className="flex items-center space-x-4">
             <Input
               type="number"
@@ -75,7 +82,7 @@ function RouteComponent() {
           </div>
           <p>{t('columns.description')}</p>
         </div>
-        <div className="border p-2">
+        <div className="p-2">
           <ToggleSwitch
             on={experiments.responsiveUI}
             setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, responsiveUI: on } }))}
@@ -83,7 +90,7 @@ function RouteComponent() {
           />
           <p>{t('responsiveUI.description')}</p>
         </div>
-        <div className="border p-2">
+        <div className="p-2">
           <div className="flex items-center space-x-4">
             <select
               className="w-64 p-2 text-black"
@@ -111,7 +118,7 @@ function RouteComponent() {
           </div>
           <p>{t('language.description')}</p>
         </div>
-        <div className="border p-2">
+        <div className="p-2">
           <div className="flex items-center space-x-4">
             <select
               className="w-64 p-2 text-black"
@@ -131,7 +138,7 @@ function RouteComponent() {
           </div>
           <p>{t('font.family.description')}</p>
         </div>
-        <div className="border p-2">
+        <div className="p-2">
           <div className="flex items-center space-x-4">
             <select
               className="w-64 p-2 text-black"
@@ -151,7 +158,7 @@ function RouteComponent() {
           </div>
           <p>{t('font.size.description')}</p>
         </div>
-        <div className="border p-2">
+        <div className="p-2">
           <ToggleSwitch
             on={experiments.cleanHandles}
             setOn={(on) => setSettings((state) => ({ experiments: { ...state.experiments, cleanHandles: on } }))}
@@ -159,9 +166,7 @@ function RouteComponent() {
           />
           <p>{t('cleanHandles.description')}</p>
         </div>
-        {isAuthenticated && <Button onClick={logout}>{t('auth:logout')}</Button>}
-
-        <div>
+        <div className="p-2">
           <div>
             <Link href={`https://github.com/akari-blue/akari/commit/${__COMMIT_HASH__}`}>
               {'commit: '}
@@ -177,6 +182,13 @@ function RouteComponent() {
             {__APP_VERSION__}
           </div>
         </div>
+        {isAuthenticated && (
+          <div className="px-2">
+            <Button className="w-full" onClick={logout}>
+              {t('auth:logout')}
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );
