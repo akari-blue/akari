@@ -12,6 +12,7 @@ import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { Avatar } from '@/components/ui/avatar';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
+import { CreateConvo } from '@/components/CreateConvo';
 
 function Conversation({ convo }: { convo: BSkyConvo }) {
   const session = useBlueskyStore((state) => state.session);
@@ -73,6 +74,7 @@ function Messages() {
           }}
           followOutput
         />
+        <CreateConvo />
       </div>
     </>
   );
