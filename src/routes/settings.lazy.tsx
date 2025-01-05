@@ -183,7 +183,7 @@ function RouteComponent() {
           </div>
         </div>
         {isAuthenticated && (
-          <div className="px-2">
+          <div className="px-2 border-none">
             <Button className="w-full" onClick={logout}>
               {t('auth:logout')}
             </Button>
