@@ -17,24 +17,24 @@ import { de } from './lang/de';
 export const defaultNS = 'app';
 
 export const supportedLocales = [
-  "en",
-  "es",
-  "de",
-  "fr",
-  "fil",
-  "ja",
-  "nl",
-  "ur",
-  "yue",
-  "zh-Hans",
-  "zh-Hant",
+  'en',
+  'es',
+  'de',
+  'fr',
+  'fil',
+  'ja',
+  'nl',
+  'ur',
+  'yue',
+  'zh-Hans',
+  'zh-Hant',
 ]
 
 export const languageNames = {
   system: 'system',
   // Get local display names
   ...supportedLocales
-    .map(locale => ({ [locale]: new Intl.DisplayNames(locale, { type: "language" }).of(locale) }))
+    .map(locale => ({ [locale]: new Intl.DisplayNames(locale, { type: 'language' }).of(locale) }))
     .reduce((acc, cur) => ({ ...acc, ...cur })),
 };
 
