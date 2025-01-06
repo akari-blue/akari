@@ -1,6 +1,5 @@
 // Urdu
 export const ur = {
-  name: 'اردو',
   translations: {
     auth: {
       login: {

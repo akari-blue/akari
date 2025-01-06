@@ -1,6 +1,5 @@
 // Japanese
 export const ja = {
-  name: '日本語',
   translations: {
     auth: {
       login: {

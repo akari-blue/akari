@@ -1,6 +1,5 @@
 // Traditional Chinese
 export const zh_Hant = {
-  name: '繁體中文',
   translations: {
     auth: {
       login: {

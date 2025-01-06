@@ -1,6 +1,5 @@
 // Cantonese
 export const yue = {
-  name: '廣東話',
   translations: {
     auth: {
       login: {
