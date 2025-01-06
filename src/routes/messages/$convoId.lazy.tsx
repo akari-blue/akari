@@ -31,7 +31,7 @@ function Message({ message }: { message: BSkyMessageWithReactions }) {
         )}
         key={message.id as string}
       >
-        <FormattedText text={message.text} />
+        <FormattedText text={message.text} linkify />
       </div>
       {message.reactions.length >= 1 && <div>{message.reactions.map((reaction) => reaction.emoji).join(' ')}</div>}
       <div className="dark:text-gray-500 text-xs">
