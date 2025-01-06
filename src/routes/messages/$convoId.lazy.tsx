@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { SendIcon } from 'lucide-react';
 import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
 import { useQueryClient } from '@tanstack/react-query';
+import { StickyHeader } from '@/components/sticky-header';
 
 function Message({ message }: { message: BSkyMessageWithReactions }) {
   const session = useBlueskyStore((state) => state.session);
@@ -139,13 +140,13 @@ function Messages() {
         <title>{t('chat')}</title>
       </Helmet>
       <div className="flex flex-col h-screen pb-safe divide-y">
-        <div className="w-full p-2 bg-background flex flex-row gap-2">
+        <StickyHeader>
           <Avatar avatar={otherMember.avatar} handle={otherMember.handle} />
           <div>
             <div className="font-bold">{otherMember.displayName}</div>
             <Handle handle={otherMember.handle} />
           </div>
-        </div>
+        </StickyHeader>
         <div className="flex-grow overflow-y-auto px-2">
           <Virtuoso
             initialTopMostItemIndex={(messages?.length ?? 0) - 1}

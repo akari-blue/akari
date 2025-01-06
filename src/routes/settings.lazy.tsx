@@ -1,4 +1,4 @@
-import { createLazyFileRoute, useRouter } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { ToggleSwitch } from '../components/ui/ToggleSwitch';
 import { useSettings } from '../hooks/useSetting';
 import { Input } from '../components/ui/input';
@@ -7,11 +7,12 @@ import i18n, { languageNames, languages } from '@/i18n';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/bluesky/hooks/useAuth';
 import { Helmet } from 'react-helmet';
-import { ArrowLeftIcon, Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/components/theme-provider/use-theme';
 import { Link } from '@/components/ui/Link';
 import TimeAgo from 'react-timeago-i18n';
+import { StickyHeader } from '@/components/sticky-header';
 
 export const Route = createLazyFileRoute('/settings')({
   component: RouteComponent,
@@ -21,19 +22,15 @@ function RouteComponent() {
   const { setSettings, experiments, font, language } = useSettings();
   const { logout, isAuthenticated } = useAuth();
   const { t } = useTranslation(['settings', 'auth', 'app']);
-  const { history } = useRouter();
 
   return (
     <>
       <Helmet>
         <title>{t('app:settings')}</title>
       </Helmet>
-      <div className="p-2 sticky top-0 bg-background z-50 border-b flex flex-row gap-2 items-center">
-        <Button variant="outline" onClick={() => history.go(-1)}>
-          <ArrowLeftIcon className="size-6" />
-        </Button>
+      <StickyHeader>
         <h1 className="text-xl font-bold">{t('app:settings')}</h1>
-      </div>
+      </StickyHeader>
       <div className="flex flex-col gap-4 pb-safe-or-16 md:pb-safe-or-2 divide-y">
         <div className="p-2 pt-0 border-none">
           <div className="flex items-center space-x-4">
