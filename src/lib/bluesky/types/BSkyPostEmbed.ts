@@ -22,10 +22,12 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
           thumb: Type.String(),
           fullsize: Type.String(),
           alt: Type.String(),
-          aspectRatio: Type.Object({
-            height: Type.Number(),
-            width: Type.Number(),
-          }),
+          aspectRatio: Type.Optional(
+            Type.Object({
+              height: Type.Number(),
+              width: Type.Number(),
+            }),
+          ),
         }),
       ),
     }),
