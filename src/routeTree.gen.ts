@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SearchImport } from './routes/search'
 import { Route as NotificationsIndexImport } from './routes/notifications/index'
 import { Route as MessagesIndexImport } from './routes/messages/index'
 import { Route as MessagesConvoIdImport } from './routes/messages/$convoId'
@@ -21,7 +22,6 @@ import { Route as ProfileHandleIndexImport } from './routes/profile/$handle/inde
 // Create Virtual Routes
 
 const SettingsLazyImport = createFileRoute('/settings')()
-const SearchLazyImport = createFileRoute('/search')()
 const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
 const TagTagLazyImport = createFileRoute('/tag/$tag')()
@@ -40,17 +40,17 @@ const SettingsLazyRoute = SettingsLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/settings.lazy').then((d) => d.Route))
 
-const SearchLazyRoute = SearchLazyImport.update({
-  id: '/search',
-  path: '/search',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/search.lazy').then((d) => d.Route))
-
 const LoginLazyRoute = LoginLazyImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
+
+const SearchRoute = SearchImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/search.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -124,18 +124,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/search': {
-      id: '/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof SearchLazyImport
       parentRoute: typeof rootRoute
     }
     '/settings': {
@@ -201,8 +201,8 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/search': typeof SearchRoute
   '/login': typeof LoginLazyRoute
-  '/search': typeof SearchLazyRoute
   '/settings': typeof SettingsLazyRoute
   '/messages/$convoId': typeof MessagesConvoIdRoute
   '/tag/$tag': typeof TagTagLazyRoute
@@ -215,8 +215,8 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/search': typeof SearchRoute
   '/login': typeof LoginLazyRoute
-  '/search': typeof SearchLazyRoute
   '/settings': typeof SettingsLazyRoute
   '/messages/$convoId': typeof MessagesConvoIdRoute
   '/tag/$tag': typeof TagTagLazyRoute
@@ -230,8 +230,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/search': typeof SearchRoute
   '/login': typeof LoginLazyRoute
-  '/search': typeof SearchLazyRoute
   '/settings': typeof SettingsLazyRoute
   '/messages/$convoId': typeof MessagesConvoIdRoute
   '/tag/$tag': typeof TagTagLazyRoute
@@ -246,8 +246,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/login'
     | '/search'
+    | '/login'
     | '/settings'
     | '/messages/$convoId'
     | '/tag/$tag'
@@ -259,8 +259,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/login'
     | '/search'
+    | '/login'
     | '/settings'
     | '/messages/$convoId'
     | '/tag/$tag'
@@ -272,8 +272,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/login'
     | '/search'
+    | '/login'
     | '/settings'
     | '/messages/$convoId'
     | '/tag/$tag'
@@ -287,8 +287,8 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  SearchRoute: typeof SearchRoute
   LoginLazyRoute: typeof LoginLazyRoute
-  SearchLazyRoute: typeof SearchLazyRoute
   SettingsLazyRoute: typeof SettingsLazyRoute
   MessagesConvoIdRoute: typeof MessagesConvoIdRoute
   TagTagLazyRoute: typeof TagTagLazyRoute
@@ -301,8 +301,8 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  SearchRoute: SearchRoute,
   LoginLazyRoute: LoginLazyRoute,
-  SearchLazyRoute: SearchLazyRoute,
   SettingsLazyRoute: SettingsLazyRoute,
   MessagesConvoIdRoute: MessagesConvoIdRoute,
   TagTagLazyRoute: TagTagLazyRoute,
@@ -324,8 +324,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/login",
         "/search",
+        "/login",
         "/settings",
         "/messages/$convoId",
         "/tag/$tag",
@@ -339,11 +339,11 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.lazy.tsx"
     },
+    "/search": {
+      "filePath": "search.tsx"
+    },
     "/login": {
       "filePath": "login.lazy.tsx"
-    },
-    "/search": {
-      "filePath": "search.lazy.tsx"
     },
     "/settings": {
       "filePath": "settings.lazy.tsx"
