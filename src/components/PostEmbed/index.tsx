@@ -18,9 +18,10 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
         <div className={cn(embed.images.length >= 2 && 'grid grid-cols-2', 'gap-2')}>
           {embed.images.map((image) => (
             <Image
-              type="post"
               key={image.thumb}
               src={image.thumb}
+              height={image.aspectRatio.height}
+              width={image.aspectRatio.width}
               alt={image.alt}
               classNames={{
                 image: cn(embed.images.length >= 2 && 'h-48', 'rounded-lg w-full object-cover'),
