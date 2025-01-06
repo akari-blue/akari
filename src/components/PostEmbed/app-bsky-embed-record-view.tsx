@@ -1,4 +1,3 @@
-import { isBlockedAuthor } from '@/lib/bluesky/types/BlockedAuthor';
 import { BSkyPostEmbed } from '@/lib/bluesky/types/BSkyPostEmbed';
 import { cn } from '@/lib/utils';
 import TimeAgo from 'react-timeago-i18n';
