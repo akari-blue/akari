@@ -11,6 +11,7 @@ export const BlockedAuthor = Type.Object({
   viewer: Type.Object({
     muted: Type.Boolean(),
     blockedBy: Type.Literal(true),
+    blocking: Type.Optional(Type.String()),
     following: Type.Optional(Type.Union([Type.String(), Type.Undefined()])),
     followedBy: Type.Optional(Type.Union([Type.String(), Type.Undefined()])),
   }),

@@ -16,9 +16,19 @@ import { SatelliteDish } from 'lucide-react';
 export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
   const { t } = useTranslation('post');
   if (embed.$type !== 'app.bsky.embed.record#view') return null;
-  const author = embed.record.$type === 'app.bsky.embed.record#viewRecord' ? embed.record.author : embed.record.creator;
+  const author =
+    embed.record.$type === 'app.bsky.embed.record#viewRecord' || embed.record.$type === 'app.bsky.embed.record#viewBlocked'
+      ? embed.record.author
+      : embed.record.creator;
   if (!author) return <Debug value={embed.record} />;
-  if (isBlockedAuthor(author)) {
+  if (author.viewer.blockedBy) {
+    return (
+      <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow')}>
+        <div className="text-gray-800 dark:text-gray-200 mb-3">{t('blockedByAuthor')}</div>
+      </div>
+    );
+  }
+  if (author.viewer.blocking) {
     return (
       <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow')}>
         <div className="text-gray-800 dark:text-gray-200 mb-3">{t('blockedAuthor')}</div>

@@ -35,6 +35,12 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
       $type: Type.Literal('app.bsky.embed.record#view'),
       record: Type.Union([
         Type.Object({
+          $type: Type.Literal('app.bsky.embed.record#viewBlocked'),
+          uri: Type.String(),
+          blocked: Type.Boolean(),
+          author: BSkyAuthor,
+        }),
+        Type.Object({
           $type: Type.Literal('app.bsky.embed.record#viewRecord'),
           uri: Type.String(),
           cid: Type.String(),
@@ -100,6 +106,7 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
           facets: Type.Optional(Type.Array(BSkyFacet)),
         }),
         Type.Object({
+          $type: Type.Literal('app.bsky.graph.defs#starterPackViewBasic'),
           uri: Type.String(),
           cid: Type.String(),
           record: Type.Object({
@@ -116,7 +123,6 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
           joinedWeekCount: Type.Number(),
           labels: Type.Array(BSkyPostLabel),
           indexedAt: Type.String(),
-          $type: Type.Literal('app.bsky.graph.defs#starterPackViewBasic'),
         }),
         Type.Object({
           $type: Type.Literal('app.bsky.feed.defs#generatorView'),
