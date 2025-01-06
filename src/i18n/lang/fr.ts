@@ -1,6 +1,5 @@
 // French
 export const fr = {
-  name: 'français',
   translations: {
     auth: {
       login: {

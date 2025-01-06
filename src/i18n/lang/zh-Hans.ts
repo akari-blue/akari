@@ -1,6 +1,5 @@
 // Simplified Chinese
 export const zh_Hans = {
-  name: '简体中文',
   translations: {
     auth: {
       login: {

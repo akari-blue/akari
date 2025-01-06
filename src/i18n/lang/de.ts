@@ -1,6 +1,5 @@
 // German
 export const de = {
-  name: 'Deutsch',
   translations: {
     auth: {
       login: {

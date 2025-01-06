@@ -1,6 +1,5 @@
 // Filipino
 export const fil = {
-  name: 'Filipino',
   translations: {
     auth: {
       login: {
