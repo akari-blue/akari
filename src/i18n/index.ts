@@ -34,8 +34,7 @@ export const languageNames = {
   system: 'system',
   // Get local display names
   ...supportedLocales
-    .map(locale => ({ [locale]: new Intl.DisplayNames(locale, { type: 'language' }).of(locale) }))
-    .reduce((acc, cur) => ({ ...acc, ...cur })),
+    .reduce((acc, locale) => ({ ...acc, [locale]: new Intl.DisplayNames(locale, { type: 'language' }).of(locale) }), {}),
 };
 
 export const languages = {
