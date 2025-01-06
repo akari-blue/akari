@@ -141,7 +141,10 @@ function Messages() {
       <div className="flex flex-col h-screen pb-safe divide-y">
         <div className="w-full p-2 bg-background flex flex-row gap-2">
           <Avatar avatar={otherMember.avatar} handle={otherMember.handle} />
-          <Handle handle={otherMember.handle} />
+          <div>
+            <div className="font-bold">{otherMember.displayName}</div>
+            <Handle handle={otherMember.handle} />
+          </div>
         </div>
         <div className="flex-grow overflow-y-auto px-2">
           <Virtuoso
