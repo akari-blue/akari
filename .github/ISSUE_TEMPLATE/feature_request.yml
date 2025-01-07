@@ -3,6 +3,13 @@ description: Suggest a new feature or enhancement for Akari.
 title: "[Feature]: "
 labels: ["enhancement"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        # **Important Note About Accessibility** 
+        If this request relates to accessibility, please file it as a **bug report** instead.  
+        Accessibility is a high priority for us, and we treat these issues with urgency.
+
   - type: textarea
     id: feature_description
     attributes:
@@ -11,13 +18,6 @@ body:
       placeholder: "Describe the feature here..."
     validations:
       required: true
-
-  - type: markdown
-    attributes:
-      value: |
-        **Important Note About Accessibility**  
-        If this request relates to accessibility, please file it as a **bug report** instead.  
-        Accessibility is a high priority for us, and we treat these issues with urgency.
 
   - type: textarea
     id: use_case
