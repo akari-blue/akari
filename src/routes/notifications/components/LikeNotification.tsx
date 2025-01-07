@@ -1,5 +1,4 @@
 import { Avatar } from '@/components/ui/avatar';
-import { Debug } from '@/components/ui/Debug';
 import { FormattedText } from '@/components/ui/FormattedText';
 import { Link } from '@/components/ui/Link';
 import { Loading } from '@/components/ui/loading';
