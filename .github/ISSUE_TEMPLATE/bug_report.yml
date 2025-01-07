@@ -1,0 +1,93 @@
+name: Bug Report
+description: Report a bug to help improve Akari
+title: "[Bug]: "
+labels: ["bug"]
+assignees: []
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear and concise description of the bug.
+      placeholder: Describe the bug here...
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Steps to Reproduce**
+        Please list the steps to reproduce the issue:
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: List the steps to reproduce the issue.
+      placeholder: "1. Go to '...'\n2. Click on '...'\n3. Observe the issue."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe the expected behavior here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots/Video
+      description: Include images or videos to help reproduce the issue, if possible.
+      placeholder: Provide links to screenshots or videos here...
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: e.g., Chrome, Firefox
+      placeholder: Specify the browser here...
+    validations:
+      required: true
+
+  - type: input
+    id: akari_version
+    attributes:
+      label: Akari Version
+      description: Find it on the settings page.
+      placeholder: Specify the Akari version here...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: pwa
+    attributes:
+      label: Installed as PWA?
+      description: Was the app installed as a Progressive Web App?
+      options:
+        - Yes
+        - No
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: severity
+    attributes:
+      label: Severity
+      description: Select the severity level:
+      options:
+        - label: Breaking (causes the app or feature to become unusable)
+          required: true
+        - label: Non-breaking (affects functionality but has a workaround)
+        - label: Cosmetic (visual or layout issue)
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here.
+      placeholder: Provide additional context here...
