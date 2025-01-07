@@ -1,6 +1,5 @@
 import { MessageCircle, Heart, Repeat } from 'lucide-react';
 import { useLike } from '../lib/bluesky/hooks/useLike';
-import { Debug } from './ui/Debug';
 import { BSkyPost } from '../lib/bluesky/types/BSkyPost';
 import { cn } from '../lib/utils';
 import { useRepost } from '../lib/bluesky/hooks/useRepost';
