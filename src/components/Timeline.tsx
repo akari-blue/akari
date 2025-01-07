@@ -117,7 +117,7 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
           endReached={() => fetchNextPage()}
           components={{
             List: forwardRef(function List(props, ref) {
-              return <div ref={ref} {...props} className="flex flex-col gap-2" />;
+              return <div ref={ref} {...props} className="flex flex-col" />;
             }),
           }}
           itemContent={(index: number) => (
