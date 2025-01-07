@@ -65,12 +65,16 @@ export const FacetedText = ({ text, facets }: FacetedTextProps) => {
 };
 
 function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return <Link href={href}>{children}</Link>;
+  return (
+    <Link href={href} className="text-blue-400">
+      {children}
+    </Link>
+  );
 }
 
 function Mention({ handle }: { handle: string }) {
   return (
-    <Link to="/profile/$handle" params={{ handle }}>
+    <Link to="/profile/$handle" params={{ handle }} className="text-blue-400">
       <span className="text-purple-500 font-semibold">@{handle.replace('.bksy.social', '')}</span>
     </Link>
   );
