@@ -76,7 +76,7 @@ body:
     id: severity
     attributes:
       label: Severity
-      description: Select the severity level:
+      description: "Select the severity level:"
       options:
         - label: Breaking (causes the app or feature to become unusable)
           required: true
