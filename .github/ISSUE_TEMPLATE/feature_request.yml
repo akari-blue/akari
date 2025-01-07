@@ -1,0 +1,43 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for Akari.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: Feature Description
+      description: Describe the feature or functionality you'd like to see added to Akari.
+      placeholder: "Describe the feature here..."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Important Note About Accessibility**  
+        If this request relates to accessibility, please file it as a **bug report** instead.  
+        Accessibility is a high priority for us, and we treat these issues with urgency.
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case
+      description: Explain how this feature would be useful. What problem does it solve or what improvement does it bring to Akari? Who would benefit from it (e.g., all users, specific groups)?
+      placeholder: "Explain the use case here..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots/Mockups (Optional)
+      description: Provide any mockups, screenshots, or diagrams that illustrate the feature, if applicable.
+      placeholder: "Provide links or descriptions of mockups here..."
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Add any additional details or related ideas here. If there are existing implementations in other apps that inspire this feature, feel free to mention them.
+      placeholder: "Add additional context here..."
