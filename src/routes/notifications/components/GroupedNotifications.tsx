@@ -40,7 +40,7 @@ export function GroupedNotifications() {
       endReached={() => fetchNextPage()}
       components={{
         List: forwardRef(function List(props: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
-          return <div ref={ref} {...props} className="flex flex-col gap-2" />;
+          return <div ref={ref} {...props} className="flex flex-col divide-y" />;
         }),
         Footer: () => {
           return isFetching ? (
@@ -61,7 +61,7 @@ export function GroupedNotifications() {
       itemContent={(index: number) => {
         if (!list[index]) return null;
         return (
-          <div key={list[index][0]?.uri} className="border-b border-neutral-700 hover:bg-neutral-500 hover:bg-opacity-10">
+          <div key={list[index][0]?.uri} className="border-neutral-700 hover:bg-neutral-500 hover:bg-opacity-10">
             <GroupNotification key={list[index][0]?.uri} notifications={list[index]} />
           </div>
         );

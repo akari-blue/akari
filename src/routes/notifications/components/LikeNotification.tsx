@@ -21,22 +21,22 @@ export function LikeNotification({ notifications }: { notifications: BSkyLikeNot
   if (!isBSkyLikeNotification(notification)) throw new Error('Notification is not a like notification');
 
   return (
-    <div className="flex flex-row gap-2 p-2">
-      <div className="flex flex-shrink-0 w-12 justify-end aspect-square">
-        <HeartIcon className="fill-pink-500 stroke-pink-500 size-6" />
-      </div>
-      <div className="flex-grow">
-        <Debug value={notification} />
-        <Link
-          to="/profile/$handle/post/$postId"
-          params={{
-            handle: session.did!,
-            postId: notification.record.subject.uri.split('/')[notification.record.subject.uri.split('/').length - 1]!,
-          }}
-          className="hover:no-underline w-full"
-        >
+    <div className="relative">
+      <Link
+        to="/profile/$handle/post/$postId"
+        params={{
+          handle: session.did!,
+          postId: notification.record.subject.uri.split('/')[notification.record.subject.uri.split('/').length - 1]!,
+        }}
+        className="absolute inset-0"
+      />
+      <div className="flex flex-row gap-2 p-2 hover:no-underline">
+        <div className="flex flex-shrink-0 w-12 justify-end aspect-square">
+          <HeartIcon className="fill-pink-500 stroke-pink-500 size-6" />
+        </div>
+        <div className="hover:no-underline w-full">
           <div className="px-2">
-            <div className="flex flex-row gap-1 overflow-hidden max-h-16">
+            <div className="flex flex-row gap-1 max-h-16">
               {notifications.map((notification) => (
                 <Avatar
                   key={notification.author.did}
@@ -56,7 +56,7 @@ export function LikeNotification({ notifications }: { notifications: BSkyLikeNot
               <LikePost notification={notification} />
             </div>
           </div>
-        </Link>
+        </div>
       </div>
     </div>
   );

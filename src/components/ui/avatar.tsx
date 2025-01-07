@@ -1,6 +1,7 @@
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { cn } from '@/lib/utils';
 import { forwardRef, ElementRef, ComponentPropsWithoutRef } from 'react';
+import { Link } from './Link';
 
 const AvatarWrapper = forwardRef<
   ElementRef<typeof AvatarPrimitive.Root>,
@@ -49,9 +50,11 @@ export const Avatar = ({
   className?: string;
 }) => {
   return (
-    <AvatarWrapper className={cn((labeler || list) && 'aspect-square rounded-sm', className)}>
-      <AvatarImage src={avatar} />
-      <AvatarFallback>{handle}</AvatarFallback>
-    </AvatarWrapper>
+    <Link to="/profile/$handle" params={{ handle }}>
+      <AvatarWrapper className={cn((labeler || list) && 'aspect-square rounded-sm', className)}>
+        <AvatarImage src={avatar} />
+        <AvatarFallback>{handle}</AvatarFallback>
+      </AvatarWrapper>
+    </Link>
   );
 };
