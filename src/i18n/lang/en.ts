@@ -16,6 +16,7 @@ export const en = {
       blueskyHandle: 'bluesky handle e.g. @alice.bsky.social',
       following: 'following',
       followers: 'followers',
+      post: 'post',
       posts: 'posts',
       replies: 'replies',
       reposts: 'reposts',

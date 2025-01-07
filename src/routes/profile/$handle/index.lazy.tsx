@@ -29,7 +29,7 @@ export const Route = createLazyFileRoute('/profile/$handle/')({
 });
 
 const List = forwardRef(function List(props: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
-  return <div ref={ref} {...props} className="flex flex-col gap-2" />;
+  return <div ref={ref} {...props} className="flex flex-col divide-y" />;
 });
 
 function All() {
@@ -146,7 +146,9 @@ function Media() {
 
   const filteredPosts = feed
     // Filter to only media
-    ?.filter(({ post }) => (post.record as BSkyPost['record']).embed?.$type === 'app.bsky.embed.images');
+    // TODO: fix this
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ?.filter(({ post }) => (post.record as any).embed?.$type === 'app.bsky.embed.images');
 
   return (
     <Virtuoso
@@ -183,35 +185,37 @@ function Profile() {
           {profile.displayName} (@{handle})
         </title>
       </Helmet>
-      <div className="flex flex-col gap-2">
-        <Banner banner={profile?.banner} />
-        <div className="px-4 -mt-12">
-          <Avatar avatar={profile?.avatar} handle={profile.handle} className="size-24" />
-          <div>
-            <div className="flex gap-2">
-              <h2 className="text-xl font-bold">{profile?.displayName || profile.handle}</h2>
-              <Badge title={profile.viewer?.following && profile.viewer?.followedBy ? 'You both follow each other' : ''}>
-                {profile.viewer?.following && profile.viewer?.followedBy && 'Mutuals'}
-              </Badge>
-              {handle !== session?.handle && <FollowButton handle={handle} following={!!profile.viewer?.following} />}
-            </div>
-            <Handle handle={profile.handle} />
-            {!experiments.zenMode && (
+      <div className="flex flex-col">
+        <div className="flex flex-col gap-2">
+          <Banner banner={profile?.banner} />
+          <div className="px-4 -mt-12">
+            <Avatar avatar={profile?.avatar} handle={profile.handle} className="size-24" />
+            <div>
               <div className="flex gap-2">
-                <FormattedNumber value={profile?.followersCount} unit={t('followers')} />
-                <FormattedNumber value={profile?.followsCount} unit={t('following')} />
-                <FormattedNumber value={profile?.postsCount} unit={t('posts')} />
+                <h2 className="text-xl font-bold">{profile?.displayName || profile.handle}</h2>
+                <Badge title={profile.viewer?.following && profile.viewer?.followedBy ? 'You both follow each other' : ''}>
+                  {profile.viewer?.following && profile.viewer?.followedBy && 'Mutuals'}
+                </Badge>
+                {handle !== session?.handle && <FollowButton handle={handle} following={!!profile.viewer?.following} />}
               </div>
-            )}
-            <FormattedText text={profile?.description ?? ''} linkify key="profile-description" />
+              <Handle handle={profile.handle} />
+              {!experiments.zenMode && (
+                <div className="flex gap-2">
+                  <FormattedNumber value={profile?.followersCount} unit={t('followers')} />
+                  <FormattedNumber value={profile?.followsCount} unit={t('following')} />
+                  <FormattedNumber value={profile?.postsCount} unit={t('posts')} />
+                </div>
+              )}
+              <FormattedText text={profile?.description ?? ''} linkify key="profile-description" />
 
-            {profile.viewer?.blockingByList && (
-              <div className="p-2 border mt-2">
-                <span>{t('profile:blockedBy', { name: profile.viewer.blockingByList.name })}</span>
-              </div>
-            )}
+              {profile.viewer?.blockingByList && (
+                <div className="p-2 border mt-2">
+                  <span>{t('profile:blockedBy', { name: profile.viewer.blockingByList.name })}</span>
+                </div>
+              )}
 
-            <Debug value={profile} />
+              <Debug value={profile} />
+            </div>
           </div>
         </div>
         {!profile.viewer?.blockingByList && (

@@ -8,13 +8,14 @@ import { Helmet } from 'react-helmet';
 import { Loading } from '@/components/ui/loading';
 import { Virtuoso } from 'react-virtuoso';
 import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
+import { StickyHeader } from '@/components/sticky-header';
 
 export const Route = createLazyFileRoute('/profile/$handle/post/$postId')({
   component: Post,
 });
 
 const List = forwardRef(function List(props: HtmlHTMLAttributes<HTMLDivElement>, ref: Ref<HTMLDivElement>) {
-  return <div ref={ref} {...props} className="flex flex-col gap-2" />;
+  return <div ref={ref} {...props} className="flex flex-col divide-y" />;
 });
 
 function Post() {
@@ -37,12 +38,15 @@ function Post() {
       <Helmet>
         <link rel="canonical" href={`https://bsky.app/profile/${handle}/post/${params.postId}`} />
       </Helmet>
-      <div className="border-x h-screen">
+      <StickyHeader>
+        <h1 className="text-xl font-bold">{t('post')}</h1>
+      </StickyHeader>
+      <div className="border-x h-full">
         <Virtuoso
           useWindowScroll
           // we need the [&>*]: since we're targeting the window scroll div
           // and the div is inside of the Virtuoso component
-          className="[&>*]:flex [&>*]:flex-col [&>*]:gap-2"
+          className="[&>*]:flex [&>*]:flex-col"
           totalCount={replies.length}
           itemContent={(index) => {
             const reply = replies?.[index];
@@ -50,7 +54,7 @@ function Post() {
             return reply.post && <PostCard post={reply.post} key={reply.post.uri} />;
           }}
           components={{
-            Header: () => <PostCard post={postThread?.post as BSkyPost} />,
+            Header: () => <PostCard post={postThread?.post as BSkyPost} className="border-b" />,
             List,
           }}
         />
