@@ -2,7 +2,6 @@ name: Bug Report
 description: Report a bug to help improve Akari
 title: "[Bug]: "
 labels: ["bug"]
-assignees: []
 body:
   - type: textarea
     id: description
@@ -13,11 +12,6 @@ body:
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: |
-        **Steps to Reproduce**
-        Please list the steps to reproduce the issue:
   - type: textarea
     id: steps
     attributes:
@@ -82,8 +76,6 @@ body:
           required: true
         - label: Non-breaking (affects functionality but has a workaround)
         - label: Cosmetic (visual or layout issue)
-    validations:
-      required: true
 
   - type: textarea
     id: additional_context
