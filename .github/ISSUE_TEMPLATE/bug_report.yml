@@ -73,7 +73,6 @@ body:
       description: "Select the severity level:"
       options:
         - label: Breaking (causes the app or feature to become unusable)
-          required: true
         - label: Non-breaking (affects functionality but has a workaround)
         - label: Cosmetic (visual or layout issue)
 
