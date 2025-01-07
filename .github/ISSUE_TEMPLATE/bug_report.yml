@@ -67,8 +67,8 @@ body:
       label: Installed as PWA?
       description: Was the app installed as a Progressive Web App?
       options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
     validations:
       required: true
 
