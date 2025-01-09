@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet, redirect, useRouterState } from '@tanstack/react-router';
+import { createRootRoute, Outlet, redirect } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
 import { ErrorBoundary } from '../components/ErrorBoundary';
@@ -44,8 +44,6 @@ export const Route = createRootRoute({
 function Root() {
   const { experiments, font, language } = useSettings();
   const dir = i18n.dir(language);
-  const router = useRouterState();
-  const pathname = router.location.pathname;
   const { data: unreadCount } = useUnreadCount();
 
   const { updateServiceWorker } = useRegisterSW({
@@ -94,11 +92,11 @@ function Root() {
           <div className="flex mx-auto lg:flex-row lg:w-fit lg:gap-2">
             <Navbar />
             <div className="flex justify-center mx-auto">
-            <div className={cn('flex flex-col sm:border-x w-screen sm:w-[550px]')}>
-              <ErrorBoundary>
+              <div className={cn('flex flex-col sm:border-x w-screen sm:w-[550px]')}>
+                <ErrorBoundary>
                   <Outlet key="app" />
-              </ErrorBoundary>
-            </div>
+                </ErrorBoundary>
+              </div>
             </div>
           </div>
           {experiments.devMode && (
