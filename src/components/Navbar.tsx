@@ -164,14 +164,14 @@ export const Navbar = () => {
       <div
         className={cn(
           // base
-          'flex flex-row gap-2 justify-between p-2 pb-4 px-8',
+          'flex flex-row gap-2 justify-between p-2 pb-4 px-2',
           // tablet
           'md:px-0  md:flex-col md:gap-2 md:h-full md:space-y-8 md:justify-normal',
           // desktop
           'xl:space-y-0',
         )}
       >
-        <div className="flex flex-row items-center gap-2 p-3">
+        <div className="flex-row items-center gap-2 p-3 hidden md:flex">
           {handle && <Avatar handle={handle} avatar={profile?.avatar} hover={false} />}
         </div>
         <HomeLink />
