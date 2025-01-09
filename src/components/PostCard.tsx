@@ -64,11 +64,14 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
   const isProd = window.location.hostname === 'akari.blue';
   const handleTranslate = async (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
+    const currentLanguage = navigator.language.split('-')[0];
+    const langs = post.record.langs?.filter((lang) => lang.split('-')[0] !== currentLanguage) ?? [];
+    toast.info('Translating post text from ' + langs[0] + ' to ' + currentLanguage);
     const response = await fetch(isProd ? 'https://translate.akari.blue' : 'http://localhost:8787', {
       method: 'POST',
       body: JSON.stringify({
         q: post.record.text,
-        source: post.record.langs?.[0] ?? 'auto',
+        source: (langs.length === 1 ? langs[0] : 'auto') ?? 'auto',
         target: navigator.language,
       }),
       headers: { 'Content-Type': 'application/json' },
