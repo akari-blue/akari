@@ -74,7 +74,14 @@ function ExternalLink({ href, children }: { href: string; children: React.ReactN
 
 function Mention({ handle }: { handle: string }) {
   return (
-    <Link to="/profile/$handle" params={{ handle }} className="text-blue-400">
+    <Link
+      to="/profile/$handle"
+      params={{ handle }}
+      className="text-blue-400"
+      onClick={(event) => {
+        event.stopPropagation();
+      }}
+    >
       <span className="text-purple-500 font-semibold">@{handle.replace('.bksy.social', '')}</span>
     </Link>
   );

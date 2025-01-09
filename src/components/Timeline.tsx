@@ -110,21 +110,19 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="w-screen sm:w-full">
-        <Virtuoso
-          useWindowScroll
-          totalCount={posts.length}
-          endReached={() => fetchNextPage()}
-          components={{
-            List: forwardRef(function List(props, ref) {
-              return <div ref={ref} {...props} className="flex flex-col divide-y" />;
-            }),
-          }}
-          itemContent={(index: number) => (
-            <PostCard key={posts[index]?.post.uri} post={posts[index]?.post} context={posts[index]?.feedContext} />
-          )}
-        />
-      </div>
+      <Virtuoso
+        useWindowScroll
+        totalCount={posts.length}
+        endReached={() => fetchNextPage()}
+        components={{
+          List: forwardRef(function List(props, ref) {
+            return <div ref={ref} {...props} className="flex flex-col divide-y" />;
+          }),
+        }}
+        itemContent={(index: number) => (
+          <PostCard key={posts[index]?.post.uri} post={posts[index]?.post} context={posts[index]?.feedContext} />
+        )}
+      />
     </div>
   );
 }

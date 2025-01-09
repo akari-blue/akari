@@ -36,14 +36,16 @@ export const BSkyPost = Type.Object({
   likeCount: Type.Number(),
   quoteCount: Type.Optional(Type.Number()),
   indexedAt: Type.String(),
-  viewer: Type.Object({
-    threadMuted: Type.Boolean(),
-    embeddingDisabled: Type.Boolean(),
-    replyDisabled: Type.Optional(Type.Boolean()),
-    like: Type.Optional(Type.String()),
-    repost: Type.Optional(Type.String()),
-    pinned: Type.Optional(Type.Boolean()),
-  }),
+  viewer: Type.Optional(
+    Type.Object({
+      threadMuted: Type.Optional(Type.Boolean()),
+      embeddingDisabled: Type.Optional(Type.Boolean()),
+      replyDisabled: Type.Optional(Type.Boolean()),
+      like: Type.Optional(Type.String()),
+      repost: Type.Optional(Type.String()),
+      pinned: Type.Optional(Type.Boolean()),
+    }),
+  ),
   labels: Type.Array(BSkyPostLabel),
   threadgate: Type.Optional(ThreadGate),
 });

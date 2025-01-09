@@ -18,6 +18,7 @@ import { SendIcon } from 'lucide-react';
 import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
 import { useQueryClient } from '@tanstack/react-query';
 import { StickyHeader } from '@/components/sticky-header';
+import { Debug } from '@/components/ui/Debug';
 
 function Message({ message }: { message: BSkyMessageWithReactions }) {
   const session = useBlueskyStore((state) => state.session);
@@ -25,7 +26,7 @@ function Message({ message }: { message: BSkyMessageWithReactions }) {
     <div className={cn('flex flex-col', message.sender.did === session?.did ? 'items-end' : 'items-start')}>
       <div
         className={cn(
-          'p-2 w-fit rounded-sm text-white',
+          'p-2 w-fit rounded-sm text-white overflow-anchor-none',
           message.sender.did === session?.did
             ? 'bg-blue-500 dark:bg-blue-600'
             : 'text-black dark:text-white bg-gray-300 dark:bg-gray-800',
@@ -110,6 +111,7 @@ function Messages() {
   const { convoId } = Route.useParams();
   const session = useBlueskyStore((state) => state.session);
   const { data, isLoading, isError, error } = useConversation({ convoId });
+  const embed = Route.useSearch().embed;
   const messages = data?.messages;
   const convo = data?.convo;
   const otherMember = convo?.members.find((member) => member.did !== session?.did);
@@ -168,9 +170,11 @@ function Messages() {
                   </div>
                 );
               }),
+              Footer: () => <div className="overflow-anchor-auto h-[1px]" />,
             }}
           />
         </div>
+        <Debug value={embed} />
         <ReplyBox />
       </div>
     </>

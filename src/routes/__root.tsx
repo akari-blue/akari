@@ -80,7 +80,7 @@ function Root() {
         dir={dir}
         lang={language}
         className={cn(
-          'bg-background text-foreground',
+          'bg-background text-foreground vt-name-[main-content]',
           font.family === 'OpenDyslexic' && 'font-[OpenDyslexic]',
           font.family === 'Atkinson-Hyperlegible' && 'font-[Atkinson-Hyperlegible]',
           font.size === 'extra-small' && 'text-xs',
@@ -102,7 +102,7 @@ function Root() {
             </div>
           </div>
           {experiments.devMode && (
-            <div className="fixed bottom-12 right-2">
+            <div className="fixed bottom-12 right-2 z-50">
               <ReactQueryDevtools buttonPosition="relative" />
             </div>
           )}
@@ -114,6 +114,7 @@ function Root() {
                   position: 'fixed',
                   bottom: '4rem',
                   left: '1em',
+                  zIndex: 50,
                 },
               }}
             />

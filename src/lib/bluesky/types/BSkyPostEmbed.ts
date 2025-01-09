@@ -176,6 +176,36 @@ export const BSkyPostEmbed = Type.Recursive((Self) => {
       }),
     }),
     Type.Object({
+      $type: Type.Literal('app.bsky.embed.recordWithMedia'),
+      media: Type.Object({
+        $type: Type.Literal('app.bsky.embed.images'),
+        images: Type.Array(
+          Type.Object({
+            alt: Type.String(),
+            aspectRatio: Type.Object({
+              height: Type.Number(),
+              width: Type.Number(),
+            }),
+            image: Type.Object({
+              $type: Type.Literal('blob'),
+              ref: Type.Object({
+                $link: Type.String(),
+              }),
+              mimeType: Type.String(),
+              size: Type.Number(),
+            }),
+          }),
+        ),
+      }),
+      record: Type.Object({
+        $type: Type.Literal('app.bsky.embed.record'),
+        record: Type.Object({
+          cid: Type.String(),
+          uri: Type.String(),
+        }),
+      }),
+    }),
+    Type.Object({
       $type: Type.Literal('app.bsky.embed.recordWithMedia#view'),
       media: Type.Union([
         Type.Object({

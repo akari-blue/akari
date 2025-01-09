@@ -58,5 +58,24 @@ export default {
     require('tailwindcss-safe-area'),
     require('tailwind-scrollbar-hide'),
     require('tailwind-scrollbar-utilities').scrollbarGutter(),
+    require('tailwindcss/plugin')(({ addUtilities }) => {
+      addUtilities({
+        '.overflow-anchor-none': {
+          overflowAnchor: 'none',
+        },
+        '.overflow-anchor-auto': {
+          overflowAnchor: 'auto',
+        },
+      });
+    }),
+    require('tailwindcss-view-transitions')({
+      styles: {
+        root: { animation: 'none' },
+        'main-content': {
+          old: { animationDuration: '1s' },
+          new: { animationDuration: '3s' },
+        },
+      },
+    }),
   ],
 };

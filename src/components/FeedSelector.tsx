@@ -10,6 +10,12 @@ import { Tab } from './ui/tab';
 import { useQueryClient } from '@tanstack/react-query';
 import { useOfflineStatus } from '@/hooks/useOfflineStatus';
 import { cn } from '@/lib/utils';
+import { StickyHeader } from './sticky-header';
+import AkariLogo from '@/../public/images/logo.svg';
+import { Image } from './ui/Image';
+import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import { HashIcon } from 'lucide-react';
+import { Button } from './ui/button';
 
 export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => {
   const isOffline = useOfflineStatus();
@@ -70,26 +76,52 @@ export const FeedSelector = ({ columnNumber = 1 }: { columnNumber: number }) => 
           {/* if there are less than 2 feeds, don't show the selector */}
           {feeds.length >= 2 && (
             <>
-              <TabList label="feed selector" className={cn('sticky bg-background z-50', isOffline ? 'top-[46px]' : 'top-0')}>
-                {data?.map((feed) => {
-                  return (
-                    <Tab
-                      id={feed.uri}
-                      name={feed.displayName}
-                      selectedTab={selectedFeed}
-                      key={feed.uri}
-                      onClick={() => {
-                        // if this tab is already selected we need to invalidate the associated query
-                        if (selectedFeed === feed.uri) {
-                          queryClient.invalidateQueries({
-                            queryKey: ['feed', { feed: selectedFeed }],
-                          });
-                        }
+              <StickyHeader backButton={false} className="p-0 border-none flex flex-col">
+                <div className="w-full flex items-center justify-between px-4 py-2">
+                  <HamburgerMenuIcon className="size-6" />
+                  <Button
+                    onClick={() => {
+                      // scroll to top and invalidate the query
+                      window.scrollTo({ top: 0 });
+                    }}
+                    variant="ghost"
+                    className="hover:bg-transparent active:scale-90"
+                  >
+                    <Image
+                      src={AkariLogo}
+                      alt="Akari"
+                      classNames={{
+                        image: 'size-10',
                       }}
+                      clickable={false}
                     />
-                  );
-                })}
-              </TabList>
+                  </Button>
+                  <HashIcon className="size-6" />
+                </div>
+                <TabList
+                  label="feed selector"
+                  className={cn('sticky bg-background z-40', isOffline ? 'top-[46px]' : 'top-0')}
+                >
+                  {data?.map((feed) => {
+                    return (
+                      <Tab
+                        id={feed.uri}
+                        name={feed.displayName}
+                        selectedTab={selectedFeed}
+                        key={feed.uri}
+                        onClick={async () => {
+                          // if this tab is already selected we need to invalidate the associated query
+                          if (selectedFeed === feed.uri) {
+                            await queryClient.invalidateQueries({
+                              queryKey: ['feed', { feed: selectedFeed }],
+                            });
+                          }
+                        }}
+                      />
+                    );
+                  })}
+                </TabList>
+              </StickyHeader>
               {data?.map((feed) => (
                 <Ariakit.TabPanel key={feed.uri} tabId={feed.uri}>
                   <Timeline columnNumber={columnNumber} />

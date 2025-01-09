@@ -5,7 +5,7 @@ export function usePostThread({ uri }: { uri?: string }) {
   const agent = useBlueskyStore((store) => store.agent);
 
   return useQuery({
-    queryKey: ['post', { uri }],
+    queryKey: ['post-thread', { uri }],
     queryFn: async () => {
       if (!uri) throw new Error('No URI provided');
 

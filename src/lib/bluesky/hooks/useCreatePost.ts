@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useBlueskyStore } from '../store';
 import { toast } from 'sonner';
 import { Facet } from '@atproto/api';
+import { ReplyRef } from '@atproto/api/dist/client/types/app/bsky/feed/post';
 
 export function useCreatePost() {
   const { agent } = useBlueskyStore();
@@ -10,13 +11,14 @@ export function useCreatePost() {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: async ({ text, facets }: { text: string; facets: Facet[] }) => {
+    mutationFn: async ({ text, facets, reply }: { text: string; facets: Facet[]; reply?: ReplyRef }) => {
       try {
         const result = await agent.post({
           text,
           facets,
+          reply,
         });
-        toast.success('Post created successfully!', {
+        toast.success(reply ? 'Reply posted successfully!' : 'Post created successfully!', {
           onDismiss() {
             navigate({
               to: '/profile/$handle/post/$postId',
@@ -26,12 +28,14 @@ export function useCreatePost() {
         });
         return result;
       } catch (error) {
-        toast.error(error instanceof Error ? JSON.stringify(error) : 'Failed to create post');
+        toast.error(
+          error instanceof Error ? JSON.stringify(error) : reply ? 'Failed to create reply' : 'Failed to create post',
+        );
         throw error;
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['timeline'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['feed'] });
     },
   });
 }

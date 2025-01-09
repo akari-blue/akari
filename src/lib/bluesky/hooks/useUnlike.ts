@@ -20,9 +20,9 @@ export function useUnlike() {
       const authorFeedQueries = cache.findAll({
         queryKey: ['author-feed'],
       });
-      const previousData = [...timelineQueries, ...authorFeedQueries];
+      const infiniteQueries = [...timelineQueries, ...authorFeedQueries];
 
-      for (const query of previousData) {
+      for (const query of infiniteQueries) {
         await queryClient.cancelQueries({ queryKey: query.queryKey });
 
         queryClient.setQueryData<{
@@ -39,7 +39,7 @@ export function useUnlike() {
             old?.pages.map((page) => ({
               ...page,
               feed: page.feed.map(({ post, feedContext }) => {
-                if (post.viewer.like !== uri) {
+                if (post.viewer?.like !== uri) {
                   return {
                     feedContext,
                     post,
@@ -63,63 +63,42 @@ export function useUnlike() {
         }));
       }
 
+      const postThreadQuery = cache.findAll({
+        queryKey: ['post-thread', uri],
+      });
+
+      for (const query of postThreadQuery) {
+        await queryClient.cancelQueries({ queryKey: query.queryKey });
+
+        queryClient.setQueryData<{
+          post: BSkyPost;
+          parent?: BSkyPost;
+          replies: BSkyPost[];
+        }>(query.queryKey, (old) => {
+          if (!old) return old;
+          if (old.post.viewer?.like !== uri) return old;
+
+          return {
+            post: {
+              ...old.post,
+              likeCount: old.post.likeCount - 1,
+              viewer: {
+                ...old.post.viewer,
+                like: undefined,
+              },
+            },
+            parent: old.parent,
+            replies: old.replies,
+          };
+        });
+      }
+
       return {
-        previousData: previousData.map((query) => ({
+        previousData: [...infiniteQueries, ...postThreadQuery].map((query) => ({
           queryKey: query.queryKey,
           state: query.state,
         })),
       };
-    },
-    onSuccess: async (_, { uri }) => {
-      const cache = queryClient.getQueryCache();
-      const timelineQueries = cache.findAll({
-        queryKey: ['feed'],
-      });
-      const authorFeedQueries = cache.findAll({
-        queryKey: ['author-feed'],
-      });
-
-      const queries = [...timelineQueries, ...authorFeedQueries];
-
-      for (const query of queries) {
-        await queryClient.cancelQueries({ queryKey: query.queryKey });
-
-        queryClient.setQueryData<{
-          pages: {
-            feed: {
-              post: BSkyPost;
-              feedContext: string;
-            }[];
-            cursor: string;
-          }[];
-          pageParams: unknown;
-        }>(query.queryKey, (old) => ({
-          pages:
-            old?.pages.map((page) => ({
-              ...page,
-              feed: page.feed.map(({ post, feedContext }) => {
-                if (post.viewer.like !== uri) {
-                  return {
-                    feedContext,
-                    post,
-                  };
-                }
-
-                return {
-                  feedContext,
-                  post: {
-                    ...post,
-                    viewer: {
-                      ...post.viewer,
-                      like: undefined,
-                    },
-                  },
-                };
-              }),
-            })) ?? [],
-          pageParams: old?.pageParams,
-        }));
-      }
     },
     onError: (error, _, context) => {
       // set the previous data back

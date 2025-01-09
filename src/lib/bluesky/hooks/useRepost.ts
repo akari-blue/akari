@@ -12,7 +12,7 @@ export function useRepost() {
     mutationFn: async ({ uri, cid }: { uri: string; cid: string }) => {
       toast.info('Reposting ' + uri);
 
-      await agent.repost(uri, cid);
+      return await agent.repost(uri, cid);
     },
     onMutate: async ({ uri }) => {
       await queryClient.cancelQueries({ queryKey: ['feed'] });
@@ -47,8 +47,7 @@ export function useRepost() {
                   repostCount: post.repostCount + 1,
                   viewer: {
                     ...post.viewer,
-                    // TODO: confirm the format of repost string
-                    repost: `at://did:${agent.session?.did}`,
+                    repost: `at://did:${agent.session?.did}/app.bsky.feed.repost/pending`,
                   },
                 },
               };
@@ -59,12 +58,60 @@ export function useRepost() {
 
       return { previousData };
     },
+    onSuccess: async (data, { uri }) => {
+      const cache = queryClient.getQueryCache();
+      const timelineQueries = cache.findAll({
+        queryKey: ['feed'],
+      });
+      const authorFeedQueries = cache.findAll({
+        queryKey: ['author-feed'],
+      });
+
+      const queries = [...timelineQueries, ...authorFeedQueries];
+
+      for (const query of queries) {
+        await queryClient.cancelQueries({ queryKey: query.queryKey });
+
+        queryClient.setQueryData<{
+          pages: {
+            feed: {
+              post: BSkyPost;
+              feedContext: string;
+            }[];
+            cursor: string;
+          }[];
+          pageParams: unknown;
+        }>(query.queryKey, (old) => ({
+          pages:
+            old?.pages.map((page) => ({
+              ...page,
+              feed: page.feed.map(({ post, feedContext }) => {
+                if (post.uri !== uri) {
+                  return {
+                    feedContext,
+                    post,
+                  };
+                }
+
+                return {
+                  feedContext,
+                  post: {
+                    ...post,
+                    viewer: {
+                      ...post.viewer,
+                      repost: data?.uri,
+                    },
+                  },
+                };
+              }),
+            })) ?? [],
+          pageParams: old?.pageParams,
+        }));
+      }
+    },
     onError: (error, __, context) => {
       queryClient.setQueryData(['feed'], context?.previousData);
       toast.error('Failed to repost ' + (error as Error).message);
-    },
-    onSuccess: () => {
-      toast.success('Reposted successfully');
     },
   });
 }

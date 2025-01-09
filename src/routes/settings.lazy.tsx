@@ -31,7 +31,7 @@ function RouteComponent() {
       <StickyHeader>
         <h1 className="text-xl font-bold">{t('app:settings')}</h1>
       </StickyHeader>
-      <div className="flex flex-col gap-4 pb-safe-or-16 md:pb-safe-or-2 divide-y">
+      <div className="flex flex-col pb-safe-or-16 md:pb-safe-or-2 divide-y py-2">
         <div className="p-2 pt-0 border-none">
           <div className="flex items-center space-x-4">
             <ThemeToggle />

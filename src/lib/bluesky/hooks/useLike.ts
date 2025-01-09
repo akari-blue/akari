@@ -51,7 +51,7 @@ export function useLike() {
                     likeCount: post.likeCount + 1,
                     viewer: {
                       ...post.viewer,
-                      like: `at://imlunahey.com/app.bsky.feed.like/pending`,
+                      like: `at://did:${agent.session?.did}/app.bsky.feed.like/pending`,
                     },
                   },
                 };
@@ -59,6 +59,57 @@ export function useLike() {
             })) ?? [],
           pageParams: old?.pageParams,
         }));
+      }
+
+      const postThreadQuery = cache.findAll({
+        queryKey: ['post-thread'],
+      });
+
+      for (const query of postThreadQuery) {
+        await queryClient.cancelQueries({ queryKey: query.queryKey });
+
+        queryClient.setQueryData<{
+          post: BSkyPost;
+          parent?: BSkyPost;
+          replies: BSkyPost[];
+        }>(query.queryKey, (old) => {
+          if (!old) return old;
+          return {
+            post:
+              old.post.uri === uri
+                ? {
+                    ...old.post,
+                    likeCount: old.post.likeCount + 1,
+                    viewer: {
+                      ...old.post.viewer,
+                      like: `at://did:${agent.session?.did}/app.bsky.feed.like/pending`,
+                    },
+                  }
+                : old.post,
+            parent:
+              old.parent?.uri === uri
+                ? {
+                    ...old.parent,
+                    likeCount: old.parent.likeCount + 1,
+                    viewer: {
+                      ...old.parent.viewer,
+                      like: `at://did:${agent.session?.did}/app.bsky.feed.like/pending`,
+                    },
+                  }
+                : old.parent,
+            replies: old.replies.map((reply) => {
+              if (reply.uri !== uri) return reply;
+
+              return {
+                ...reply,
+                viewer: {
+                  ...reply.viewer,
+                  like: `at://did:${agent.session?.did}/app.bsky.feed.like/pending`,
+                },
+              };
+            }),
+          };
+        });
       }
 
       return {
@@ -117,6 +168,56 @@ export function useLike() {
             })) ?? [],
           pageParams: old?.pageParams,
         }));
+      }
+
+      const postThreadQuery = cache.findAll({
+        queryKey: ['post-thread'],
+      });
+
+      for (const query of postThreadQuery) {
+        await queryClient.cancelQueries({ queryKey: query.queryKey });
+
+        queryClient.setQueryData<{
+          post: BSkyPost;
+          parent?: BSkyPost;
+          replies: BSkyPost[];
+        }>(query.queryKey, (old) => {
+          if (!old) return old;
+          console.info('old', old);
+          return {
+            post:
+              old.post.uri === uri
+                ? {
+                    ...old.post,
+                    viewer: {
+                      ...old.post.viewer,
+                      like: data?.uri,
+                    },
+                  }
+                : old.post,
+            parent:
+              old.parent?.uri === uri
+                ? {
+                    ...old.parent,
+                    viewer: {
+                      ...old.parent.viewer,
+                      like: data?.uri,
+                    },
+                  }
+                : old.parent,
+            replies: old.replies.map((reply) => {
+              if (reply.uri !== uri) return reply;
+
+              return {
+                ...reply,
+                viewer: {
+                  ...reply.viewer,
+                  like: data?.uri,
+                },
+              };
+            }),
+          };
+        });
       }
     },
     onError: (error, _, context) => {
