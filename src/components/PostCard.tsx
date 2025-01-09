@@ -11,7 +11,7 @@ import {
   UserRoundPlusIcon,
   VolumeOffIcon,
 } from 'lucide-react';
-import { useLocation, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { MessageCircle, Heart, Repeat } from 'lucide-react';
 import { useLike } from '../lib/bluesky/hooks/useLike';
 import { BSkyPost } from '../lib/bluesky/types/BSkyPost';
@@ -61,8 +61,7 @@ const BetterContext = ({ context }: { context?: string }) => {
 };
 
 const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTranslatedText: (text: string) => void }) => {
-  const location = useLocation();
-  const isProd = new URL(location.href).hostname === 'akari.blue';
+  const isProd = window.location.hostname === 'akari.blue';
   const handleTranslate = async (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
     const response = await fetch(isProd ? 'https://translate.akari.blue' : 'http://localhost:8787', {
