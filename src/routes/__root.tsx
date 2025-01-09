@@ -94,11 +94,11 @@ function Root() {
           <div className="flex mx-auto lg:flex-row lg:w-fit lg:gap-2">
             <Navbar />
             <div className="flex justify-center mx-auto">
+            <div className={cn('flex flex-col sm:border-x w-screen sm:w-[550px]')}>
               <ErrorBoundary>
-                <div className={cn('flex flex-col sm:border-x', pathname !== '/' && 'w-screen sm:w-[550px]')}>
                   <Outlet key="app" />
-                </div>
               </ErrorBoundary>
+            </div>
             </div>
           </div>
           {experiments.devMode && (
