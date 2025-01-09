@@ -37,7 +37,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { toast } from 'sonner';
 
 const contextToText = (context: string) => {
@@ -195,7 +195,7 @@ type PostCardProps = {
   parent?: boolean;
 };
 
-export function PostCard({ post, context, className, parent = false }: PostCardProps) {
+function PostCardInner({ post, context, className, parent = false }: PostCardProps) {
   const { t } = useTranslation(['app', 'post']);
   const like = useLike();
   const unlike = useUnlike();
@@ -382,3 +382,5 @@ export function PostCard({ post, context, className, parent = false }: PostCardP
     </div>
   );
 }
+
+export const PostCard = memo(PostCardInner);

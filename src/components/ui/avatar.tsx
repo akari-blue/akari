@@ -1,6 +1,6 @@
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { cn } from '@/lib/utils';
-import { forwardRef, ElementRef, ComponentPropsWithoutRef } from 'react';
+import { forwardRef, ElementRef, ComponentPropsWithoutRef, memo } from 'react';
 import { Link } from './Link';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './hover-card';
 
@@ -37,7 +37,16 @@ const AvatarFallback = forwardRef<
   );
 });
 
-export const Avatar = ({
+function HoverCardInner({ handle }: { handle: string }) {
+  return (
+    <div className="p-2">
+      <div className="text-lg font-bold">{handle}</div>
+      <div className="text-sm text-gray-500">{'@' + handle}</div>
+    </div>
+  );
+}
+
+const AvatarInner = ({
   handle,
   avatar,
   labeler,
@@ -72,11 +81,4 @@ export const Avatar = ({
   );
 };
 
-function HoverCardInner({ handle }: { handle: string }) {
-  return (
-    <div className="p-2">
-      <div className="text-lg font-bold">{handle}</div>
-      <div className="text-sm text-gray-500">{'@' + handle}</div>
-    </div>
-  );
-}
+export const Avatar = memo(AvatarInner);

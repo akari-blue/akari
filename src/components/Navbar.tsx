@@ -94,20 +94,22 @@ const NotificationsLink = () => {
 };
 
 const ProfileLink = () => {
-  const { session } = useBlueskyStore();
   const { t } = useTranslation('profile');
+  const handle = useBlueskyStore((state) => state.session?.handle);
+  const { data: profile } = useProfile({ handle });
 
-  if (!session?.handle) return null;
+  if (!handle) return null;
 
   return (
     <Link
       to="/profile/$handle"
       params={{
-        handle: session?.handle,
+        handle,
       }}
       className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700"
     >
-      <UserIcon className="size-7 xl:size-6 active:scale-90" />
+      <UserIcon className="hidden sm:flex size-7 xl:size-6 active:scale-90" />
+      <Avatar handle={handle} avatar={profile?.avatar} hover={false} className="size-7 sm:hidden" />
       <span className="hidden xl:block">{t('profile')}</span>
     </Link>
   );
@@ -118,7 +120,7 @@ const SettingsLink = () => {
   return (
     <Link
       to="/settings"
-      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700"
+      className="flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 hidden md:flex"
     >
       <SettingsIcon className="size-7 xl:size-6 active:scale-90" />
       <span className="hidden xl:block">{t('settings')}</span>
