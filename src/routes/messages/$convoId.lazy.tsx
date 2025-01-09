@@ -18,7 +18,6 @@ import { SendIcon } from 'lucide-react';
 import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
 import { useQueryClient } from '@tanstack/react-query';
 import { StickyHeader } from '@/components/sticky-header';
-import { Debug } from '@/components/ui/Debug';
 
 function Message({ message }: { message: BSkyMessageWithReactions }) {
   const session = useBlueskyStore((state) => state.session);
@@ -111,7 +110,6 @@ function Messages() {
   const { convoId } = Route.useParams();
   const session = useBlueskyStore((state) => state.session);
   const { data, isLoading, isError, error } = useConversation({ convoId });
-  const embed = Route.useSearch().embed;
   const messages = data?.messages;
   const convo = data?.convo;
   const otherMember = convo?.members.find((member) => member.did !== session?.did);
@@ -174,7 +172,6 @@ function Messages() {
             }}
           />
         </div>
-        <Debug value={embed} />
         <ReplyBox />
       </div>
     </>
