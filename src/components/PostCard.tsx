@@ -72,7 +72,8 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
       method: 'POST',
       body: JSON.stringify({
         q: post.record.text,
-        source,
+        // fall back to auto detection if the lanauge is the same as the current language
+        source: source === currentLanguage ? 'auto' : source,
         target: navigator.language,
       }),
       headers: { 'Content-Type': 'application/json' },
