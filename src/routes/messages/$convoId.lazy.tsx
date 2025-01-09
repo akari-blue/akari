@@ -165,14 +165,15 @@ function Messages() {
                 return (
                   <div className="flex flex-col gap-2 mr-4" ref={ref} style={style}>
                     {children}
+                    <div className="overflow-anchor-auto h-[1px]" />
                   </div>
                 );
               }),
-              Footer: () => <div className="overflow-anchor-auto h-[1px]" />,
             }}
           />
         </div>
         <ReplyBox />
+        <div className="pb-safe-offset-8 md:pb-0 border-none" />
       </div>
     </>
   );
