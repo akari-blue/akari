@@ -3,6 +3,7 @@ import { useSettings } from '@/hooks/useSetting';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from './dialog';
 import { VisuallyHidden } from '@ariakit/react';
+import { memo } from 'react';
 
 type ImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'className'> & {
   classNames?: {
@@ -12,7 +13,7 @@ type ImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'className'> &
   clickable?: boolean;
 };
 
-export const Image = ({ src, alt, classNames, clickable = true, ...props }: ImageProps) => {
+const ImageInner = ({ src, alt, classNames, clickable = true, ...props }: ImageProps) => {
   const { experiments } = useSettings();
   const { t } = useTranslation('image');
 
@@ -64,3 +65,5 @@ export const Image = ({ src, alt, classNames, clickable = true, ...props }: Imag
     </div>
   );
 };
+
+export const Image = memo(ImageInner);
