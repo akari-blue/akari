@@ -29,7 +29,7 @@ const HomeLink = () => {
           });
         }
       }}
-      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700"
+      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 justify-center"
     >
       <HomeIcon className="size-7 xl:size-6 active:scale-90" />
       <span className="hidden xl:block">{t('home')}</span>
@@ -42,7 +42,7 @@ const SearchLink = () => {
   return (
     <Link
       to="/search"
-      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700"
+      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 justify-center"
     >
       <SearchIcon className="size-7 xl:size-6 active:scale-90" />
       <span className="hidden xl:block">{t('search')}</span>
@@ -57,7 +57,7 @@ const MessagesLink = () => {
   return (
     <Link
       to="/messages"
-      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700"
+      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 justify-center"
     >
       <div className="relative active:scale-90">
         <MailIcon className="size-7 xl:size-6" />
@@ -78,7 +78,7 @@ const NotificationsLink = () => {
   return (
     <Link
       to="/notifications"
-      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700"
+      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 justify-center"
     >
       <div className="relative">
         <BellIcon className="size-7 xl:size-6 active:scale-90" />
@@ -106,7 +106,7 @@ const ProfileLink = () => {
       params={{
         handle,
       }}
-      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700"
+      className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 justify-center"
     >
       <UserIcon className="hidden sm:flex size-7 xl:size-6 active:scale-90" />
       <Avatar handle={handle} avatar={profile?.avatar} hover={false} className="size-7 sm:hidden" />
@@ -120,7 +120,7 @@ const SettingsLink = () => {
   return (
     <Link
       to="/settings"
-      className="flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 hidden md:flex"
+      className="flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 hidden justify-center md:flex"
     >
       <SettingsIcon className="size-7 xl:size-6 active:scale-90" />
       <span className="hidden xl:block">{t('settings')}</span>
