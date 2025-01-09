@@ -39,6 +39,7 @@ import {
 } from './ui/dropdown-menu';
 import { memo, useState } from 'react';
 import { toast } from 'sonner';
+import { usePlausible } from '@/hooks/usePlausible';
 
 const contextToText = (context: string) => {
   if (context === 'following') return 'following';
@@ -61,6 +62,7 @@ const BetterContext = ({ context }: { context?: string }) => {
 };
 
 const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTranslatedText: (text: string) => void }) => {
+  const { trackEvent } = usePlausible();
   const isProd = window.location.hostname === 'akari.blue';
   const handleTranslate = async (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -87,6 +89,7 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
       translatedText: string;
     };
     setTranslatedText(json.translatedText);
+    trackEvent('translate', { language: source });
   };
 
   return (
@@ -104,6 +107,7 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
             event.stopPropagation();
             navigator.clipboard.writeText(post.record.text);
             toast.info('Copied post text to clipboard');
+            trackEvent('copyToClipboard', { type: 'post-text' });
           }}
         >
           {'copy post text'} <ClipboardIcon />
@@ -125,6 +129,7 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
               `https://akari.blue/profile/${post.author.handle}/post/${post.uri.split('/').pop()}`,
             );
             toast.info('Copied post link to clipboard');
+            trackEvent('copyToClipboard', { type: 'post-link' });
           }}
         >
           {'copy link to post'} <ShareIcon />
