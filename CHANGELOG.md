@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.1.1](https://github.com/akari-blue/akari/compare/v1.1.0...v1.1.1) (2025-01-09)
+
+
+### Bug Fixes
+
+* convo reply box being hidden ([279393c](https://github.com/akari-blue/akari/commit/279393c346c4655f69632f996038db75a5942032))
+* dont allow posts to crash whole page ([80915a5](https://github.com/akari-blue/akari/commit/80915a5e1bf1a0d0a8d48e436ca435eb4d973ee2))
+* dont request unread count when logged out ([12b58fe](https://github.com/akari-blue/akari/commit/12b58fe0e7d30d113eeb45e84e0d97191ad82f52))
+* navbar icons ([439af25](https://github.com/akari-blue/akari/commit/439af257a084615644f2db208a73788f09e05eb7))
+* navbar on mobile ([8a344b0](https://github.com/akari-blue/akari/commit/8a344b0b8dde62f3f9c45801e8e217706e83399f))
+* posts not rendering ([cc669c6](https://github.com/akari-blue/akari/commit/cc669c650d46d77e1a9b1f45902e60fca64b2264))
+* remove extra debug ([6e3bf47](https://github.com/akari-blue/akari/commit/6e3bf477686ac78a32e4f5c1efc0fd8793273503))
+* translating posts with incorrect language ([f214bc0](https://github.com/akari-blue/akari/commit/f214bc07970faf4ee7cbdb71c04a17e2253a8c7e))
+* translating posts with multiple languages ([253b4ff](https://github.com/akari-blue/akari/commit/253b4ff123fe5b06a66cd70e7ac342e78de31362))
+* translating posts with multiple languages ([13a0b9d](https://github.com/akari-blue/akari/commit/13a0b9df4c6bd64d762bc89280b9417b8244c1c7))
+* translations in production ([2221da0](https://github.com/akari-blue/akari/commit/2221da05df4e5faddfe97459c551db8a44b03f63))
+* width on mobile when signed out ([09b8f20](https://github.com/akari-blue/akari/commit/09b8f2066ec8afc1660cc220c1b9c236b438d0ef))
+
 ## [1.1.0](https://github.com/akari-blue/akari/compare/v1.0.0...v1.1.0) (2025-01-09)
 
 
