@@ -23,14 +23,14 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
       ? embed.record.author
       : embed.record.creator;
   if (!author) return <Debug value={embed.record} />;
-  if (author.viewer.blockedBy) {
+  if (author.viewer?.blockedBy) {
     return (
       <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow')}>
         <div className="text-gray-800 dark:text-gray-200 mb-3">{t('blockedByAuthor')}</div>
       </div>
     );
   }
-  if (author.viewer.blocking) {
+  if (author.viewer?.blocking) {
     return (
       <div className={cn('bg-white dark:bg-neutral-900 p-4 rounded-lg shadow')}>
         <div className="text-gray-800 dark:text-gray-200 mb-3">{t('blockedAuthor')}</div>
