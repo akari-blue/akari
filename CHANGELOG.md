@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.1.0](https://github.com/akari-blue/akari/compare/v1.0.0...v1.1.0) (2025-01-09)
+
+
+### Features
+
+* basic avatar hover card ([adf7321](https://github.com/akari-blue/akari/commit/adf7321f17101e95634902a928896ac282c0a2c9))
+* sticky header ([d63c333](https://github.com/akari-blue/akari/commit/d63c3339a927f49bd023982a25c2d72cefba4d73))
+
+
+### Bug Fixes
+
+* add sticky header to posts ([b71ffff](https://github.com/akari-blue/akari/commit/b71ffff08b25a40d81a905fef7af039eb2671226))
+* dont display website info for gifs ([eebe71c](https://github.com/akari-blue/akari/commit/eebe71ce6c4d6e5be0a9747a084106c942074a57))
+* embed linking ([f4349c1](https://github.com/akari-blue/akari/commit/f4349c15bb15de11b7f024e31765f7c2e31df9bc))
+* https://github.com/akari-blue/akari/issues/133 ([3f41d56](https://github.com/akari-blue/akari/commit/3f41d5663111bae0439698e92169696af2a8bb64))
+* https://github.com/akari-blue/akari/issues/27 ([70677b5](https://github.com/akari-blue/akari/commit/70677b525083a4ae70fe7c7106b7eced3e265901))
+* notifications not being clickable ([52ca7f7](https://github.com/akari-blue/akari/commit/52ca7f754a0be45a6134eae53ffeac10dc9f10cb))
+* translations in production ([ef6038f](https://github.com/akari-blue/akari/commit/ef6038fc759fdb323f81250da2681cec0866c0b9))
+
 ## 1.0.0 (2025-01-06)
 
 
