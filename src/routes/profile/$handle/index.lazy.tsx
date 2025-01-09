@@ -23,6 +23,7 @@ import { TabList } from '@/components/ui/tab-list';
 import { Handle } from '@/components/ui/Handle';
 import { Avatar } from '@/components/ui/avatar';
 import { Banner } from '@/components/ui/banner';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
@@ -76,7 +77,9 @@ function Posts() {
         List,
       }}
       itemContent={(index: number) => (
-        <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+        <ErrorBoundary>
+          <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+        </ErrorBoundary>
       )}
     />
   );
@@ -103,7 +106,9 @@ function Reposts() {
         List,
       }}
       itemContent={(index: number) => (
-        <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+        <ErrorBoundary>
+          <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+        </ErrorBoundary>
       )}
     />
   );
@@ -130,7 +135,9 @@ function Replies() {
         List,
       }}
       itemContent={(index: number) => (
-        <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+        <ErrorBoundary>
+          <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+        </ErrorBoundary>
       )}
     />
   );
@@ -159,7 +166,9 @@ function Media() {
         List,
       }}
       itemContent={(index: number) => (
-        <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+        <ErrorBoundary>
+          <PostCard key={filteredPosts[index]?.post.uri} post={filteredPosts[index]?.post as BSkyPost} />
+        </ErrorBoundary>
       )}
     />
   );

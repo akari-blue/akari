@@ -34,7 +34,7 @@ class ErrorBoundaryInner extends Component<Props, State> {
         this.props.fallback || (
           <div className="flex items-center justify-center bg-white dark:bg-black">
             <h1 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">{t('somethingWentWrong')}</h1>
-            <pre className="text-gray-600 dark:text-gray-300">
+            <pre className="text-gray-600 dark:text-gray-300 max-w-full overflow-x-auto">
               {this.state.error
                 ? JSON.stringify(error2json(this.state.error), null, 2)
                     .split('\n')

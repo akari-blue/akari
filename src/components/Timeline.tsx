@@ -8,6 +8,7 @@ import { useSettings } from '../hooks/useSetting';
 import { Virtuoso } from 'react-virtuoso';
 import { Loading } from './ui/loading';
 import { useUnlike } from '@/lib/bluesky/hooks/useUnlike';
+import { ErrorBoundary } from './ErrorBoundary';
 
 export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
   const { columns } = useSettings();
@@ -120,7 +121,9 @@ export function Timeline({ columnNumber = 1 }: { columnNumber: number }) {
           }),
         }}
         itemContent={(index: number) => (
-          <PostCard key={posts[index]?.post.uri} post={posts[index]?.post} context={posts[index]?.feedContext} />
+          <ErrorBoundary>
+            <PostCard key={posts[index]?.post.uri} post={posts[index]?.post} context={posts[index]?.feedContext} />
+          </ErrorBoundary>
         )}
       />
     </div>
