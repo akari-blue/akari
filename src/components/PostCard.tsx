@@ -40,6 +40,7 @@ import {
 import { memo, useState } from 'react';
 import { toast } from 'sonner';
 import { usePlausible } from '@/hooks/usePlausible';
+import { useBlueskyStore } from '@/lib/bluesky/store';
 
 const contextToText = (context: string) => {
   if (context === 'following') return 'following';
@@ -63,6 +64,7 @@ const BetterContext = ({ context }: { context?: string }) => {
 
 const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTranslatedText: (text: string) => void }) => {
   const { trackEvent } = usePlausible();
+  const isAuthenticated = useBlueskyStore((state) => state.isAuthenticated);
   const isProd = window.location.hostname === 'akari.blue';
   const handleTranslate = async (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -112,15 +114,17 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
         >
           {'copy post text'} <ClipboardIcon />
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className="justify-between"
-          onClick={(event) => {
-            event.stopPropagation();
-            toast.error('Not implemented');
-          }}
-        >
-          {'send via direct message'} <SendHorizonalIcon />
-        </DropdownMenuItem>
+        {isAuthenticated && (
+          <DropdownMenuItem
+            className="justify-between"
+            onClick={(event) => {
+              event.stopPropagation();
+              toast.error('Not implemented');
+            }}
+          >
+            {'send via direct message'} <SendHorizonalIcon />
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem
           className="justify-between"
           onClick={(event) => {
@@ -134,63 +138,67 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
         >
           {'copy link to post'} <ShareIcon />
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="justify-between"
-          onClick={(event) => {
-            event.stopPropagation();
-            toast.error('Not implemented');
-          }}
-        >
-          {'mute thread'} <VolumeOffIcon />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="justify-between"
-          onClick={(event) => {
-            event.stopPropagation();
-            toast.error('Not implemented');
-          }}
-        >
-          {'mute words & tags'} <FilterIcon />
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="justify-between"
-          onClick={(event) => {
-            event.stopPropagation();
-            toast.error('Not implemented');
-          }}
-        >
-          {'hide reply for me'} <EyeOffIcon />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="justify-between"
-          onClick={(event) => {
-            event.stopPropagation();
-            toast.error('Not implemented');
-          }}
-        >
-          {'hide reply for everyone'} <EyeOffIcon />
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="justify-between"
-          onClick={(event) => {
-            event.stopPropagation();
-            toast.error('Not implemented');
-          }}
-        >
-          {'block account'} <UserRoundPlusIcon />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="justify-between"
-          onClick={(event) => {
-            event.stopPropagation();
-            toast.error('Not implemented');
-          }}
-        >
-          {'report account'} <AlertTriangleIcon />
-        </DropdownMenuItem>
+        {isAuthenticated && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="justify-between"
+              onClick={(event) => {
+                event.stopPropagation();
+                toast.error('Not implemented');
+              }}
+            >
+              {'mute thread'} <VolumeOffIcon />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="justify-between"
+              onClick={(event) => {
+                event.stopPropagation();
+                toast.error('Not implemented');
+              }}
+            >
+              {'mute words & tags'} <FilterIcon />
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="justify-between"
+              onClick={(event) => {
+                event.stopPropagation();
+                toast.error('Not implemented');
+              }}
+            >
+              {'hide reply for me'} <EyeOffIcon />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="justify-between"
+              onClick={(event) => {
+                event.stopPropagation();
+                toast.error('Not implemented');
+              }}
+            >
+              {'hide reply for everyone'} <EyeOffIcon />
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="justify-between"
+              onClick={(event) => {
+                event.stopPropagation();
+                toast.error('Not implemented');
+              }}
+            >
+              {'block account'} <UserRoundPlusIcon />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="justify-between"
+              onClick={(event) => {
+                event.stopPropagation();
+                toast.error('Not implemented');
+              }}
+            >
+              {'report account'} <AlertTriangleIcon />
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
