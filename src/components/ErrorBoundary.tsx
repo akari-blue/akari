@@ -2,6 +2,7 @@ import error2json from '@stdlib/error-to-json';
 import { TFunction } from 'i18next';
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { withTranslation } from 'react-i18next';
+import { Button } from './ui/button';
 
 type Props = {
   children: ReactNode;
@@ -32,7 +33,7 @@ class ErrorBoundaryInner extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="flex items-center justify-center bg-white dark:bg-black">
+          <div className="flex flex-col items-center justify-center bg-background w-full">
             <h1 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">{t('somethingWentWrong')}</h1>
             <pre className="text-gray-600 dark:text-gray-300 max-w-full overflow-x-auto">
               {this.state.error
@@ -47,13 +48,13 @@ class ErrorBoundaryInner extends Component<Props, State> {
                 : 'An unexpected error occurred'}
             </pre>
             <div className="flex items-center justify-end w-full">
-              <button
+              <Button
+                variant="outline"
                 // reload the component
                 onClick={() => this.setState({ hasError: false })}
-                className="px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-black rounded-md hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
               >
                 {t('reloadComponent')}
-              </button>
+              </Button>
             </div>
           </div>
         )
