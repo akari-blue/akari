@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import { BSkyPostEmbed } from '@/lib/bluesky/types/BSkyPostEmbed';
 import { cn } from '@/lib/utils';
 import TimeAgo from 'react-timeago-i18n';
@@ -14,6 +15,8 @@ import { SatelliteDish } from 'lucide-react';
 
 export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
   const { t } = useTranslation('post');
+  const navigate = useNavigate();
+  const location = useLocation();
   if (embed.$type !== 'app.bsky.embed.record#view') return null;
   const author =
     embed.record.$type === 'app.bsky.embed.record#viewRecord' || embed.record.$type === 'app.bsky.embed.record#viewBlocked'
@@ -35,10 +38,26 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
     );
   }
 
+  const onClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    const cellText = document.getSelection();
+    if (cellText?.type === 'Range') return;
+    if (embed.record.$type !== 'app.bsky.embed.record#viewRecord') return;
+
+    const handle = embed.record.author.handle;
+    const postId = embed.record.uri.split('/').pop()!;
+    if (location.pathname === `/profile/${handle}/post/${postId}`) return;
+    console.info('Navigating from %s to %s', location.pathname, `/profile/${handle}/post/${postId}`);
+    navigate({
+      to: '/profile/$handle/post/$postId',
+      params: { handle, postId },
+    });
+  };
+
   return (
     <div className="p-4 rounded-lg shadow border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-500 hover:bg-opacity-10 z-10">
       {embed.record.$type === 'app.bsky.embed.record#viewRecord' && (
-        <>
+        <div onClick={onClick}>
           <div className="flex items-center space-x-3 mb-2">
             <Avatar handle={author.handle} avatar={author.avatar} />
             <div>
@@ -48,7 +67,7 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
                 </Link>
               </div>
               <div className="text-gray-500 dark:text-gray-400 text-sm">
-                <Link to="/profile/$handle" params={{ handle: author.handle }}>
+                <Link to="/profile/$handle" params={{ handle: author.handle }} className="hover:no-underline">
                   <Handle handle={author.handle} />
                 </Link>
                 {' · '}
@@ -58,6 +77,7 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
                     handle: author.handle,
                     postId: embed.record.uri.split('/').pop()!,
                   }}
+                  className="hover:no-underline"
                 >
                   <TimeAgo date={embed.record.indexedAt} />
                 </Link>
@@ -72,7 +92,7 @@ export const AppBskyEmbedRecordView = ({ embed }: { embed: BSkyPostEmbed }) => {
             )}
           </p>
           <PostEmbed embed={embed.record.embeds?.[0]} />
-        </>
+        </div>
       )}
       {embed.record.$type === 'app.bsky.graph.defs#starterPackViewBasic' && (
         <div className="text-gray-800 dark:text-gray-200">
