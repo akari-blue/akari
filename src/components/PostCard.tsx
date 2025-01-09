@@ -63,15 +63,18 @@ const BetterContext = ({ context }: { context?: string }) => {
 const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTranslatedText: (text: string) => void }) => {
   const handleTranslate = async (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
-    const response = await fetch('http://localhost:8787', {
-      method: 'POST',
-      body: JSON.stringify({
-        q: post.record.text,
-        source: post.record.langs?.[0] ?? 'auto',
-        target: navigator.language,
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const response = await fetch(
+      process.env.NODE_ENV === 'production' ? 'https://translate.akari.blue' : 'http://localhost:8787',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          q: post.record.text,
+          source: post.record.langs?.[0] ?? 'auto',
+          target: navigator.language,
+        }),
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
     const json = (await response.json()) as {
       alternatives: [];
       detectedLanguage: {
