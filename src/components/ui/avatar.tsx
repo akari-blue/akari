@@ -2,6 +2,7 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { cn } from '@/lib/utils';
 import { forwardRef, ElementRef, ComponentPropsWithoutRef } from 'react';
 import { Link } from './Link';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './hover-card';
 
 const AvatarWrapper = forwardRef<
   ElementRef<typeof AvatarPrimitive.Root>,
@@ -42,19 +43,40 @@ export const Avatar = ({
   labeler,
   list,
   className,
+  hover = true,
 }: {
   handle: string;
   avatar: string | undefined;
   labeler?: boolean;
   list?: boolean;
   className?: string;
+  hover?: boolean;
 }) => {
-  return (
-    <Link to="/profile/$handle" params={{ handle }}>
+  const content = (
+    <Link to="/profile/$handle" params={{ handle }} onClick={(event) => event.stopPropagation()}>
       <AvatarWrapper className={cn((labeler || list) && 'aspect-square rounded-sm', className)}>
         <AvatarImage src={avatar} />
         <AvatarFallback>{handle}</AvatarFallback>
       </AvatarWrapper>
     </Link>
   );
+  if (!hover) return content;
+
+  return (
+    <HoverCard>
+      <HoverCardTrigger>{content}</HoverCardTrigger>
+      <HoverCardContent>
+        <HoverCardInner handle={handle} />
+      </HoverCardContent>
+    </HoverCard>
+  );
 };
+
+function HoverCardInner({ handle }: { handle: string }) {
+  return (
+    <div className="p-2">
+      <div className="text-lg font-bold">{handle}</div>
+      <div className="text-sm text-gray-500">{'@' + handle}</div>
+    </div>
+  );
+}
