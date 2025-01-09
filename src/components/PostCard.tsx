@@ -11,7 +11,7 @@ import {
   UserRoundPlusIcon,
   VolumeOffIcon,
 } from 'lucide-react';
-import { useNavigate } from '@tanstack/react-router';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import { MessageCircle, Heart, Repeat } from 'lucide-react';
 import { useLike } from '../lib/bluesky/hooks/useLike';
 import { BSkyPost } from '../lib/bluesky/types/BSkyPost';
@@ -61,20 +61,19 @@ const BetterContext = ({ context }: { context?: string }) => {
 };
 
 const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTranslatedText: (text: string) => void }) => {
+  const location = useLocation();
+  const isProd = new URL(location.href).hostname === 'akari.blue';
   const handleTranslate = async (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
-    const response = await fetch(
-      process.env.NODE_ENV === 'production' ? 'https://translate.akari.blue' : 'http://localhost:8787',
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          q: post.record.text,
-          source: post.record.langs?.[0] ?? 'auto',
-          target: navigator.language,
-        }),
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    const response = await fetch(isProd ? 'https://translate.akari.blue' : 'http://localhost:8787', {
+      method: 'POST',
+      body: JSON.stringify({
+        q: post.record.text,
+        source: post.record.langs?.[0] ?? 'auto',
+        target: navigator.language,
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
     const json = (await response.json()) as {
       alternatives: [];
       detectedLanguage: {
