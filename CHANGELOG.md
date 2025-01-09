@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.2](https://github.com/akari-blue/akari/compare/v1.1.1...v1.1.2) (2025-01-09)
+
+
+### Bug Fixes
+
+* center icons ([28f346e](https://github.com/akari-blue/akari/commit/28f346e77f0d482f66c73cdab4bdecd91ea728d6))
+* dont show post menu items that require with when signed out ([85f5b79](https://github.com/akari-blue/akari/commit/85f5b79f250c329e28aed56ae6f742611936fa22))
+* error component rendering ([249ca19](https://github.com/akari-blue/akari/commit/249ca195de9ca243de4b00e8e346e6b91b8352dc))
+* posts throwing error for author.viewer ([711a5b5](https://github.com/akari-blue/akari/commit/711a5b5671eb07b01bfcab36d7d1898fd6cd7319))
+
 ## [1.1.1](https://github.com/akari-blue/akari/compare/v1.1.0...v1.1.1) (2025-01-09)
 
 
