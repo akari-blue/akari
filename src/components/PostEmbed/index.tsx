@@ -74,31 +74,60 @@ export const PostEmbed = ({ embed }: { embed?: BSkyPostEmbed | null }) => {
           </div>
         );
       }
+
+      const isKnownGifSite = embed.external.uri.includes('tenor.com') || embed.external.uri.includes('gify.com');
+
       return (
-        <Link
-          className="rounded-lg border overflow-hidden hover:no-underline hover:border-neutral-600 group"
-          href={embed.external.uri}
-          target="_blank"
-        >
-          {embed.external.thumb && (
-            <Image
-              src={embed.external.uri.includes('.gif') ? embed.external.uri : embed.external.thumb}
-              alt={embed.external.title}
-              classNames={{
-                image: 'w-full object-cover border-b group-hover:border-neutral-600 aspect-video',
-              }}
-              clickable={false}
-            />
-          )}
-          <div className="p-2 text-sm flex flex-col gap-2">
-            {embed.external.title && <h2 className="font-bold">{embed.external.title}</h2>}
-            <div>{embed.external.description && <p className="text-xs">{embed.external.description}</p>}</div>
-            <div className="border-t text-xs text-gray-500 flex flex-row gap-2 items-center pt-2">
-              <Globe2 className="size-3" />
-              {new URL(embed.external.uri).hostname}
-            </div>
+        <>
+          <div className="rounded-lg border overflow-hidden hover:no-underline hover:border-neutral-600 group">
+            {isKnownGifSite ? (
+              embed.external.thumb && (
+                <Image
+                  src={embed.external.uri.includes('.gif') ? embed.external.uri : embed.external.thumb}
+                  alt={embed.external.title}
+                  classNames={{
+                    image: 'w-full object-cover border-b group-hover:border-neutral-600 aspect-video',
+                  }}
+                  clickable={false}
+                  // pause the gif on click
+                  onClick={(e) => {
+                    e.currentTarget.src =
+                      e.currentTarget.src === embed.external.uri ? embed.external.thumb : embed.external.uri;
+                  }}
+                />
+              )
+            ) : (
+              <Link href={embed.external.uri} target="_blank">
+                {embed.external.thumb && (
+                  <Image
+                    src={embed.external.uri.includes('.gif') ? embed.external.uri : embed.external.thumb}
+                    alt={embed.external.title}
+                    classNames={{
+                      image: 'w-full object-cover border-b group-hover:border-neutral-600 aspect-video',
+                    }}
+                    clickable={false}
+                  />
+                )}
+              </Link>
+            )}
           </div>
-        </Link>
+          {!isKnownGifSite && (
+            <Link
+              className="rounded-lg border overflow-hidden hover:no-underline hover:border-neutral-600 group"
+              href={embed.external.uri}
+              target="_blank"
+            >
+              <div className="p-2 text-sm flex flex-col gap-2">
+                {embed.external.title && <h2 className="font-bold">{embed.external.title}</h2>}
+                <div>{embed.external.description && <p className="text-xs">{embed.external.description}</p>}</div>
+                <div className="border-t text-xs text-gray-500 flex flex-row gap-2 items-center pt-2">
+                  <Globe2 className="size-3" />
+                  {new URL(embed.external.uri).hostname}
+                </div>
+              </div>
+            </Link>
+          )}
+        </>
       );
     }
     case 'app.bsky.embed.record#view': {
