@@ -198,7 +198,7 @@ function Profile() {
         <div className="flex flex-col gap-2">
           <Banner banner={profile?.banner} />
           <div className="px-4 -mt-12">
-            <Avatar avatar={profile?.avatar} handle={profile.handle} className="size-24" />
+            <Avatar avatar={profile?.avatar} handle={profile.handle} className="size-24" hover={false} />
             <div>
               <div className="flex gap-2">
                 <h2 className="text-xl font-bold">{profile?.displayName || profile.handle}</h2>
