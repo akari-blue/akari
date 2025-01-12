@@ -57,7 +57,6 @@ export function useConversation({ convoId }: { convoId: string }) {
   return useQuery({
     queryKey: ['conversation', { convoId }],
     queryFn: async () => {
-      // @ts-expect-error bsky_chat does in fact work
       const proxy = agent.withProxy('bsky_chat', 'did:web:api.bsky.chat');
 
       const messages = await getMessages(proxy, convoId);
@@ -70,7 +69,8 @@ export function useConversation({ convoId }: { convoId: string }) {
       };
     },
     enabled: !!agent && isAuthenticated,
-    // 30s
-    staleTime: 30 * 1000,
+    // 10s
+    staleTime: 10 * 1_000,
+    refetchInterval: 10 * 1_000,
   });
 }

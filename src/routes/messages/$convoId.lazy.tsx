@@ -26,7 +26,7 @@ function Message({ message }: { message: BSkyMessageWithReactions }) {
     <div className={cn('flex flex-col', message.sender.did === session?.did ? 'items-end' : 'items-start')}>
       <div
         className={cn(
-          'p-2 w-fit rounded-sm text-white overflow-anchor-none',
+          'p-2 w-fit rounded-sm text-white overflow-anchor-none max-w-[85%]',
           message.sender.did === session?.did
             ? 'bg-blue-500 dark:bg-blue-600'
             : 'text-black dark:text-white bg-gray-300 dark:bg-gray-800',
@@ -195,10 +195,10 @@ function Messages() {
                 return (
                   <div className="flex flex-col gap-2 mr-4" ref={ref} style={style}>
                     {children}
-                    <div className="overflow-anchor-auto h-[1px]" />
                   </div>
                 );
               }),
+              Footer: () => <div className="overflow-anchor-auto h-[1px]" />,
             }}
           />
         </div>
