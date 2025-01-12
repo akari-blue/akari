@@ -18,9 +18,7 @@ import { BSkyPost } from '../lib/bluesky/types/bsky-post';
 import { cn } from '../lib/utils';
 import { useRepost } from '../lib/bluesky/hooks/use-repost';
 import { FacetedText } from './faceted-text';
-import { PostEmbed } from './post-embed';
 import { Link } from './ui/link';
-import { ErrorBoundary } from './error-boundary';
 import { useSettings } from '../hooks/use-setting';
 import { FormattedNumber } from './ui/formatted-number';
 import TimeAgo from 'react-timeago-i18n';
@@ -41,6 +39,10 @@ import { memo, useState } from 'react';
 import { toast } from 'sonner';
 import { usePlausible } from '@/hooks/use-plausible';
 import { useBlueskyStore } from '@/lib/bluesky/store';
+import { usePostLabels } from '@/lib/bluesky/hooks/use-post-labels';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@radix-ui/react-accordion';
+import { ErrorBoundary } from './error-boundary';
+import { PostEmbed } from './post-embed';
 
 const contextToText = (context: string) => {
   if (context === 'following') return 'following';
@@ -204,15 +206,16 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
   );
 };
 
-type PostCardProps = {
-  post: BSkyPost | undefined | null;
+type PostCardInnerProps = {
+  post: BSkyPost;
   context?: string;
   className?: string;
   parent?: boolean;
 };
 
-function PostCardInner({ post, context, className, parent = false }: PostCardProps) {
+function PostCardInner({ post, context, className, parent = false }: PostCardInnerProps) {
   const { t } = useTranslation(['app', 'post']);
+  const agent = useBlueskyStore((state) => state.agent);
   const like = useLike();
   const unlike = useUnlike();
   const repost = useRepost();
@@ -220,6 +223,7 @@ function PostCardInner({ post, context, className, parent = false }: PostCardPro
   const { experiments } = useSettings();
   const navigate = useNavigate();
   const [translatedText, setTranslatedText] = useState<string | null>(null);
+  const { moderation } = usePostLabels({ agent, post });
 
   const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -241,7 +245,11 @@ function PostCardInner({ post, context, className, parent = false }: PostCardPro
     repost.mutate({ uri, cid });
   };
 
-  if (!post) return null;
+  // Hide post if it's filtered
+  if (moderation?.ui('contentList').filter) return null;
+  const contentMedia = moderation?.ui('contentMedia');
+  const moderationLabel = contentMedia?.blurs[0]?.type === 'label' ? contentMedia.blurs[0]?.labelDef.locales[0] : null;
+  const moderationFilter = moderation?.ui('contentMedia').filter;
 
   const onClick = () => {
     const cellText = document.getSelection();
@@ -318,7 +326,29 @@ function PostCardInner({ post, context, className, parent = false }: PostCardPro
                   <FormattedText text={post?.record.text} />
                 )}
               </p>
-              <ErrorBoundary>{post.embed && <PostEmbed embed={post.embed} />}</ErrorBoundary>
+              <ErrorBoundary>
+                {moderationFilter ? null : moderationLabel ? (
+                  <Accordion type="single" collapsible onClick={(event) => event.stopPropagation()}>
+                    <AccordionItem value="item-1">
+                      <AccordionTrigger className="w-full group">
+                        <div className="flex items-center space-x-2 rounded-sm hover:bg-neutral-500 hover:bg-opacity-10 gap-1 border justify-between p-2">
+                          <div className="flex items-center gap-1">
+                            <AlertTriangleIcon size={20} />
+                            {moderationLabel?.name}
+                          </div>
+                          <div className="group-data-[state=open]:hidden">{'show'}</div>
+                          <div className="hidden group-data-[state=open]:flex">{'hide'}</div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2">
+                        <ErrorBoundary>{post.embed && <PostEmbed embed={post.embed} />}</ErrorBoundary>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                ) : (
+                  post.embed && <PostEmbed embed={post.embed} />
+                )}
+              </ErrorBoundary>
               <div className="flex items-center text-gray-500 dark:text-gray-400 justify-between">
                 <Link
                   to="/profile/$handle/post/$postId"
@@ -399,4 +429,15 @@ function PostCardInner({ post, context, className, parent = false }: PostCardPro
   );
 }
 
-export const PostCard = memo(PostCardInner);
+type PostCardProps = {
+  post: BSkyPost | null | undefined;
+  context?: string;
+  className?: string;
+  parent?: boolean;
+};
+
+export const PostCard = memo(function PostCard(props: PostCardProps) {
+  if (!props.post) return null;
+
+  return <PostCardInner {...props} />;
+});
