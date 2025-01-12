@@ -191,7 +191,7 @@ function Profile() {
       <Helmet>
         <link rel="canonical" href={`https://bsky.app/profile/${handle}`} />
         <title>
-          {profile.displayName} (@{handle})
+          {profile.displayName ?? profile.handle} (@{handle})
         </title>
       </Helmet>
       <div className="flex flex-col">
