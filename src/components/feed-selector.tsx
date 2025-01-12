@@ -1,5 +1,4 @@
 import { useAuth } from '../lib/bluesky/hooks/use-auth';
-import { useFeeds } from '../lib/bluesky/hooks/use-feeds';
 import { usePreferences } from '../lib/bluesky/hooks/use-preferences';
 import { useSettings } from '../hooks/use-setting';
 import * as Ariakit from '@ariakit/react';
