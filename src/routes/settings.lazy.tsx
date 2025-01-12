@@ -1,16 +1,16 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { ToggleSwitch } from '../components/ui/ToggleSwitch';
-import { useSettings } from '../hooks/useSetting';
+import { ToggleSwitch } from '../components/ui/toggle-switch';
+import { useSettings } from '../hooks/use-setting';
 import { Input } from '../components/ui/input';
 import { useTranslation } from 'react-i18next';
 import i18n, { languageNames, languages } from '@/i18n';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/lib/bluesky/hooks/useAuth';
+import { useAuth } from '@/lib/bluesky/hooks/use-auth';
 import { Helmet } from 'react-helmet';
 import { Moon, Sun } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/components/theme-provider/use-theme';
-import { Link } from '@/components/ui/Link';
+import { Link } from '@/components/ui/link';
 import TimeAgo from 'react-timeago-i18n';
 import { StickyHeader } from '@/components/sticky-header';
 

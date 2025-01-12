@@ -1,8 +1,8 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { ErrorBoundary } from '../components/ErrorBoundary';
-import { FeedSelector } from '../components/FeedSelector';
+import { ErrorBoundary } from '../components/error-boundary';
+import { FeedSelector } from '../components/feed-selector';
 import { cn } from '../lib/utils';
-import { useSettings } from '../hooks/useSetting';
+import { useSettings } from '../hooks/use-setting';
 
 export const Route = createLazyFileRoute('/')({
   component: Index,

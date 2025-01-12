@@ -1,7 +1,7 @@
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { cn } from '@/lib/utils';
 import { forwardRef, ElementRef, ComponentPropsWithoutRef, memo } from 'react';
-import { Link } from './Link';
+import { Link } from './link';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './hover-card';
 
 const AvatarWrapper = forwardRef<

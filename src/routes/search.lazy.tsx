@@ -1,15 +1,15 @@
 import { createLazyFileRoute, useLocation, useNavigate } from '@tanstack/react-router';
-import { PostCard } from '../components/PostCard';
+import { PostCard } from '../components/post-card';
 import { Helmet } from 'react-helmet';
 import { Input } from '@/components/ui/input';
 import { useEffect, useState } from 'react';
-import { useSearch } from '@/lib/bluesky/hooks/useSearch';
+import { useSearch } from '@/lib/bluesky/hooks/use-search';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Loader2Icon, SearchIcon, XIcon } from 'lucide-react';
 import { StickyHeader } from '@/components/sticky-header';
-import { useSearchHistory } from '@/hooks/useSearchHistory';
-import { Link } from '@/components/ui/Link';
+import { useSearchHistory } from '@/hooks/use-search-history';
+import { Link } from '@/components/ui/link';
 import { Loading } from '@/components/ui/loading';
 
 export const Route = createLazyFileRoute('/search')({

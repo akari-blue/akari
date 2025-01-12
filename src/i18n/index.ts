@@ -10,31 +10,21 @@ import { ja } from './lang/ja';
 import { nl } from './lang/nl';
 import { ur } from './lang/ur';
 import { yue } from './lang/yue';
-import { zh_Hans } from './lang/zh-Hans';
-import { zh_Hant } from './lang/zh-Hant';
+import { zh_Hans } from './lang/zh-hans';
+import { zh_Hant } from './lang/zh-hant';
 import { de } from './lang/de';
 
 export const defaultNS = 'app';
 
-export const supportedLocales = [
-  'en',
-  'es',
-  'de',
-  'fr',
-  'fil',
-  'ja',
-  'nl',
-  'ur',
-  'yue',
-  'zh-Hans',
-  'zh-Hant',
-]
+export const supportedLocales = ['en', 'es', 'de', 'fr', 'fil', 'ja', 'nl', 'ur', 'yue', 'zh-Hans', 'zh-Hant'];
 
 export const languageNames = {
   system: 'system',
   // Get local display names
-  ...supportedLocales
-    .reduce((acc, locale) => ({ ...acc, [locale]: new Intl.DisplayNames(locale, { type: 'language' }).of(locale) }), {}),
+  ...supportedLocales.reduce(
+    (acc, locale) => ({ ...acc, [locale]: new Intl.DisplayNames(locale, { type: 'language' }).of(locale) }),
+    {},
+  ),
 };
 
 export const languages = {

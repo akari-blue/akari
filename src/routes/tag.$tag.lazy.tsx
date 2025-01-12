@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { PostCard } from '../components/PostCard';
-import { useTag } from '../lib/bluesky/hooks/useTag';
+import { PostCard } from '../components/post-card';
+import { useTag } from '../lib/bluesky/hooks/use-tag';
 import { Helmet } from 'react-helmet';
 
 export const Route = createLazyFileRoute('/tag/$tag')({

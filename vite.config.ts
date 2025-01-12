@@ -31,20 +31,22 @@ export default defineConfig({
       workbox: {
         runtimeCaching: [
           {
-            // do not cache any requests
-            urlPattern: () => true,
-            handler: 'NetworkFirst',
-          },
-          {
-            // cache images
+            // Cache frequently accessed images
             urlPattern: ({ request }) => request.destination === 'image',
-            handler: 'StaleWhileRevalidate',
+            handler: 'CacheFirst',
             options: {
               cacheName: 'images-cache',
               expiration: {
-                maxEntries: 100, // limit the number of cached images
+                maxEntries: 50, // Store only the 50 most frequently accessed images
+                maxAgeSeconds: 7 * 24 * 60 * 60, // Keep images for 7 days
+                purgeOnQuotaError: true, // Automatically remove cached images if storage quota is exceeded
               },
             },
+          },
+          {
+            // Don't cache other requests - always use network
+            urlPattern: () => true,
+            handler: 'NetworkOnly', // Changed from NetworkFirst to NetworkOnly
           },
         ],
       },

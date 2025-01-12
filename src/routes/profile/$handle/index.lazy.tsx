@@ -1,18 +1,18 @@
 import * as Ariakit from '@ariakit/react';
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { useProfile } from '@/lib/bluesky/hooks/useProfile';
-import { useAuthorFeed } from '@/lib/bluesky/hooks/useAuthorFeed';
-import { PostCard } from '@/components/PostCard';
-import { BSkyPost } from '@/lib/bluesky/types/BSkyPost';
+import { useProfile } from '@/lib/bluesky/hooks/use-profile';
+import { useAuthorFeed } from '@/lib/bluesky/hooks/use-author-feed';
+import { PostCard } from '@/components/post-card';
+import { BSkyPost } from '@/lib/bluesky/types/bsky-post';
 import { useTranslation } from 'react-i18next';
-import { useSettings } from '@/hooks/useSetting';
-import { Badge } from '@/components/ui/Badge';
-import { FollowButton } from '@/components/ui/FollowButton';
-import { FormattedNumber } from '@/components/ui/FormattedNumber';
-import { FormattedText } from '@/components/ui/FormattedText';
-import { Debug } from '@/components/ui/Debug';
+import { useSettings } from '@/hooks/use-setting';
+import { Badge } from '@/components/ui/badge';
+import { FollowButton } from '@/components/ui/follow-button';
+import { FormattedNumber } from '@/components/ui/formatted-number';
+import { FormattedText } from '@/components/ui/formatted-text';
+import { Debug } from '@/components/ui/debug';
 import { forwardRef, HtmlHTMLAttributes, Ref, useState } from 'react';
-import { NotImplementedBox } from '@/components/ui/NotImplementedBox';
+import { NotImplementedBox } from '@/components/ui/not-implemented-box';
 import { Virtuoso } from 'react-virtuoso';
 import { Loading } from '@/components/ui/loading';
 import { NotFound } from '@/components/ui/not-found';
@@ -20,10 +20,10 @@ import { Helmet } from 'react-helmet';
 import { useBlueskyStore } from '@/lib/bluesky/store';
 import { Tab } from '@/components/ui/tab';
 import { TabList } from '@/components/ui/tab-list';
-import { Handle } from '@/components/ui/Handle';
+import { Handle } from '@/components/ui/handle';
 import { Avatar } from '@/components/ui/avatar';
 import { Banner } from '@/components/ui/banner';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,

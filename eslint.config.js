@@ -5,6 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import i18next from 'eslint-plugin-i18next';
 import reactPlugin from 'eslint-plugin-react';
+import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 
 export default tseslint.config(
   i18next.configs['flat/recommended'],
@@ -68,6 +69,23 @@ export default tseslint.config(
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    plugins: {
+      unicorn: eslintPluginUnicorn,
+    },
+    rules: {
+      'unicorn/filename-case': [
+        'warn',
+        {
+          case: 'kebabCase',
+          ignore: [
+            // match anything with a $ in it
+            /.*\$.*/,
+          ],
+        },
+      ],
     },
   },
 );

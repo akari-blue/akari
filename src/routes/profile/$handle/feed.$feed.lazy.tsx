@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet';
-import { NotImplementedBox } from '@/components/ui/NotImplementedBox';
+import { NotImplementedBox } from '@/components/ui/not-implemented-box';
 
 export const Route = createLazyFileRoute('/profile/$handle/feed/$feed')({
   component: Feed,

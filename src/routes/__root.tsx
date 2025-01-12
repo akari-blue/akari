@@ -1,17 +1,17 @@
 import { createRootRoute, Outlet, redirect } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import '../index.css';
-import { ErrorBoundary } from '../components/ErrorBoundary';
+import { ErrorBoundary } from '../components/error-boundary';
 import { useBlueskyStore } from '../lib/bluesky/store';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
-import { useSettings } from '../hooks/useSetting';
+import { useSettings } from '../hooks/use-setting';
 import { cn } from '../lib/utils';
-import { Navbar } from '../components/Navbar';
+import { Navbar } from '../components/navigation/navbar';
 import i18n from '../i18n';
 import { Toaster } from '@/components/ui/sonner';
 import { Helmet } from 'react-helmet';
 import { appName } from '@/config';
-import { useUnreadCount } from '@/lib/bluesky/hooks/useUnreadCount';
+import { useUnreadCount } from '@/lib/bluesky/hooks/use-unread-count';
 import { OfflineBanner } from '@/components/ui/offline-banner';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { toast } from 'sonner';
@@ -92,7 +92,7 @@ function Root() {
           <div className="flex mx-auto lg:flex-row lg:w-fit lg:gap-2">
             <Navbar />
             <div className="flex justify-center mx-auto">
-              <div className={cn('flex flex-col sm:border-x w-screen sm:w-[550px]')}>
+              <div className="flex flex-col sm:border-x w-screen md:w-[550px]">
                 <ErrorBoundary>
                   <Outlet key="app" />
                 </ErrorBoundary>

@@ -1,8 +1,8 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { useProfile } from '@/lib/bluesky/hooks/useProfile';
-import { usePostThread } from '@/lib/bluesky/hooks/usePostThread';
-import { PostCard } from '@/components/PostCard';
-import { BSkyPost } from '@/lib/bluesky/types/BSkyPost';
+import { useProfile } from '@/lib/bluesky/hooks/use-profile';
+import { usePostThread } from '@/lib/bluesky/hooks/use-post-thread';
+import { PostCard } from '@/components/post-card';
+import { BSkyPost } from '@/lib/bluesky/types/bsky-post';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
 import { Loading } from '@/components/ui/loading';
@@ -13,7 +13,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { useBlueskyStore } from '@/lib/bluesky/store';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { useCreatePost } from '@/lib/bluesky/hooks/useCreatePost';
+import { useCreatePost } from '@/lib/bluesky/hooks/use-create-post';
 import { Facet } from '@atproto/api';
 import { convertJSONToPost } from '@/components/convert';
 import { JSONContent } from '@tiptap/react';
@@ -153,7 +153,7 @@ function ReplyBox() {
       <DialogTrigger asChild>
         <div className="border-b p-1">
           <div className="hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg cursor-pointer w-full flex flex-row items-center gap-2 p-1">
-            <Avatar handle={ownProfile?.handle} avatar={ownProfile?.avatar} className="size-8" />
+            <Avatar handle={ownProfile?.handle} avatar={ownProfile?.avatar} className="size-8" hover={false} />
             <div className="p-2 ">{'write your reply'}</div>
           </div>
         </div>

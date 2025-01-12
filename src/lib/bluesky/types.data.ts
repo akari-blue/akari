@@ -1,5 +1,5 @@
-import { BSkyNotification } from './types/BSkyNotification';
-import { BSkyPost } from './types/BSkyPost';
+import { BSkyNotification } from './types/bsky-notification';
+import { BSkyPost } from './types/bsky-post';
 
 export const textPost = {
   uri: 'at://did:plc:k6acu4chiwkixvdedcmdgmal/app.bsky.feed.post/3lei22stup22j',

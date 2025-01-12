@@ -1,7 +1,7 @@
 import { ArrowLeftIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
-import { useScollVisible } from '@/hooks/useScrollVisible';
+import { useScollVisible } from '@/hooks/use-scroll-visible';
 
 export const StickyHeader = ({
   children,

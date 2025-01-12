@@ -13,7 +13,7 @@ export const TabList = ({
   return (
     <Ariakit.TabList
       className={cn(
-        'flex flex-row max-w-full overflow-x-scroll overflow-y-hidden scrollbar-hide border-b border-gray-200 dark:border-gray-800 touch-none touch-pan-x',
+        'flex flex-row max-w-full overflow-x-scroll overflow-y-hidden scrollbar-hide border-b touch-none touch-pan-x',
         className,
       )}
       aria-label={label}

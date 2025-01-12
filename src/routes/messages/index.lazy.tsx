@@ -1,18 +1,18 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { useConversations } from '../../lib/bluesky/hooks/useConversations';
+import { useConversations } from '../../lib/bluesky/hooks/use-conversations';
 import { cn } from '../../lib/utils';
 import { useBlueskyStore } from '../../lib/bluesky/store';
-import { Link } from '../../components/ui/Link';
-import { BSkyConvo } from '../../lib/bluesky/types/BSkyConvo';
+import { Link } from '../../components/ui/link';
+import { BSkyConvo } from '../../lib/bluesky/types/bsky-convo';
 import TimeAgo from 'react-timeago-i18n';
-import { Handle } from '../../components/ui/Handle';
+import { Handle } from '../../components/ui/handle';
 import { Virtuoso } from 'react-virtuoso';
 import { Loading } from '@/components/ui/loading';
 import { forwardRef, HtmlHTMLAttributes, Ref } from 'react';
 import { Avatar } from '@/components/ui/avatar';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
-import { CreateConvo } from '@/components/CreateConvo';
+import { CreateConvo } from '@/components/create-convo';
 
 function Conversation({ convo }: { convo: BSkyConvo }) {
   const session = useBlueskyStore((state) => state.session);

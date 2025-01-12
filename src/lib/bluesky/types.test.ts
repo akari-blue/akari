@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BSkyPostLabel } from './types/BSkyPostLabel';
+import { BSkyPostLabel } from './types/bsky-post-label';
 import { TypeCompiler } from '@sinclair/typebox/compiler';
 
 describe('BSkyPostLabel schema validation', () => {

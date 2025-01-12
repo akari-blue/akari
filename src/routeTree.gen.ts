@@ -23,8 +23,12 @@ import { Route as ProfileHandleIndexImport } from './routes/profile/$handle/inde
 
 const SettingsLazyImport = createFileRoute('/settings')()
 const LoginLazyImport = createFileRoute('/login')()
+const FeedsLazyImport = createFileRoute('/feeds')()
 const IndexLazyImport = createFileRoute('/')()
 const TagTagLazyImport = createFileRoute('/tag/$tag')()
+const NotificationsSettingsLazyImport = createFileRoute(
+  '/notifications/settings',
+)()
 const ProfileHandlePostPostIdLazyImport = createFileRoute(
   '/profile/$handle/post/$postId',
 )()
@@ -45,6 +49,12 @@ const LoginLazyRoute = LoginLazyImport.update({
   path: '/login',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
+
+const FeedsLazyRoute = FeedsLazyImport.update({
+  id: '/feeds',
+  path: '/feeds',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/feeds.lazy').then((d) => d.Route))
 
 const SearchRoute = SearchImport.update({
   id: '/search',
@@ -79,6 +89,14 @@ const TagTagLazyRoute = TagTagLazyImport.update({
   path: '/tag/$tag',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/tag.$tag.lazy').then((d) => d.Route))
+
+const NotificationsSettingsLazyRoute = NotificationsSettingsLazyImport.update({
+  id: '/notifications/settings',
+  path: '/notifications/settings',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/notifications/settings.lazy').then((d) => d.Route),
+)
 
 const MessagesConvoIdRoute = MessagesConvoIdImport.update({
   id: '/messages/$convoId',
@@ -131,6 +149,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchImport
       parentRoute: typeof rootRoute
     }
+    '/feeds': {
+      id: '/feeds'
+      path: '/feeds'
+      fullPath: '/feeds'
+      preLoaderRoute: typeof FeedsLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -150,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/messages/$convoId'
       fullPath: '/messages/$convoId'
       preLoaderRoute: typeof MessagesConvoIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/notifications/settings': {
+      id: '/notifications/settings'
+      path: '/notifications/settings'
+      fullPath: '/notifications/settings'
+      preLoaderRoute: typeof NotificationsSettingsLazyImport
       parentRoute: typeof rootRoute
     }
     '/tag/$tag': {
@@ -202,9 +234,11 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/search': typeof SearchRoute
+  '/feeds': typeof FeedsLazyRoute
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
   '/messages/$convoId': typeof MessagesConvoIdRoute
+  '/notifications/settings': typeof NotificationsSettingsLazyRoute
   '/tag/$tag': typeof TagTagLazyRoute
   '/messages': typeof MessagesIndexRoute
   '/notifications': typeof NotificationsIndexRoute
@@ -216,9 +250,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/search': typeof SearchRoute
+  '/feeds': typeof FeedsLazyRoute
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
   '/messages/$convoId': typeof MessagesConvoIdRoute
+  '/notifications/settings': typeof NotificationsSettingsLazyRoute
   '/tag/$tag': typeof TagTagLazyRoute
   '/messages': typeof MessagesIndexRoute
   '/notifications': typeof NotificationsIndexRoute
@@ -231,9 +267,11 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/search': typeof SearchRoute
+  '/feeds': typeof FeedsLazyRoute
   '/login': typeof LoginLazyRoute
   '/settings': typeof SettingsLazyRoute
   '/messages/$convoId': typeof MessagesConvoIdRoute
+  '/notifications/settings': typeof NotificationsSettingsLazyRoute
   '/tag/$tag': typeof TagTagLazyRoute
   '/messages/': typeof MessagesIndexRoute
   '/notifications/': typeof NotificationsIndexRoute
@@ -247,9 +285,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/search'
+    | '/feeds'
     | '/login'
     | '/settings'
     | '/messages/$convoId'
+    | '/notifications/settings'
     | '/tag/$tag'
     | '/messages'
     | '/notifications'
@@ -260,9 +300,11 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/search'
+    | '/feeds'
     | '/login'
     | '/settings'
     | '/messages/$convoId'
+    | '/notifications/settings'
     | '/tag/$tag'
     | '/messages'
     | '/notifications'
@@ -273,9 +315,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/search'
+    | '/feeds'
     | '/login'
     | '/settings'
     | '/messages/$convoId'
+    | '/notifications/settings'
     | '/tag/$tag'
     | '/messages/'
     | '/notifications/'
@@ -288,9 +332,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   SearchRoute: typeof SearchRoute
+  FeedsLazyRoute: typeof FeedsLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
   SettingsLazyRoute: typeof SettingsLazyRoute
   MessagesConvoIdRoute: typeof MessagesConvoIdRoute
+  NotificationsSettingsLazyRoute: typeof NotificationsSettingsLazyRoute
   TagTagLazyRoute: typeof TagTagLazyRoute
   MessagesIndexRoute: typeof MessagesIndexRoute
   NotificationsIndexRoute: typeof NotificationsIndexRoute
@@ -302,9 +348,11 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   SearchRoute: SearchRoute,
+  FeedsLazyRoute: FeedsLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
   SettingsLazyRoute: SettingsLazyRoute,
   MessagesConvoIdRoute: MessagesConvoIdRoute,
+  NotificationsSettingsLazyRoute: NotificationsSettingsLazyRoute,
   TagTagLazyRoute: TagTagLazyRoute,
   MessagesIndexRoute: MessagesIndexRoute,
   NotificationsIndexRoute: NotificationsIndexRoute,
@@ -325,9 +373,11 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/search",
+        "/feeds",
         "/login",
         "/settings",
         "/messages/$convoId",
+        "/notifications/settings",
         "/tag/$tag",
         "/messages/",
         "/notifications/",
@@ -342,6 +392,9 @@ export const routeTree = rootRoute
     "/search": {
       "filePath": "search.tsx"
     },
+    "/feeds": {
+      "filePath": "feeds.lazy.tsx"
+    },
     "/login": {
       "filePath": "login.lazy.tsx"
     },
@@ -350,6 +403,9 @@ export const routeTree = rootRoute
     },
     "/messages/$convoId": {
       "filePath": "messages/$convoId.tsx"
+    },
+    "/notifications/settings": {
+      "filePath": "notifications/settings.lazy.tsx"
     },
     "/tag/$tag": {
       "filePath": "tag.$tag.lazy.tsx"

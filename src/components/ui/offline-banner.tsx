@@ -1,6 +1,6 @@
 import { WifiOff } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useOfflineStatus } from '@/hooks/useOfflineStatus';
+import { useOfflineStatus } from '@/hooks/use-offline-status';
 
 export const OfflineBanner = () => {
   const isOffline = useOfflineStatus();

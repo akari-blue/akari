@@ -1,22 +1,22 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { useConversation } from '@/lib/bluesky/hooks/useConversation';
+import { useConversation } from '@/lib/bluesky/hooks/use-conversation';
 import { cn } from '@/lib/utils';
 import { useBlueskyStore } from '@/lib/bluesky/store';
-import { BSkyMessageWithReactions } from '@/lib/bluesky/types/BSkyMessage';
+import { BSkyMessageWithReactions } from '@/lib/bluesky/types/bsky-message';
 import { Virtuoso } from 'react-virtuoso';
-import { forwardRef, HtmlHTMLAttributes, Ref, useRef, useState } from 'react';
+import { forwardRef, HtmlHTMLAttributes, Ref, useEffect, useRef, useState } from 'react';
 import { Loading } from '@/components/ui/loading';
 import TimeAgo from 'react-timeago-i18n';
-import { FormattedText } from '@/components/ui/FormattedText';
+import { FormattedText } from '@/components/ui/formatted-text';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/ui/avatar';
-import { Handle } from '@/components/ui/Handle';
+import { Handle } from '@/components/ui/handle';
 import { MinimalTiptapEditor } from '@/components/minimal-tiptap';
 import { Button } from '@/components/ui/button';
 import { SendIcon } from 'lucide-react';
-import { useSendMessage } from '@/lib/bluesky/hooks/useSendMessage';
-import { useQueryClient } from '@tanstack/react-query';
+import { useSendMessage } from '@/lib/bluesky/hooks/use-send-message';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { StickyHeader } from '@/components/sticky-header';
 
 function Message({ message }: { message: BSkyMessageWithReactions }) {
@@ -105,6 +105,22 @@ function ReplyBox() {
   );
 }
 
+const useMarkAsRead = ({ convoId }: { convoId: string }) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['conversation', { convoId }],
+    mutationFn: async () => {
+      const proxy = useBlueskyStore.getState().agent.withProxy('bsky_chat', 'did:web:api.bsky.chat');
+      await proxy.chat.bsky.convo.updateRead({ convoId });
+
+      // invalidate conversations query to update unread count
+      queryClient.invalidateQueries({
+        queryKey: ['conversations'],
+      });
+    },
+  });
+};
+
 function Messages() {
   const { t } = useTranslation('messages');
   const { convoId } = Route.useParams();
@@ -113,6 +129,13 @@ function Messages() {
   const messages = data?.messages;
   const convo = data?.convo;
   const otherMember = convo?.members.find((member) => member.did !== session?.did);
+  const hasUnread = (convo?.unreadCount ?? 0) > 0;
+  const { mutate: markAsRead } = useMarkAsRead({ convoId });
+
+  // mark as read on load if there are unread messages
+  useEffect(() => {
+    if (hasUnread) markAsRead();
+  }, [hasUnread, markAsRead]);
 
   if (isLoading) return <Loading />;
 
