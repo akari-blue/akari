@@ -1,4 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
+import { BSkyFacet } from './bsky-facet';
 
 export const BSkyMessage = Type.Object({
   id: Type.String(),
@@ -8,6 +9,7 @@ export const BSkyMessage = Type.Object({
   }),
   text: Type.String(),
   sentAt: Type.String(),
+  facets: Type.Optional(Type.Array(BSkyFacet)),
 });
 
 export type BSkyMessage = Static<typeof BSkyMessage>;

@@ -18,6 +18,7 @@ import { SendIcon } from 'lucide-react';
 import { useSendMessage } from '@/lib/bluesky/hooks/use-send-message';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { StickyHeader } from '@/components/sticky-header';
+import { FacetedText } from '@/components/faceted-text';
 
 function Message({ message }: { message: BSkyMessageWithReactions }) {
   const session = useBlueskyStore((state) => state.session);
@@ -32,7 +33,13 @@ function Message({ message }: { message: BSkyMessageWithReactions }) {
         )}
         key={message.id as string}
       >
-        <FormattedText text={message.text} linkify />
+        {message.facets ? (
+          <div className="[&>*]:!text-white [&>a]:underline">
+            <FacetedText text={message.text} facets={message.facets} />
+          </div>
+        ) : (
+          <FormattedText text={message.text} />
+        )}
       </div>
       {message.reactions.length >= 1 && <div>{message.reactions.map((reaction) => reaction.emoji).join(' ')}</div>}
       <div className="dark:text-gray-500 text-xs">
