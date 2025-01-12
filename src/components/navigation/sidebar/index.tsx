@@ -14,13 +14,13 @@ import { NotificationsLink } from './notifications-link';
 import { ProfileLink } from './profile-link';
 import { SettingsLink } from './settings-link';
 import { useLocation } from '@tanstack/react-router';
+import AkariLogo from '@/../public/images/logo.svg';
+import { Image } from '@/components/ui/image';
 
 export const Sidebar = () => {
   const handle = useBlueskyStore((state) => state.session?.handle);
   const { data: profile } = useProfile({ handle });
   const location = useLocation();
-
-  if (!handle) return null;
 
   return (
     <Dialog>
@@ -32,22 +32,36 @@ export const Sidebar = () => {
       </DialogTrigger>
       <DialogContent className="h-screen w-64 bg-background px-4" position="left" closeButton={false}>
         <div className="divide-y gap-2 flex flex-col">
-          <div className="flex flex-col">
-            <Avatar handle={handle} avatar={profile?.avatar} hover={false} className="size-12" />
-            <div className="font-bold">{profile?.displayName}</div>
-            <Handle handle={handle} />
-            <div className="flex flex-row items-center text-sm ">
-              <div className="flex flex-row gap-1">
-                <FormattedNumber value={profile?.followersCount} />
-                <div className="text-gray-400">{'followers'}</div>
-              </div>
-              <DotIcon className="size-4 text-gray-400" />
-              <div className="flex flex-row gap-1">
-                <FormattedNumber value={profile?.followsCount} />
-                <div className="text-gray-400">{'following'}</div>
+          {handle ? (
+            <div className="flex flex-col">
+              <Avatar handle={handle} avatar={profile?.avatar} hover={false} className="size-12" />
+              <div className="font-bold">{profile?.displayName}</div>
+              <Handle handle={handle} />
+              <div className="flex flex-row items-center text-sm ">
+                <div className="flex flex-row gap-1">
+                  <FormattedNumber value={profile?.followersCount} />
+                  <div className="text-gray-400">{'followers'}</div>
+                </div>
+                <DotIcon className="size-4 text-gray-400" />
+                <div className="flex flex-row gap-1">
+                  <FormattedNumber value={profile?.followsCount} />
+                  <div className="text-gray-400">{'following'}</div>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-row items-center gap-2">
+              <Image
+                src={AkariLogo}
+                alt="Akari"
+                classNames={{
+                  image: 'size-12',
+                }}
+                clickable={false}
+              />
+              <Link to="/">{'akari'}</Link>
+            </div>
+          )}
           <div className="pt-2">
             <div className="flex flex-col items-start gap-2 [&>*]:w-full [&>*]:justify-start">
               <SearchLink />

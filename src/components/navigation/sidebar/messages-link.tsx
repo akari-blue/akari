@@ -2,11 +2,16 @@ import { MailIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '../../ui/link';
 import { useConversations } from '@/lib/bluesky/hooks/use-conversations';
+import { useBlueskyStore } from '@/lib/bluesky/store';
 
 export const MessagesLink = () => {
+  const isAuthenticated = useBlueskyStore((store) => store.isAuthenticated);
   const { t } = useTranslation('messages');
   const { data: convos } = useConversations();
   const unreadCount = convos?.filter((convo) => convo.unreadCount >= 1).length || 0;
+
+  if (!isAuthenticated) return null;
+
   return (
     <Link
       to="/messages"

@@ -2,10 +2,15 @@ import { BellIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '../../ui/link';
 import { useUnreadCount } from '@/lib/bluesky/hooks/use-unread-count';
+import { useBlueskyStore } from '@/lib/bluesky/store';
 
 export const NotificationsLink = () => {
+  const isAuthenticated = useBlueskyStore((store) => store.isAuthenticated);
   const { t } = useTranslation('notifications');
   const { data: unreadCount } = useUnreadCount();
+
+  if (!isAuthenticated) return null;
+
   return (
     <Link
       to="/notifications"
