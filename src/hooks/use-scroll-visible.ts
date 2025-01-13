@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const useScollVisible = () => {
+export const useScrollVisible = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 

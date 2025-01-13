@@ -24,6 +24,7 @@ import { Handle } from '@/components/ui/handle';
 import { Avatar } from '@/components/ui/avatar';
 import { Banner } from '@/components/ui/banner';
 import { ErrorBoundary } from '@/components/error-boundary';
+import { StickyHeader } from '@/components/sticky-header';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
@@ -235,7 +236,7 @@ function Profile() {
               setSelectedTab(selectedId);
             }}
           >
-            <div>
+            <StickyHeader backButton={false} className="border-none p-0">
               <TabList label="Profile tabs">
                 {[
                   {
@@ -254,7 +255,7 @@ function Profile() {
                   <Tab name={name} id={id} selectedTab={selectedTab} key={id} />
                 ))}
               </TabList>
-            </div>
+            </StickyHeader>
             <Ariakit.TabPanel tabId="all">
               <All />
             </Ariakit.TabPanel>

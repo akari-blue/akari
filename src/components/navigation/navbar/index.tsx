@@ -3,7 +3,7 @@ import { useAuth } from '../../../lib/bluesky/hooks/use-auth';
 import { useBlueskyStore } from '../../../lib/bluesky/store';
 import { CreatePost } from '../../create-post';
 import { cn } from '@/lib/utils';
-import { useScollVisible } from '@/hooks/use-scroll-visible';
+import { useScrollVisible } from '@/hooks/use-scroll-visible';
 import { Avatar } from '../../ui/avatar';
 import { useProfile } from '@/lib/bluesky/hooks/use-profile';
 import { HomeLink } from './home-link';
@@ -13,16 +13,19 @@ import { NotificationsLink } from './notifications-link';
 import { SettingsLink } from './settings-link';
 import { ProfileLink } from './profile-link';
 import { LoginButton } from './login-button';
+import { useRef } from 'react';
 
 export const Navbar = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
-  const isVisible = useScollVisible();
+  const ref = useRef<HTMLDivElement>(null);
+  const isVisible = useScrollVisible(ref);
   const handle = useBlueskyStore((state) => state.session?.handle);
   const { data: profile } = useProfile({ handle });
 
   return (
     <div
+      ref={ref}
       className={cn(
         'bg-background text-foreground sticky',
         // base
