@@ -19,6 +19,8 @@ import { useSendMessage } from '@/lib/bluesky/hooks/use-send-message';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { StickyHeader } from '@/components/sticky-header';
 import { FacetedText } from '@/components/faceted-text';
+import { Badge } from '@/components/ui/badge';
+import { useProfileLabels } from '@/lib/bluesky/hooks/use-profile-labels';
 
 function Message({ message }: { message: BSkyMessageWithReactions }) {
   const session = useBlueskyStore((state) => state.session);
@@ -138,6 +140,9 @@ function Messages() {
   const otherMember = convo?.members.find((member) => member.did !== session?.did);
   const hasUnread = (convo?.unreadCount ?? 0) > 0;
   const { mutate: markAsRead } = useMarkAsRead({ convoId });
+  const agent = useBlueskyStore((state) => state.agent);
+  const { moderation } = useProfileLabels({ agent, did: otherMember?.did, handle: otherMember?.handle });
+  const profileLabels = moderation?.ui('profileList').informs.filter((label) => label.type === 'label');
 
   // mark as read on load if there are unread messages
   useEffect(() => {
@@ -175,6 +180,13 @@ function Messages() {
           <div>
             <div className="font-bold">{otherMember.displayName}</div>
             <Handle handle={otherMember.handle} />
+            <div className="flex gap-1 py-1">
+              {profileLabels?.map((label) => (
+                <Badge title={label.labelDef.locales[0]!.description} key={label.label.uri}>
+                  {label.labelDef.locales[0]!.name}
+                </Badge>
+              ))}
+            </div>
           </div>
         </StickyHeader>
         <div className="flex-grow overflow-y-auto px-2">
