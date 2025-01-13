@@ -43,6 +43,7 @@ import { usePostLabels } from '@/lib/bluesky/hooks/use-post-labels';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@radix-ui/react-accordion';
 import { ErrorBoundary } from './error-boundary';
 import { PostEmbed } from './post-embed';
+import { Badge } from './ui/badge';
 
 const contextToText = (context: string) => {
   if (context === 'following') return 'following';
@@ -248,7 +249,8 @@ function PostCardInner({ post, context, className, parent = false }: PostCardInn
   // Hide post if it's filtered
   if (moderation?.ui('contentList').filter) return null;
   const contentMedia = moderation?.ui('contentMedia');
-  const moderationLabel = contentMedia?.blurs[0]?.type === 'label' ? contentMedia.blurs[0]?.labelDef.locales[0] : null;
+  const moderationMediaLabel = contentMedia?.blurs[0]?.type === 'label' ? contentMedia.blurs[0]?.labelDef.locales[0] : null;
+  const profileLabels = moderation?.ui('profileList').informs.filter((label) => label.type === 'label');
   const moderationFilter = moderation?.ui('contentMedia').filter;
 
   const onClick = () => {
@@ -311,6 +313,13 @@ function PostCardInner({ post, context, className, parent = false }: PostCardInn
                 {!experiments.zenMode && <BetterContext context={context} />}
               </div>
             </div>
+            <div className="flex gap-1 py-1">
+              {profileLabels?.map((label) => (
+                <Badge title={label.labelDef.locales[0]!.description} key={label.label.uri}>
+                  {label.labelDef.locales[0]!.name}
+                </Badge>
+              ))}
+            </div>
             <div className="flex flex-col gap-2">
               <p className="text-gray-800 dark:text-gray-200">
                 {translatedText ? (
@@ -327,14 +336,14 @@ function PostCardInner({ post, context, className, parent = false }: PostCardInn
                 )}
               </p>
               <ErrorBoundary>
-                {moderationFilter ? null : moderationLabel ? (
+                {moderationFilter ? null : moderationMediaLabel ? (
                   <Accordion type="single" collapsible onClick={(event) => event.stopPropagation()}>
                     <AccordionItem value="item-1">
                       <AccordionTrigger className="w-full group">
                         <div className="flex items-center space-x-2 rounded-sm hover:bg-neutral-500 hover:bg-opacity-10 gap-1 border justify-between p-2">
                           <div className="flex items-center gap-1">
                             <AlertTriangleIcon size={20} />
-                            {moderationLabel?.name}
+                            {moderationMediaLabel?.name}
                           </div>
                           <div className="group-data-[state=open]:hidden">{'show'}</div>
                           <div className="hidden group-data-[state=open]:flex">{'hide'}</div>
@@ -436,8 +445,8 @@ type PostCardProps = {
   parent?: boolean;
 };
 
-export const PostCard = memo(function PostCard(props: PostCardProps) {
-  if (!props.post) return null;
+export const PostCard = memo(function PostCard({ post, ...props }: PostCardProps) {
+  if (!post) return null;
 
-  return <PostCardInner {...props} />;
+  return <PostCardInner {...props} post={post} />;
 });
