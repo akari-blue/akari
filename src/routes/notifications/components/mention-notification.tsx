@@ -8,7 +8,7 @@ export function MentionNotification({ notification }: { notification: BSkyMentio
   return (
     <div className="flex flex-row gap-2 p-2">
       <div className="flex flex-shrink-0 w-12 justify-end aspect-square">
-        <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8" />
+        <Avatar handle={notification.author.handle} avatar={notification.author.avatar} classNames={{ wrapper: 'size-8' }} />
       </div>
       <div className="flex-grow">
         <div>

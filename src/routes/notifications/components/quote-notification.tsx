@@ -21,7 +21,11 @@ export function QuoteNotification({ notification }: { notification: BSkyQuoteNot
         </div>
         <div>
           <div className="flex flex-row gap-1 overflow-hidden max-h-16">
-            <Avatar handle={notification.author.handle} avatar={notification.author.avatar} className="size-8" />
+            <Avatar
+              handle={notification.author.handle}
+              avatar={notification.author.avatar}
+              classNames={{ wrapper: 'size-8' }}
+            />
           </div>
           <div>
             {notification.author.displayName} {t('quotedYourPost')}

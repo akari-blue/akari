@@ -51,20 +51,23 @@ const AvatarInner = ({
   avatar,
   labeler,
   list,
-  className,
+  classNames,
   hover = true,
 }: {
   handle: string;
   avatar: string | undefined;
   labeler?: boolean;
   list?: boolean;
-  className?: string;
+  classNames?: {
+    image?: string;
+    wrapper?: string;
+  };
   hover?: boolean;
 }) => {
   const content = (
     <Link to="/profile/$handle" params={{ handle }} onClick={(event) => event.stopPropagation()}>
-      <AvatarWrapper className={cn((labeler || list) && 'aspect-square rounded-sm', className)}>
-        <AvatarImage src={avatar} />
+      <AvatarWrapper className={cn((labeler || list) && 'aspect-square rounded-sm border-2', classNames?.wrapper)}>
+        <AvatarImage src={avatar} className={classNames?.image} />
         <AvatarFallback>{handle}</AvatarFallback>
       </AvatarWrapper>
     </Link>
