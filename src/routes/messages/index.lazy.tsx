@@ -13,6 +13,9 @@ import { Avatar } from '@/components/ui/avatar';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { CreateConvo } from '@/components/create-convo';
+import { StickyHeader } from '@/components/sticky-header';
+import { Sidebar } from '@/components/navigation/sidebar';
+import { FormattedText } from '@/components/ui/formatted-text';
 
 function Conversation({ convo }: { convo: BSkyConvo }) {
   const session = useBlueskyStore((state) => state.session);
@@ -27,17 +30,19 @@ function Conversation({ convo }: { convo: BSkyConvo }) {
         key={member.did}
       >
         <Link to="/profile/$handle" params={{ handle: member.handle ?? member.did }} className="hover:no-underline">
-          <Avatar handle={member.handle} avatar={member.avatar} className="size-16" />
+          <Avatar handle={member.handle} avatar={member.avatar} className="size-14" />
         </Link>
         <div className="flex flex-col">
-          <div className="flex flex-row gap-2">
-            <Handle handle={member.handle ?? member.did} />
+          <div className="flex flex-row gap-2 items-center">
+            {member.displayName ?? <Handle handle={member.handle ?? member.did} />}
             {' · '}
-            <TimeAgo date={convo.lastMessage.sentAt} />
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              <TimeAgo date={convo.lastMessage.sentAt} />
+            </div>
           </div>
-          <div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
             {convo.lastMessage.sender.did === session?.did && 'You: '}
-            {convo.lastMessage.text}
+            <FormattedText text={convo.lastMessage.text} />
           </div>
         </div>
       </div>
@@ -60,6 +65,10 @@ function Messages() {
       <Helmet>
         <title>{t('messages')}</title>
       </Helmet>
+      <StickyHeader backButton={false}>
+        <Sidebar />
+        {t('messages')}
+      </StickyHeader>
       <div className="w-full border-x border-gray-200 dark:border-gray-800">
         <Virtuoso
           useWindowScroll
@@ -75,7 +84,6 @@ function Messages() {
             }),
             Footer: () => <div className="h-96 md:h-0" />,
           }}
-          followOutput
         />
         <CreateConvo />
       </div>
