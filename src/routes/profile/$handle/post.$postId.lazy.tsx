@@ -48,6 +48,12 @@ function Post() {
     <>
       <Helmet>
         <link rel="canonical" href={`https://bsky.app/profile/${handle}/post/${params.postId}`} />
+        <title>
+          {profile.displayName ?? profile.handle}
+          {': "'}
+          {(postThread?.post as BSkyPost).record.text}
+          {'"'}
+        </title>
       </Helmet>
       <StickyHeader>
         <h1 className="text-xl font-bold">{t('post')}</h1>
