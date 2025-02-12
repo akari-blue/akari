@@ -34,7 +34,7 @@ export const Sidebar = () => {
         <div className="divide-y gap-2 flex flex-col">
           {handle ? (
             <div className="flex flex-col">
-              <Avatar handle={handle} avatar={profile?.avatar} hover={false} className="size-12" />
+              <Avatar handle={handle} avatar={profile?.avatar} hover={false} classNames={{ image: 'size-12' }} />
               <div className="font-bold">{profile?.displayName}</div>
               <Handle handle={handle} />
               <div className="flex flex-row items-center text-sm ">

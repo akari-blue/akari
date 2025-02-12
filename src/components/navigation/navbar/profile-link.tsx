@@ -21,7 +21,7 @@ export const ProfileLink = () => {
       className="flex flex-row items-center gap-2 p-3 rounded-sm hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 justify-center"
     >
       <UserIcon className="hidden sm:flex size-6 xl:size-5 active:scale-90" />
-      <Avatar handle={handle} avatar={profile?.avatar} hover={false} className="size-6 sm:hidden" />
+      <Avatar handle={handle} avatar={profile?.avatar} hover={false} classNames={{ wrapper: 'size-6 sm:hidden' }} />
       <span className="hidden xl:block">{t('profile')}</span>
     </Link>
   );

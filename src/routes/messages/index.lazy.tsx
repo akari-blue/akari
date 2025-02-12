@@ -30,7 +30,7 @@ function Conversation({ convo }: { convo: BSkyConvo }) {
         key={member.did}
       >
         <Link to="/profile/$handle" params={{ handle: member.handle ?? member.did }} className="hover:no-underline">
-          <Avatar handle={member.handle} avatar={member.avatar} className="size-14" />
+          <Avatar handle={member.handle} avatar={member.avatar} classNames={{ image: 'size-14' }} />
         </Link>
         <div className="flex flex-col">
           <div className="flex flex-row gap-2 items-center">

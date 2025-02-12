@@ -10,7 +10,6 @@ import { Badge } from '@/components/ui/badge';
 import { FollowButton } from '@/components/ui/follow-button';
 import { FormattedNumber } from '@/components/ui/formatted-number';
 import { FormattedText } from '@/components/ui/formatted-text';
-import { Debug } from '@/components/ui/debug';
 import { forwardRef, HtmlHTMLAttributes, Ref, useState } from 'react';
 import { NotImplementedBox } from '@/components/ui/not-implemented-box';
 import { Virtuoso } from 'react-virtuoso';
@@ -25,6 +24,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { Banner } from '@/components/ui/banner';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { StickyHeader } from '@/components/sticky-header';
+import { cn } from '@/lib/utils';
 
 export const Route = createLazyFileRoute('/profile/$handle/')({
   component: Profile,
@@ -182,6 +182,7 @@ function Profile() {
   const { session } = useBlueskyStore();
   const { t } = useTranslation(['app', 'profile']);
   const [selectedTab, setSelectedTab] = useState<string | null>('posts');
+  const blocked = profile?.viewer?.blockingByList;
 
   if (isLoading) return <Loading />;
 
@@ -197,38 +198,43 @@ function Profile() {
       </Helmet>
       <div className="flex flex-col">
         <div className="flex flex-col gap-2">
-          <Banner banner={profile?.banner} />
+          <Banner banner={profile?.banner} classNames={{ image: cn(blocked && 'blur-xl') }} />
           <div className="px-4 -mt-12">
-            <Avatar avatar={profile?.avatar} handle={profile.handle} className="size-24" hover={false} />
+            <Avatar
+              avatar={profile?.avatar}
+              handle={profile.handle}
+              classNames={{ wrapper: 'size-24 border-2', image: blocked && 'blur' }}
+              hover={false}
+            />
             <div>
               <div className="flex gap-2">
                 <h2 className="text-xl font-bold">{profile?.displayName || profile.handle}</h2>
                 <Badge title={profile.viewer?.following && profile.viewer?.followedBy ? 'You both follow each other' : ''}>
                   {profile.viewer?.following && profile.viewer?.followedBy && 'Mutuals'}
                 </Badge>
-                {handle !== session?.handle && <FollowButton handle={handle} following={!!profile.viewer?.following} />}
+                {handle !== session?.handle && !blocked && (
+                  <FollowButton handle={handle} following={!!profile.viewer?.following} />
+                )}
               </div>
               <Handle handle={profile.handle} />
-              {!experiments.zenMode && (
+              {!experiments.zenMode && !blocked && (
                 <div className="flex gap-2">
                   <FormattedNumber value={profile?.followersCount} unit={t('followers')} />
                   <FormattedNumber value={profile?.followsCount} unit={t('following')} />
                   <FormattedNumber value={profile?.postsCount} unit={t('posts')} />
                 </div>
               )}
-              <FormattedText text={profile?.description ?? ''} linkify key="profile-description" />
+              {!blocked && <FormattedText text={profile?.description ?? ''} linkify key="profile-description" />}
 
-              {profile.viewer?.blockingByList && (
+              {blocked && (
                 <div className="p-2 border mt-2">
-                  <span>{t('profile:blockedBy', { name: profile.viewer.blockingByList.name })}</span>
+                  <span>{t('profile:blockedBy', { name: blocked.name })}</span>
                 </div>
               )}
-
-              <Debug value={profile} />
             </div>
           </div>
         </div>
-        {!profile.viewer?.blockingByList && (
+        {!blocked && (
           <Ariakit.TabProvider
             defaultSelectedId={selectedTab}
             setSelectedId={(selectedId) => {

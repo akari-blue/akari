@@ -22,7 +22,7 @@ export function ReplyNotification({ notification }: { notification: BSkyReplyNot
           <Avatar
             handle={notification.author.handle}
             avatar={notification.author.avatar}
-            className="stroke-green-400 size-10"
+            classNames={{ wrapper: 'stroke-green-400 size-10' }}
           />
         </div>
         <div className="hover:no-underline w-full">

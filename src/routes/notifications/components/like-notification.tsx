@@ -41,7 +41,7 @@ export function LikeNotification({ notifications }: { notifications: BSkyLikeNot
                   key={notification.author.did}
                   handle={notification.author.handle}
                   avatar={notification.author.avatar}
-                  className="size-8"
+                  classNames={{ wrapper: 'size-8' }}
                 />
               ))}
             </div>
