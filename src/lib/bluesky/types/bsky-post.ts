@@ -33,7 +33,7 @@ export const BSkyPost = Type.Object({
     encryption: Type.Optional(
       Type.Object({
         key: Type.String(),
-        algorithm: Type.String(),
+        type: Type.String(),
         encoding: Type.String(),
       }),
     ),

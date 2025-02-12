@@ -218,32 +218,45 @@ async function decryptPrivatePost(post: BSkyPost) {
 
   try {
     // Convert key string to array buffer
-    const keyData = new TextEncoder().encode(key);
+    console.info('key:', key);
+    const keyData = Uint8Array.from(atob(key), (c) => c.charCodeAt(0));
 
     // Import the raw key
-    const cryptoKey = await window.crypto.subtle.importKey('raw', keyData, { name: 'AES-CBC', length: 256 }, false, [
-      'decrypt',
-    ]);
+    console.info('keyData:', keyData);
+    const cryptoKey = await window.crypto.subtle.importKey(
+      'raw',
+      keyData,
+      { name: post.record.encryption.type, length: 256 },
+      false,
+      ['decrypt'],
+    );
 
     // Decode base64 encrypted text
+    console.info('encryptedText:', encryptedText);
     const encryptedData = Uint8Array.from(atob(encryptedText), (c) => c.charCodeAt(0));
 
     // First 16 bytes should be IV
     const iv = encryptedData.slice(0, 16);
     const data = encryptedData.slice(16);
+    console.info('iv:', iv);
+    console.info('data:', data);
 
     // Decrypt the data
     const decryptedData = await window.crypto.subtle.decrypt(
       {
-        name: 'AES-CBC',
+        name: post.record.encryption.type,
         iv: iv,
       },
       cryptoKey,
       data,
     );
 
+    console.info('decryptedData:', decryptedData);
+
     // Convert the decrypted array buffer back to text
-    return new TextDecoder().decode(decryptedData);
+    const text = new TextDecoder().decode(decryptedData);
+    console.info('decrypted text:', text);
+    return text;
   } catch (error) {
     console.error('Decryption failed:', error);
     return 'decryption failed';
