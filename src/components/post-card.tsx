@@ -35,7 +35,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { usePlausible } from '@/hooks/use-plausible';
 import { useBlueskyStore } from '@/lib/bluesky/store';
@@ -207,6 +207,49 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
   );
 };
 
+async function decryptPrivatePost(post: BSkyPost) {
+  // If no encryption data, return the regular text
+  if (!post.record.encryption || !post.record.encryptedText) {
+    return post.record.text;
+  }
+
+  const { key } = post.record.encryption;
+  const encryptedText = post.record.encryptedText;
+
+  try {
+    // Convert key string to array buffer
+    const keyData = new TextEncoder().encode(key);
+
+    // Import the raw key
+    const cryptoKey = await window.crypto.subtle.importKey('raw', keyData, { name: 'AES-CBC', length: 256 }, false, [
+      'decrypt',
+    ]);
+
+    // Decode base64 encrypted text
+    const encryptedData = Uint8Array.from(atob(encryptedText), (c) => c.charCodeAt(0));
+
+    // First 16 bytes should be IV
+    const iv = encryptedData.slice(0, 16);
+    const data = encryptedData.slice(16);
+
+    // Decrypt the data
+    const decryptedData = await window.crypto.subtle.decrypt(
+      {
+        name: 'AES-CBC',
+        iv: iv,
+      },
+      cryptoKey,
+      data,
+    );
+
+    // Convert the decrypted array buffer back to text
+    return new TextDecoder().decode(decryptedData);
+  } catch (error) {
+    console.error('Decryption failed:', error);
+    return 'decryption failed';
+  }
+}
+
 type PostCardInnerProps = {
   post: BSkyPost;
   context?: string;
@@ -225,6 +268,14 @@ function PostCardInner({ post, context, className, parent = false }: PostCardInn
   const navigate = useNavigate();
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const { moderation } = usePostLabels({ agent, post });
+  const isPrivatePost = !!post.record.encryptedText;
+  const [postText, setPostText] = useState<string>(isPrivatePost ? 'decrypting private post...' : post.record.text);
+
+  useEffect(() => {
+    if (isPrivatePost) {
+      decryptPrivatePost(post).then(setPostText);
+    }
+  }, [isPrivatePost, post]);
 
   const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -330,9 +381,9 @@ function PostCardInner({ post, context, className, parent = false }: PostCardInn
                     </Link>
                   </div>
                 ) : post.record.facets ? (
-                  <FacetedText text={post?.record.text} facets={post.record.facets} />
+                  <FacetedText text={postText} facets={post.record.facets} />
                 ) : (
-                  <FormattedText text={post?.record.text} />
+                  <FormattedText text={postText} />
                 )}
               </p>
               <ErrorBoundary>
