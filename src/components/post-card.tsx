@@ -35,7 +35,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { usePlausible } from '@/hooks/use-plausible';
 import { useBlueskyStore } from '@/lib/bluesky/store';
@@ -207,6 +207,80 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
   );
 };
 
+async function createEncryptedPost(content: string) {
+  // Generate encryption key and IV
+  const key = await crypto.subtle.generateKey({ name: 'AES-CBC', length: 256 }, true, ['encrypt', 'decrypt']);
+
+  const iv = crypto.getRandomValues(new Uint8Array(16));
+  const encoder = new TextEncoder();
+  const data = encoder.encode(content);
+
+  // Encrypt content
+  const encrypted = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, key, data);
+
+  // Export key material
+  const rawKey = await crypto.subtle.exportKey('raw', key);
+  const keyString = btoa(String.fromCharCode(...new Uint8Array(rawKey)));
+
+  // Combine IV and ciphertext
+  const combined = new Uint8Array(iv.byteLength + encrypted.byteLength);
+  combined.set(iv, 0);
+  combined.set(new Uint8Array(encrypted), iv.byteLength);
+
+  return {
+    record: {
+      text: '', // Empty public text
+      encryption: {
+        type: 'AES-CBC',
+        key: keyString,
+      },
+      encryptedText: btoa(String.fromCharCode(...combined)),
+    },
+  };
+}
+
+window.createEncryptedPost = createEncryptedPost;
+
+async function decryptPrivatePost(post: BSkyPost) {
+  if (!post.record.encryption || !post.record.encryptedText) {
+    return post.record.text;
+  }
+
+  const { key } = post.record.encryption;
+  const encryptedText = post.record.encryptedText;
+
+  try {
+    // Decode base64 key
+    const keyData = new Uint8Array(Array.from(atob(key), (c) => c.charCodeAt(0)));
+
+    // Import key (without length parameter)
+    const cryptoKey = await crypto.subtle.importKey(
+      'raw',
+      keyData,
+      { name: post.record.encryption.type }, // Removed length
+      false,
+      ['decrypt'],
+    );
+
+    // Decode base64 payload
+    const encryptedData = new Uint8Array(Array.from(atob(encryptedText), (c) => c.charCodeAt(0)));
+
+    // Extract IV and ciphertext with proper buffer boundaries
+    const iv = new Uint8Array(encryptedData.buffer, 0, 16);
+    const data = new Uint8Array(encryptedData.buffer, 16);
+
+    // Decrypt
+    const decryptedData = await crypto.subtle.decrypt({ name: post.record.encryption.type, iv }, cryptoKey, data);
+
+    return new TextDecoder().decode(decryptedData);
+  } catch (error) {
+    console.error('Decryption failed:', error);
+    return 'decryption failed';
+  }
+}
+
+window.decryptPrivatePost = decryptPrivatePost;
+
 type PostCardInnerProps = {
   post: BSkyPost;
   context?: string;
@@ -225,6 +299,14 @@ function PostCardInner({ post, context, className, parent = false }: PostCardInn
   const navigate = useNavigate();
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const { moderation } = usePostLabels({ agent, post });
+  const isPrivatePost = !!post.record.encryptedText;
+  const [postText, setPostText] = useState<string>(isPrivatePost ? 'decrypting private post...' : post.record.text);
+
+  useEffect(() => {
+    if (isPrivatePost) {
+      decryptPrivatePost(post).then(setPostText);
+    }
+  }, [isPrivatePost, post]);
 
   const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -330,9 +412,9 @@ function PostCardInner({ post, context, className, parent = false }: PostCardInn
                     </Link>
                   </div>
                 ) : post.record.facets ? (
-                  <FacetedText text={post?.record.text} facets={post.record.facets} />
+                  <FacetedText text={postText} facets={post.record.facets} />
                 ) : (
-                  <FormattedText text={post?.record.text} />
+                  <FormattedText text={postText} />
                 )}
               </p>
               <ErrorBoundary>
