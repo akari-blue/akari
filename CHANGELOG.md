@@ -1,5 +1,41 @@
 # Changelog
 
+## [2.0.0](https://github.com/akari-blue/akari/compare/v1.1.1...v2.0.0) (2025-02-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* major codebase restructure and improvements
+
+### Features
+
+* post labels ([099cef1](https://github.com/akari-blue/akari/commit/099cef177be9286256aa61a7ed19ff582c217c22))
+* post labels for profiles ([5e7f374](https://github.com/akari-blue/akari/commit/5e7f37493deacb1bb8f25d1c0174ed3d32c3e560))
+* profile labels in DMs ([0b853be](https://github.com/akari-blue/akari/commit/0b853be7214c25abb11ff96a60e8eb8609ed4476))
+* profile sticky header ([d723cd0](https://github.com/akari-blue/akari/commit/d723cd03c0407c03ca6675f78e9ba2d012e067ca))
+
+
+### Bug Fixes
+
+* center icons ([28f346e](https://github.com/akari-blue/akari/commit/28f346e77f0d482f66c73cdab4bdecd91ea728d6))
+* convo autoscroll ([9f0b81f](https://github.com/akari-blue/akari/commit/9f0b81ffb39cf2eac2242fe579bc01589198ff64))
+* convo list formatting ([201724c](https://github.com/akari-blue/akari/commit/201724cbd5365bf56413fd0f4e8057e89870c18d))
+* dont allow hover on profile avatar ([661bdd7](https://github.com/akari-blue/akari/commit/661bdd7560925ecbcc7b835737b6b3cdf8bd6a36))
+* dont show post menu items that require with when signed out ([85f5b79](https://github.com/akari-blue/akari/commit/85f5b79f250c329e28aed56ae6f742611936fa22))
+* error component rendering ([249ca19](https://github.com/akari-blue/akari/commit/249ca195de9ca243de4b00e8e346e6b91b8352dc))
+* links in messages ([49292ca](https://github.com/akari-blue/akari/commit/49292cacdf1fd355f46147b3cce4c9765a4a24eb))
+* missing login button ([7b08e2b](https://github.com/akari-blue/akari/commit/7b08e2beffe9c360bcaf46eba7159c3b8d0ad8ee))
+* post title ([c2e25ac](https://github.com/akari-blue/akari/commit/c2e25ac2201d120732aa4c61bafee0b87a04b7c5))
+* posts throwing error for author.viewer ([711a5b5](https://github.com/akari-blue/akari/commit/711a5b5671eb07b01bfcab36d7d1898fd6cd7319))
+* profile not loading without display name ([4d96b3c](https://github.com/akari-blue/akari/commit/4d96b3c56542401108861ca4cbd4312278f2467f))
+* profiles when blocked ([#151](https://github.com/akari-blue/akari/issues/151)) ([4d7e3b8](https://github.com/akari-blue/akari/commit/4d7e3b8c9e31ec00934c6af60241f6f64fee716f))
+* when signed out dont show links that require auth ([bf08502](https://github.com/akari-blue/akari/commit/bf0850200729c28cb4bebe9196785133c783c63a))
+
+
+### Code Refactoring
+
+* major codebase restructure and improvements ([aa431f4](https://github.com/akari-blue/akari/commit/aa431f4aa0ff1e688197de53b80af3994b150c96))
+
 ## [1.1.1](https://github.com/akari-blue/akari/compare/v1.1.0...v1.1.1) (2025-01-09)
 
 
