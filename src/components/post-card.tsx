@@ -207,8 +207,41 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
   );
 };
 
+async function createEncryptedPost(content: string) {
+  // Generate encryption key and IV
+  const key = await crypto.subtle.generateKey({ name: 'AES-CBC', length: 256 }, true, ['encrypt', 'decrypt']);
+
+  const iv = crypto.getRandomValues(new Uint8Array(16));
+  const encoder = new TextEncoder();
+  const data = encoder.encode(content);
+
+  // Encrypt content
+  const encrypted = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, key, data);
+
+  // Export key material
+  const rawKey = await crypto.subtle.exportKey('raw', key);
+  const keyString = btoa(String.fromCharCode(...new Uint8Array(rawKey)));
+
+  // Combine IV and ciphertext
+  const combined = new Uint8Array(iv.byteLength + encrypted.byteLength);
+  combined.set(iv, 0);
+  combined.set(new Uint8Array(encrypted), iv.byteLength);
+
+  return {
+    record: {
+      text: '', // Empty public text
+      encryption: {
+        type: 'AES-CBC',
+        key: keyString,
+      },
+      encryptedText: btoa(String.fromCharCode(...combined)),
+    },
+  };
+}
+
+window.createEncryptedPost = createEncryptedPost;
+
 async function decryptPrivatePost(post: BSkyPost) {
-  // If no encryption data, return the regular text
   if (!post.record.encryption || !post.record.encryptedText) {
     return post.record.text;
   }
@@ -217,51 +250,36 @@ async function decryptPrivatePost(post: BSkyPost) {
   const encryptedText = post.record.encryptedText;
 
   try {
-    // Convert key string to array buffer
-    console.info('key:', key);
-    const keyData = Uint8Array.from(atob(key), (c) => c.charCodeAt(0));
+    // Decode base64 key
+    const keyData = new Uint8Array(Array.from(atob(key), (c) => c.charCodeAt(0)));
 
-    // Import the raw key
-    console.info('keyData:', keyData);
-    const cryptoKey = await window.crypto.subtle.importKey(
+    // Import key (without length parameter)
+    const cryptoKey = await crypto.subtle.importKey(
       'raw',
       keyData,
-      { name: post.record.encryption.type, length: 256 },
+      { name: post.record.encryption.type }, // Removed length
       false,
       ['decrypt'],
     );
 
-    // Decode base64 encrypted text
-    console.info('encryptedText:', encryptedText);
-    const encryptedData = Uint8Array.from(atob(encryptedText), (c) => c.charCodeAt(0));
+    // Decode base64 payload
+    const encryptedData = new Uint8Array(Array.from(atob(encryptedText), (c) => c.charCodeAt(0)));
 
-    // First 16 bytes should be IV
-    const iv = encryptedData.slice(0, 16);
-    const data = encryptedData.slice(16);
-    console.info('iv:', iv);
-    console.info('data:', data);
+    // Extract IV and ciphertext with proper buffer boundaries
+    const iv = new Uint8Array(encryptedData.buffer, 0, 16);
+    const data = new Uint8Array(encryptedData.buffer, 16);
 
-    // Decrypt the data
-    const decryptedData = await window.crypto.subtle.decrypt(
-      {
-        name: post.record.encryption.type,
-        iv: iv,
-      },
-      cryptoKey,
-      data,
-    );
+    // Decrypt
+    const decryptedData = await crypto.subtle.decrypt({ name: post.record.encryption.type, iv }, cryptoKey, data);
 
-    console.info('decryptedData:', decryptedData);
-
-    // Convert the decrypted array buffer back to text
-    const text = new TextDecoder().decode(decryptedData);
-    console.info('decrypted text:', text);
-    return text;
+    return new TextDecoder().decode(decryptedData);
   } catch (error) {
     console.error('Decryption failed:', error);
     return 'decryption failed';
   }
 }
+
+window.decryptPrivatePost = decryptPrivatePost;
 
 type PostCardInnerProps = {
   post: BSkyPost;
