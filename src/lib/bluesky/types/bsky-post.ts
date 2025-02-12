@@ -39,20 +39,39 @@ export const BSkyPost = Type.Object({
     ),
     acl: Type.Optional(
       Type.Object({
-        user: Type.Array(
-          Type.Object({
-            did: Type.String(),
-            permission: Type.Object({
-              read: Type.Boolean(),
-              interact: Type.Object({
-                reply: Type.Boolean(),
-                like: Type.Boolean(),
-                repost: Type.Boolean(),
-                quote: Type.Boolean(),
-                comment: Type.Boolean(),
+        group: Type.Optional(
+          Type.Array(
+            Type.Object({
+              list: Type.String(),
+              permission: Type.Object({
+                read: Type.Boolean(),
+                interact: Type.Object({
+                  reply: Type.Boolean(),
+                  like: Type.Boolean(),
+                  repost: Type.Boolean(),
+                  quote: Type.Boolean(),
+                  comment: Type.Boolean(),
+                }),
               }),
             }),
-          }),
+          ),
+        ),
+        user: Type.Optional(
+          Type.Array(
+            Type.Object({
+              did: Type.String(),
+              permission: Type.Object({
+                read: Type.Boolean(),
+                interact: Type.Object({
+                  reply: Type.Boolean(),
+                  like: Type.Boolean(),
+                  repost: Type.Boolean(),
+                  quote: Type.Boolean(),
+                  comment: Type.Boolean(),
+                }),
+              }),
+            }),
+          ),
         ),
       }),
     ),
