@@ -109,10 +109,15 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
         <DropdownMenuItem
           className="justify-between"
           onClick={(event) => {
-            event.stopPropagation();
-            navigator.clipboard.writeText(post.record.text);
-            toast.info('Copied post text to clipboard');
-            trackEvent('copyToClipboard', { type: 'post-text' });
+            if (post.record.text != undefined) {
+              event.stopPropagation();
+              navigator.clipboard.writeText(post.record.text);
+              toast.info('Copied post text to clipboard');
+              trackEvent('copyToClipboard', { type: 'post-text' });
+            } else {
+              event.stopPropagation();
+              toast.info('Cannot copy private posts');
+            }
           }}
         >
           {'copy post text'} <ClipboardIcon />
