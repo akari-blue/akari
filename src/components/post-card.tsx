@@ -213,7 +213,8 @@ async function decryptPrivatePost(post: BSkyPost) {
     return post.record.text;
   }
 
-  const { key } = post.record.encryption;
+  const { algorithm } = post.record.encryption;
+  const { key, length } = post.record.encryption.key;
   const encryptedText = post.record.encryptedText;
 
   try {
@@ -221,7 +222,7 @@ async function decryptPrivatePost(post: BSkyPost) {
     const keyData = new TextEncoder().encode(key);
 
     // Import the raw key
-    const cryptoKey = await window.crypto.subtle.importKey('raw', keyData, { name: 'AES-CBC', length: 256 }, false, [
+    const cryptoKey = await window.crypto.subtle.importKey('raw', keyData, { name: algorithm, length: length }, false, [
       'decrypt',
     ]);
 
@@ -235,7 +236,7 @@ async function decryptPrivatePost(post: BSkyPost) {
     // Decrypt the data
     const decryptedData = await window.crypto.subtle.decrypt(
       {
-        name: 'AES-CBC',
+        name: algorithm,
         iv: iv,
       },
       cryptoKey,
