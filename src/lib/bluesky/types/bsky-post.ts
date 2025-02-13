@@ -28,7 +28,7 @@ export const BSkyPost = Type.Object({
         }),
       }),
     ),
-    text: Type.Optional(Type.String()),
+    text: Type.String() || Type.Literal('This post is private'),
     akariPublicKey: Type.Optional(Type.String()),
     encryptedText: Type.Optional(Type.String()),
     encryption: Type.Optional(
