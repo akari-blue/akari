@@ -29,6 +29,7 @@ export const BSkyPost = Type.Object({
       }),
     ),
     text: Type.String(),
+    akariPublicKey: Type.String(),
     encryptedText: Type.Optional(Type.String()),
     encryption: Type.Optional(
       Type.Object({
