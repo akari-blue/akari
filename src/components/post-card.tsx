@@ -109,10 +109,17 @@ const PostDropdownMenu = ({ post, setTranslatedText }: { post: BSkyPost; setTran
         <DropdownMenuItem
           className="justify-between"
           onClick={(event) => {
-            event.stopPropagation();
-            navigator.clipboard.writeText(post.record.text);
-            toast.info('Copied post text to clipboard');
-            trackEvent('copyToClipboard', { type: 'post-text' });
+            if (post.record.text != undefined) {
+              event.stopPropagation();
+              navigator.clipboard.writeText(post.record.text);
+              toast.info('Copied post text to clipboard');
+              trackEvent('copyToClipboard', { type: 'post-text' });
+            } else {
+              event.stopPropagation();
+              navigator.clipboard.writeText(post.record.encryptedText);
+              toast.info('Copied post text to clipboard');
+              trackEvent('copyToClipboard', { type: 'post-text' });
+            }
           }}
         >
           {'copy post text'} <ClipboardIcon />
@@ -229,10 +236,13 @@ async function createEncryptedPost(content: string) {
 
   return {
     record: {
-      text: '', // Empty public text
+      text: 'This post is private', // Empty public text
       encryption: {
-        type: 'AES-CBC',
-        key: keyString,
+        algorithm: 'AES-CBC',
+        key: {
+          key: keyString,
+          length: 256,
+        },
       },
       encryptedText: btoa(String.fromCharCode(...combined)),
     },
@@ -242,36 +252,42 @@ async function createEncryptedPost(content: string) {
 window.createEncryptedPost = createEncryptedPost;
 
 async function decryptPrivatePost(post: BSkyPost) {
+  // If no encryption data, return the regular text
   if (!post.record.encryption || !post.record.encryptedText) {
     return post.record.text;
   }
 
-  const { key } = post.record.encryption;
+  const { algorithm } = post.record.encryption;
+  const { key, length } = post.record.encryption.key;
   const encryptedText = post.record.encryptedText;
 
   try {
-    // Decode base64 key
-    const keyData = new Uint8Array(Array.from(atob(key), (c) => c.charCodeAt(0)));
+    // Convert key string to array buffer
+    const keyData = new TextEncoder().encode(key);
 
-    // Import key (without length parameter)
-    const cryptoKey = await crypto.subtle.importKey(
-      'raw',
-      keyData,
-      { name: post.record.encryption.type }, // Removed length
-      false,
-      ['decrypt'],
+    // Import the raw key
+    const cryptoKey = await window.crypto.subtle.importKey('raw', keyData, { name: algorithm, length: length }, false, [
+      'decrypt',
+    ]);
+
+    // Decode base64 encrypted text
+    const encryptedData = Uint8Array.from(atob(encryptedText), (c) => c.charCodeAt(0));
+
+    // First 16 bytes should be IV
+    const iv = encryptedData.slice(0, 16);
+    const data = encryptedData.slice(16);
+
+    // Decrypt the data
+    const decryptedData = await window.crypto.subtle.decrypt(
+      {
+        name: algorithm,
+        iv: iv,
+      },
+      cryptoKey,
+      data,
     );
 
-    // Decode base64 payload
-    const encryptedData = new Uint8Array(Array.from(atob(encryptedText), (c) => c.charCodeAt(0)));
-
-    // Extract IV and ciphertext with proper buffer boundaries
-    const iv = new Uint8Array(encryptedData.buffer, 0, 16);
-    const data = new Uint8Array(encryptedData.buffer, 16);
-
-    // Decrypt
-    const decryptedData = await crypto.subtle.decrypt({ name: post.record.encryption.type, iv }, cryptoKey, data);
-
+    // Convert the decrypted array buffer back to text
     return new TextDecoder().decode(decryptedData);
   } catch (error) {
     console.error('Decryption failed:', error);
