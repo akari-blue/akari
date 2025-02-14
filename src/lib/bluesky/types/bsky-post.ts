@@ -28,31 +28,54 @@ export const BSkyPost = Type.Object({
         }),
       }),
     ),
-    text: Type.String(),
+    text: Type.String() || Type.Literal('This post is private'),
+    akariPublicKey: Type.Optional(Type.String()),
     encryptedText: Type.Optional(Type.String()),
     encryption: Type.Optional(
       Type.Object({
-        key: Type.String(),
-        type: Type.String(),
+        key: Type.Object({
+          key: Type.String(),
+          length: Type.Number(),
+        }),
+        algorithm: Type.String(),
         encoding: Type.String(),
       }),
     ),
     acl: Type.Optional(
       Type.Object({
-        user: Type.Array(
-          Type.Object({
-            did: Type.String(),
-            permission: Type.Object({
-              read: Type.Boolean(),
-              interact: Type.Object({
-                reply: Type.Boolean(),
-                like: Type.Boolean(),
-                repost: Type.Boolean(),
-                quote: Type.Boolean(),
-                comment: Type.Boolean(),
+        group: Type.Optional(
+          Type.Array(
+            Type.Object({
+              list: Type.String(),
+              permission: Type.Object({
+                read: Type.Boolean(),
+                interact: Type.Object({
+                  reply: Type.Boolean(),
+                  like: Type.Boolean(),
+                  repost: Type.Boolean(),
+                  quote: Type.Boolean(),
+                  comment: Type.Boolean(),
+                }),
               }),
             }),
-          }),
+          ),
+        ),
+        user: Type.Optional(
+          Type.Array(
+            Type.Object({
+              did: Type.String(),
+              permission: Type.Object({
+                read: Type.Boolean(),
+                interact: Type.Object({
+                  reply: Type.Boolean(),
+                  like: Type.Boolean(),
+                  repost: Type.Boolean(),
+                  quote: Type.Boolean(),
+                  comment: Type.Boolean(),
+                }),
+              }),
+            }),
+          ),
         ),
       }),
     ),
